@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>AI-Driven Demand Management Assistant</title>
 
   <style>
@@ -22,7 +23,6 @@
 
     body {
       margin: 0;
-      padding: 0;
       background: var(--bg);
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
@@ -30,9 +30,44 @@
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: auto;
-      padding: 60px 24px;
+      padding: 50px 24px 80px;
+    }
+
+    .top-banner {
+      background: linear-gradient(135deg, #00d08422, #00d08408);
+      border: 1px solid var(--accent);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .top-banner h2 {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 26px;
+    }
+
+    .top-banner p {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .demo-link {
+      display: inline-block;
+      padding: 14px 24px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .demo-link:hover {
+      opacity: 0.85;
     }
 
     .hero {
@@ -58,7 +93,7 @@
     .subtitle {
       color: var(--muted);
       font-size: 18px;
-      max-width: 850px;
+      max-width: 900px;
     }
 
     .section {
@@ -66,29 +101,26 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 32px;
-      margin-bottom: 28px;
+      margin-bottom: 30px;
     }
 
     h2 {
       margin-top: 0;
       margin-bottom: 20px;
       color: var(--accent);
-      font-size: 26px;
+      font-size: 28px;
     }
 
     p {
       margin-bottom: 18px;
-      color: var(--text);
     }
 
     ul {
-      margin: 0;
       padding-left: 22px;
     }
 
     li {
       margin-bottom: 12px;
-      color: var(--text);
     }
 
     .highlight-box {
@@ -116,7 +148,24 @@
     .card h3 {
       margin-top: 0;
       color: var(--accent);
-      font-size: 18px;
+    }
+
+    .architecture-wrapper {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .architecture-wrapper img {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .architecture-caption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     .footer {
@@ -124,22 +173,6 @@
       text-align: center;
       color: var(--muted);
       font-size: 14px;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .architecture-image {
-      width: 100%;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      margin-top: 20px;
     }
 
     @media (max-width: 768px) {
@@ -150,6 +183,10 @@
       .section {
         padding: 24px;
       }
+
+      .top-banner h2 {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
@@ -158,8 +195,30 @@
 
   <div class="container">
 
+    <!-- TOP LINK -->
+    <div class="top-banner">
+      <h2>Interactive Architecture Demo</h2>
+
+      <p>
+        Explore the complete AI-Driven Demand Management Assistant architecture,
+        including connectors, intelligence layers, and stakeholder flows.
+      </p>
+
+      <a
+        class="demo-link"
+        href="https://will-demand-mgmt.github.io/demand-assistant/index"
+        target="_blank"
+      >
+        Open Interactive Demo
+      </a>
+    </div>
+
+    <!-- HERO -->
     <div class="hero">
-      <div class="tag">AI-Driven Architecture Proposal</div>
+
+      <div class="tag">
+        AI-Driven Architecture Proposal
+      </div>
 
       <h1>AI-Driven Demand Management Assistant</h1>
 
@@ -167,21 +226,25 @@
         A conversational AI layer designed to centralize enterprise demand information,
         simplify data access, and improve operational decision-making across existing platforms.
       </p>
+
     </div>
 
+    <!-- OVERVIEW -->
     <div class="section">
+
       <h2>Overview</h2>
 
       <p>
         Today, demand management information is distributed across multiple enterprise platforms
-        such as Aha!, Microsoft Teams, SharePoint, and Jira. Retrieving and correlating data
-        across these systems often requires manual effort, leading to fragmented visibility,
-        slower response times, and inconsistent understanding of priorities and delivery status.
+        such as Aha!, Microsoft Teams, SharePoint, and Jira.
+        Retrieving and correlating data across these systems often requires manual effort,
+        leading to fragmented visibility, slower response times, and inconsistent understanding
+        of priorities and delivery status.
       </p>
 
       <p>
-        The proposed solution introduces a conversational AI layer capable of connecting these
-        systems into a unified experience without replacing the current ecosystem.
+        The proposed solution introduces a conversational AI layer capable of connecting
+        these systems into a unified experience without replacing the current ecosystem.
       </p>
 
       <div class="highlight-box">
@@ -189,9 +252,39 @@
         Microsoft Teams bots, or a web interface, receiving contextualized responses
         aggregated from multiple enterprise systems.
       </div>
+
     </div>
 
+    <!-- ARCHITECTURE IMAGE -->
     <div class="section">
+
+      <h2>Solution Architecture</h2>
+
+      <p>
+        The following diagram provides a high-level overview of the proposed architecture,
+        including stakeholder interaction, AI orchestration layers, enterprise connectors,
+        and the underlying knowledge infrastructure.
+      </p>
+
+      <div class="architecture-wrapper">
+
+        <!-- Replace architecture.png with your uploaded image path -->
+        <img
+          src="architecture.png"
+          alt="AI-Driven Demand Management Assistant Architecture"
+        />
+
+        <div class="architecture-caption">
+          High-level architecture overview of the AI-Driven Demand Management Assistant
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="section">
+
       <h2>Architecture Approach</h2>
 
       <p>
@@ -235,9 +328,12 @@
         </div>
 
       </div>
+
     </div>
 
+    <!-- INTELLIGENCE -->
     <div class="section">
+
       <h2>Intelligence Core</h2>
 
       <p>
@@ -255,9 +351,12 @@
         This architecture enables responses that are not only informative,
         but also contextualized, traceable, and role-aware.
       </div>
+
     </div>
 
+    <!-- KNOWLEDGE -->
     <div class="section">
+
       <h2>Knowledge Layer</h2>
 
       <p>
@@ -288,9 +387,12 @@
         </div>
 
       </div>
+
     </div>
 
+    <!-- VALUE -->
     <div class="section">
+
       <h2>Business Value</h2>
 
       <ul>
@@ -300,9 +402,12 @@
         <li>Create a unified access point for operational knowledge</li>
         <li>Support faster and more context-aware decision-making</li>
       </ul>
+
     </div>
 
+    <!-- ROADMAP -->
     <div class="section">
+
       <h2>Roadmap & Evolution</h2>
 
       <p>
@@ -327,6 +432,7 @@
         but to create an intelligent cross-platform layer that enhances
         the value of the systems already adopted within the organization.
       </div>
+
     </div>
 
     <div class="footer">
