@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Driven Demand Management Assistant — Architecture</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --bg2: #ffffff;
+      --bg3: #f1efe8;
+      --text: #1a1a18;
+      --text2: #5f5e5a;
+      --text3: #888780;
+      --border: rgba(0,0,0,0.12);
+      --border2: rgba(0,0,0,0.22);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1a;
+        --bg2: #242422;
+        --bg3: #2c2c2a;
+        --text: #e8e6df;
+        --text2: #b4b2a9;
+        --text3: #888780;
+        --border: rgba(255,255,255,0.1);
+        --border2: rgba(255,255,255,0.2);
+      }
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--bg2);
+      border-bottom: 0.5px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .header-left { flex: 1; min-width: 260px; }
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1D9E75;
+      margin-bottom: 6px;
+    }
+    header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.25;
+    }
+    header p {
+      font-size: 14px;
+      color: var(--text2);
+      margin-top: 6px;
+      line-height: 1.6;
+      max-width: 560px;
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: #E1F5EE;
+      color: #085041;
+      border: 0.5px solid #9FE1CB;
+      margin-top: 12px;
+      white-space: nowrap;
+    }
+    @media (prefers-color-scheme: dark) {
+      .header-badge { background: #04342C; color: #9FE1CB; border-color: #0F6E56; }
+    }
+    .header-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text3);
+      padding-top: 4px;
+    }
+    .header-meta .phase-pill {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #FAEEDA;
+      color: #633806;
+      border: 0.5px solid #FAC775;
+    }
+    @media (prefers-color-scheme: dark) {
+      .header-meta .phase-pill { background: #412402; color: #FAC775; border-color: #854F0B; }
+    }
+
+    /* MAIN */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px 60px;
+    }
+
+    /* ARCHITECTURE */
+    .arch-wrap {}
+    .layer { margin-bottom: 10px; }
+    .layer-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 7px;
+      padding-left: 2px;
+    }
+    .node-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .node {
+      flex: 1;
+      min-width: 120px;
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.12s;
+      background: var(--bg2);
+      text-align: left;
+    }
+    .node:hover { transform: translateY(-1px); }
+    .node:active { transform: translateY(0); }
+    .node .n-title { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .node .n-sub { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.35; }
+    .node .n-icon { font-size: 18px; margin-bottom: 5px; }
+
+    /* Layer colour skins */
+    .l-consumer .node { border-color: #B5D4F4; background: #E6F1FB; }
+    .l-consumer .node:hover { background: #d5e9f7; border-color: #378ADD; }
+    .l-consumer .node .n-title { color: #0C447C; }
+    .l-consumer .node .n-sub { color: #185FA5; }
+    .l-consumer .node .n-icon { color: #185FA5; }
+
+    .l-agent .node-single {
+      border: 1.5px solid #1D9E75;
+      border-radius: var(--radius-lg);
+      background: #E1F5EE;
+      padding: 16px 22px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.12s;
+      text-align: left;
+      width: 100%;
+    }
+    .l-agent .node-single:hover { background: #c5edd9; transform: translateY(-1px); }
+    .l-agent .node-single .n-title { font-size: 15px; font-weight: 600; color: #085041; }
+    .l-agent .node-single .n-sub { font-size: 13px; color: #0F6E56; margin-top: 4px; line-height: 1.5; }
+    .l-agent .node-single .n-icon { font-size: 24px; color: #1D9E75; margin-bottom: 7px; }
+    .agent-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: #1D9E75;
+      color: #fff;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .l-core .node { border-color: #CECBF6; background: #EEEDFE; }
+    .l-core .node:hover { background: #dcdafc; border-color: #7F77DD; }
+    .l-core .node .n-title { color: #3C3489; }
+    .l-core .node .n-sub { color: #534AB7; }
+    .l-core .node .n-icon { color: #534AB7; }
+
+    .l-connector .node { border-color: #FAC775; background: #FAEEDA; }
+    .l-connector .node:hover { background: #f5e2bd; border-color: #EF9F27; }
+    .l-connector .node .n-title { color: #633806; }
+    .l-connector .node .n-sub { color: #854F0B; }
+    .l-connector .node .n-icon { color: #BA7517; }
+
+    .l-source .node { border-color: #F5C4B3; background: #FAECE7; }
+    .l-source .node:hover { background: #f5d9cc; border-color: #D85A30; }
+    .l-source .node .n-title { color: #4A1B0C; }
+    .l-source .node .n-sub { color: #993C1D; }
+    .l-source .node .n-icon { color: #D85A30; }
+
+    .l-store .node { border-color: #D3D1C7; background: #F1EFE8; }
+    .l-store .node:hover { background: #e5e3d9; border-color: #888780; }
+    .l-store .node .n-title { color: #2C2C2A; }
+    .l-store .node .n-sub { color: #5F5E5A; }
+    .l-store .node .n-icon { color: #888780; }
+
+    @media (prefers-color-scheme: dark) {
+      .l-consumer .node { border-color: #0C447C; background: #042C53; }
+      .l-consumer .node:hover { background: #083d72; }
+      .l-consumer .node .n-title { color: #B5D4F4; }
+      .l-consumer .node .n-sub { color: #85B7EB; }
+      .l-consumer .node .n-icon { color: #85B7EB; }
+
+      .l-agent .node-single { border-color: #1D9E75; background: #04342C; }
+      .l-agent .node-single:hover { background: #085041; }
+      .l-agent .node-single .n-title { color: #9FE1CB; }
+      .l-agent .node-single .n-sub { color: #5DCAA5; }
+      .l-agent .node-single .n-icon { color: #5DCAA5; }
+
+      .l-core .node { border-color: #3C3489; background: #26215C; }
+      .l-core .node:hover { background: #342d72; }
+      .l-core .node .n-title { color: #CECBF6; }
+      .l-core .node .n-sub { color: #AFA9EC; }
+      .l-core .node .n-icon { color: #AFA9EC; }
+
+      .l-connector .node { border-color: #854F0B; background: #412402; }
+      .l-connector .node:hover { background: #5a3408; }
+      .l-connector .node .n-title { color: #FAC775; }
+      .l-connector .node .n-sub { color: #EF9F27; }
+      .l-connector .node .n-icon { color: #EF9F27; }
+
+      .l-source .node { border-color: #993C1D; background: #4A1B0C; }
+      .l-source .node:hover { background: #622511; }
+      .l-source .node .n-title { color: #F5C4B3; }
+      .l-source .node .n-sub { color: #F0997B; }
+      .l-source .node .n-icon { color: #F0997B; }
+
+      .l-store .node { border-color: #444441; background: #2C2C2A; }
+      .l-store .node:hover { background: #3a3a37; }
+      .l-store .node .n-title { color: #D3D1C7; }
+      .l-store .node .n-sub { color: #B4B2A9; }
+      .l-store .node .n-icon { color: #888780; }
+    }
+
+    /* Connector arrows */
+    .layer-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 3px 0;
+      color: var(--text3);
+      font-size: 12px;
+    }
+    .layer-arrow i { font-size: 16px; }
+
+    /* Detail panel */
+    #detail-panel {
+      margin-top: 16px;
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      background: var(--bg3);
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.65;
+      display: none;
+      position: relative;
+      animation: fadeIn 0.18s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    #detail-panel.visible { display: block; }
+    #detail-panel .dp-close {
+      position: absolute; top: 10px; right: 12px;
+      cursor: pointer; color: var(--text3);
+      font-size: 18px; background: none; border: none; padding: 4px;
+      line-height: 1; border-radius: 4px;
+      transition: background 0.12s;
+    }
+    #detail-panel .dp-close:hover { background: var(--border); }
+    #detail-panel .dp-title { font-weight: 600; font-size: 15px; margin-bottom: 6px; color: var(--text); }
+    #detail-panel .dp-body { color: var(--text2); }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding: 14px 16px;
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text2);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 24px 40px;
+      font-size: 12px;
+      color: var(--text3);
+      border-top: 0.5px solid var(--border);
+      background: var(--bg2);
+      margin-top: 40px;
+    }
+    footer strong { color: var(--text2); }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      main { padding: 20px 16px 48px; }
+      .node-row { gap: 6px; }
+      .node { min-width: 100px; padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="header-eyebrow">Solution Architecture — Draft v1.0</div>
+    <h1>AI-Driven Demand Management Assistant</h1>
+    <p>From fragmented knowledge to real-time decision intelligence. A unified AI layer connecting A-ah!, Microsoft Teams, SharePoint, and Jira into a single conversational interface.</p>
+    <span class="header-badge">
+      <i class="ti ti-sparkles"></i>
+      Any demand · Any time · Instant answers
+    </span>
+  </div>
+  <div class="header-meta">
+    <span class="phase-pill">Phase 1 — Read-only</span>
+    <span>Click any node to explore</span>
+  </div>
+</header>
+
+<main>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div> Consumers</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div> AI Agent Interface</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div> Intelligence Core</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div> Connector Layer</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#D85A30"></div> Source Systems</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#888780"></div> Knowledge Store</div>
+  </div>
+
+  <div class="arch-wrap">
+
+    <!-- L1: CONSUMERS -->
+    <div class="layer l-consumer">
+      <div class="layer-label">Consumers — any stakeholder, any time</div>
+      <div class="node-row">
+        <button class="node" onclick="showDetail('exec')">
+          <i class="ti ti-building-skyscraper n-icon"></i>
+          <div class="n-title">Executives</div>
+          <div class="n-sub">Portfolio overview, status</div>
+        </button>
+        <button class="node" onclick="showDetail('dm')">
+          <i class="ti ti-layout-dashboard n-icon"></i>
+          <div class="n-title">Demand managers</div>
+          <div class="n-sub">Your team — demand details</div>
+        </button>
+        <button class="node" onclick="showDetail('dev')">
+          <i class="ti ti-code n-icon"></i>
+          <div class="n-title">Developers &amp; PMs</div>
+          <div class="n-sub">Sprint context, blockers</div>
+        </button>
+        <button class="node" onclick="showDetail('biz')">
+          <i class="ti ti-briefcase n-icon"></i>
+          <div class="n-title">Business stakeholders</div>
+          <div class="n-sub">Their demand status &amp; docs</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="layer-arrow">
+      <i class="ti ti-arrows-down-up"></i>
+      <span>Natural language Q&amp;A — chat, Teams bot, or web interface</span>
+    </div>
+
+    <!-- L2: AI AGENT -->
+    <div class="layer l-agent">
+      <div class="layer-label">AI agent interface</div>
+      <button class="node-single" onclick="showDetail('agent')">
+        <i class="ti ti-robot n-icon"></i>
+        <div class="n-title">Demand Management AI Assistant</div>
+        <div class="n-sub">Conversational interface — understands demand context, user intent, and role. Responds in natural language with cited sources.</div>
+        <span class="agent-badge">Any demand · Any time · Instant answers</span>
+      </button>
+    </div>
+
+    <div class="layer-arrow">
+      <i class="ti ti-arrow-down"></i>
+      <span>Query decomposition &amp; retrieval requests</span>
+    </div>
+
+    <!-- L3: INTELLIGENCE CORE -->
+    <div class="layer l-core">
+      <div class="layer-label">Intelligence core</div>
+      <div class="node-row">
+        <button class="node" onclick="showDetail('rag')">
+          <i class="ti ti-search n-icon"></i>
+          <div class="n-title">RAG engine</div>
+          <div class="n-sub">Retrieval-augmented generation</div>
+        </button>
+        <button class="node" onclick="showDetail('router')">
+          <i class="ti ti-route n-icon"></i>
+          <div class="n-title">Intent router</div>
+          <div class="n-sub">Routes to right connector</div>
+        </button>
+        <button class="node" onclick="showDetail('ctx')">
+          <i class="ti ti-filter n-icon"></i>
+          <div class="n-title">Context builder</div>
+          <div class="n-sub">Role, demand ID, history</div>
+        </button>
+        <button class="node" onclick="showDetail('synth')">
+          <i class="ti ti-sparkles n-icon"></i>
+          <div class="n-title">Response synthesizer</div>
+          <div class="n-sub">LLM + source citations</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="layer-arrow">
+      <i class="ti ti-arrow-down"></i>
+      <span>Structured queries to connectors (read-only)</span>
+    </div>
+
+    <!-- L4: CONNECTORS -->
+    <div class="layer l-connector">
+      <div class="layer-label">Integration &amp; connector layer</div>
+      <div class="node-row">
+        <button class="node" onclick="showDetail('c-aah')">
+          <i class="ti ti-list-check n-icon"></i>
+          <div class="n-title">A-ah! connector</div>
+          <div class="n-sub">Demands, status, requirements</div>
+        </button>
+        <button class="node" onclick="showDetail('c-teams')">
+          <i class="ti ti-messages n-icon"></i>
+          <div class="n-title">Teams connector</div>
+          <div class="n-sub">Meeting minutes via Copilot</div>
+        </button>
+        <button class="node" onclick="showDetail('c-sp')">
+          <i class="ti ti-files n-icon"></i>
+          <div class="n-title">SharePoint connector</div>
+          <div class="n-sub">Docs, deliverables, briefs</div>
+        </button>
+        <button class="node" onclick="showDetail('c-jira')">
+          <i class="ti ti-bug n-icon"></i>
+          <div class="n-title">Jira connector</div>
+          <div class="n-sub">Dev tracking, dashboards</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="layer-arrow">
+      <i class="ti ti-arrow-down"></i>
+      <span>API / webhook sync (scheduled + event-triggered)</span>
+    </div>
+
+    <!-- L5: SOURCE SYSTEMS -->
+    <div class="layer l-source">
+      <div class="layer-label">Source systems — existing tools (unchanged)</div>
+      <div class="node-row">
+        <button class="node" onclick="showDetail('s-aah')">
+          <i class="ti ti-clipboard-list n-icon"></i>
+          <div class="n-title">A-ah!</div>
+          <div class="n-sub">System of record: demands, statuses (shaping → closure), business requirements</div>
+        </button>
+        <button class="node" onclick="showDetail('s-teams')">
+          <i class="ti ti-messages n-icon"></i>
+          <div class="n-title">Microsoft Teams + Copilot</div>
+          <div class="n-sub">Follow-up meetings, minutes, general communications</div>
+        </button>
+        <button class="node" onclick="showDetail('s-sp')">
+          <i class="ti ti-folder-open n-icon"></i>
+          <div class="n-title">SharePoint</div>
+          <div class="n-sub">Document archive: deliverables, mission briefs, presentations</div>
+        </button>
+        <button class="node" onclick="showDetail('s-jira')">
+          <i class="ti ti-chart-bar n-icon"></i>
+          <div class="n-title">Jira</div>
+          <div class="n-sub">Dev dashboards, sprint tracking, PM visibility</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="layer-arrow">
+      <i class="ti ti-arrow-down"></i>
+      <span>Indexed &amp; vectorized into knowledge store</span>
+    </div>
+
+    <!-- L6: KNOWLEDGE STORE -->
+    <div class="layer l-store">
+      <div class="layer-label">Knowledge store</div>
+      <div class="node-row">
+        <button class="node" onclick="showDetail('ks-vec')">
+          <i class="ti ti-database n-icon"></i>
+          <div class="n-title">Vector database</div>
+          <div class="n-sub">Semantic search over demand knowledge</div>
+        </button>
+        <button class="node" onclick="showDetail('ks-meta')">
+          <i class="ti ti-table n-icon"></i>
+          <div class="n-title">Metadata cache</div>
+          <div class="n-sub">Demand IDs, status, owners</div>
+        </button>
+        <button class="node" onclick="showDetail('ks-index')">
+          <i class="ti ti-refresh n-icon"></i>
+          <div class="n-title">Indexing pipeline</div>
+          <div class="n-sub">Scheduled + event-triggered sync</div>
+        </button>
+        <button class="node" onclick="showDetail('ks-access')">
+          <i class="ti ti-lock n-icon"></i>
+          <div class="n-title">Access control layer</div>
+          <div class="n-sub">Role-based data visibility</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Detail panel -->
+    <div id="detail-panel" role="region" aria-live="polite">
+      <button class="dp-close" onclick="closeDetail()" aria-label="Close detail"><i class="ti ti-x"></i></button>
+      <div id="dp-content"></div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <strong>AI-Driven Demand Management Assistant</strong> — Solution Architecture Draft v1.0 &nbsp;·&nbsp; Phase 1: Read-only &nbsp;·&nbsp; Click any node to explore
+</footer>
+
+<script>
+const details = {
+  exec: { title: "Executives", body: "Executives can query the agent for real-time portfolio summaries — how many demands are in each lifecycle stage, which are at risk, and what decisions are pending — without coordinating with the demand management team." },
+  dm: { title: "Demand managers (your team)", body: "Your team can reduce the number of recurring status update requests. The agent serves as the first point of contact for repetitive questions about demand details, freeing the team to focus on decision-making and governance." },
+  dev: { title: "Developers & project managers", body: "Devs and PMs can query progress, blockers, and sprint context — drawing from Jira dashboards — without waiting for a team sync. The agent bridges A-ah! status with Jira technical detail." },
+  biz: { title: "Business stakeholders", body: "Stakeholders can self-serve the status of their own demands, retrieve the latest mission brief from SharePoint, or check whether their requirements are in design or implementation — instantly, at any time." },
+  agent: { title: "AI Agent Interface", body: "The agent is the single conversational entry point. It understands demand vocabulary (shaping, high-level assessment, roll-out...), recognises demand IDs, infers intent from natural language, and always cites its source systems in the response. Deployable as a Teams bot, a web widget, or both." },
+  rag: { title: "RAG Engine", body: "Retrieval-Augmented Generation: the engine first retrieves relevant chunks from the knowledge store semantically, then passes them as context to the LLM for synthesis. This grounds the answer in real data and prevents hallucination. The agent never invents demand status." },
+  router: { title: "Intent Router", body: "Classifies the query: is it about a demand's status (→ A-ah! connector), a document (→ SharePoint), meeting minutes (→ Teams), or developer progress (→ Jira)? Multi-source queries trigger parallel retrieval from multiple connectors." },
+  ctx: { title: "Context Builder", body: "Enriches each query with the caller's role, their team's demand portfolio, and conversation history. An executive's question about 'pending decisions' resolves differently than a developer's same question." },
+  synth: { title: "Response Synthesizer", body: "The LLM assembles the final answer from retrieved chunks, adds source citations ('Per A-ah! as of today…'), and formats the response for the channel — chat message, Teams adaptive card, or structured summary." },
+  'c-aah': { title: "A-ah! Connector", body: "Reads demand records via the A-ah! API: status, lifecycle stage, business requirements, responsible team, linked items. This is the authoritative source for demand status — always reflected faithfully in agent responses." },
+  'c-teams': { title: "Teams + Copilot Connector", body: "Ingests Copilot-generated meeting minutes and transcripts from follow-up sessions. This makes meeting decisions and action items searchable through the agent — a key differentiator vs. static knowledge bases." },
+  'c-sp': { title: "SharePoint Connector", body: "Uses the Microsoft Graph API to index documents stored in SharePoint: mission briefs, deliverable PDFs, presentations. The agent can surface and link the latest approved version of any document." },
+  'c-jira': { title: "Jira Connector", body: "Reads sprint boards, issue statuses, and dashboard data via the Jira REST API. Lets developers and PMs query the agent for issue progress without leaving their workflow or waiting for a status meeting." },
+  's-aah': { title: "A-ah! (Source system)", body: "System of record. Demand statuses: Shaping → High Level Assessment → Design → Implementation & Testing → Roll-out → Closure. Business requirements and detailed demand data live here. Nothing changes in how your team uses A-ah!." },
+  's-teams': { title: "Microsoft Teams + Copilot (Source)", body: "The collaboration hub. Copilot records follow-up meetings and produces structured minutes. These minutes carry decision logs, action items, and risk flags — all made searchable through the agent." },
+  's-sp': { title: "SharePoint (Source)", body: "Document archive. Stores mission briefs, signed-off deliverables, presentation decks, and compliance artefacts. Versioning is built in — the connector always surfaces the latest approved version." },
+  's-jira': { title: "Jira (Source)", body: "Developer and PM tracking. A-ah! holds the demand-level view; Jira holds the technical task breakdown. The agent bridges them, answering both 'what stage is demand #42?' and 'which Jira tickets are blocking it?'" },
+  'ks-vec': { title: "Vector Database", body: "Stores embeddings of demand records, document chunks, and meeting summaries. Enables semantic search — 'find demands related to data governance' returns conceptually related results, not just keyword matches. Options: Pinecone, Weaviate, Azure AI Search." },
+  'ks-meta': { title: "Metadata Cache", body: "A fast-lookup store (e.g. Redis or a relational DB) for structured demand attributes: IDs, statuses, owners, dates. Answers factual questions ('is demand #247 in design?') without hitting the vector DB every time." },
+  'ks-index': { title: "Indexing Pipeline", body: "Scheduled jobs sync source systems regularly. Event-triggered sync fires on A-ah! status changes or new SharePoint uploads. Copilot minutes are ingested after each meeting via webhook or polling." },
+  'ks-access': { title: "Access Control Layer", body: "Enforces role-based visibility. Executives see all demands. Business stakeholders see only their own. Developers see technical detail. This layer filters retrieval results before they reach the LLM context window." },
+};
+
+function showDetail(id) {
+  const d = details[id];
+  if (!d) return;
+  document.getElementById('dp-content').innerHTML =
+    '<div class="dp-title">' + d.title + '</div>' +
+    '<div class="dp-body">' + d.body + '</div>';
+  const p = document.getElementById('detail-panel');
+  p.classList.add('visible');
+  setTimeout(() => p.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('visible');
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDetail();
+});
+</script>
+
+</body>
+</html>
