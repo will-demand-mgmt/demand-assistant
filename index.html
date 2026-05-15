@@ -295,9 +295,9 @@
     </div>
     <div class="modal-body">
       <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('agent','flow')">Live query demo</button>
-        <button class="tab-btn" onclick="switchTab('agent','arch')">Technical design</button>
-        <button class="tab-btn" onclick="switchTab('agent','decisions')">Open decisions</button>
+        <button class="tab-btn active" data-tab="flow" onclick="switchTab('agent','flow')">Live query demo</button>
+        <button class="tab-btn" data-tab="arch" onclick="switchTab('agent','arch')">Technical design</button>
+        <button class="tab-btn" data-tab="decisions" onclick="switchTab('agent','decisions')">Open decisions</button>
       </div>
       <div class="tab-pane active" id="agent-flow">
         <div class="anim-agent" id="agent-anim">
@@ -335,9 +335,9 @@
     </div>
     <div class="modal-body">
       <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('rag','flow')">Step-by-step animation</button>
-        <button class="tab-btn" onclick="switchTab('rag','arch')">Technical design</button>
-        <button class="tab-btn" onclick="switchTab('rag','decisions')">Open decisions</button>
+        <button class="tab-btn active" data-tab="flow" onclick="switchTab('rag','flow')">Step-by-step animation</button>
+        <button class="tab-btn" data-tab="arch" onclick="switchTab('rag','arch')">Technical design</button>
+        <button class="tab-btn" data-tab="decisions" onclick="switchTab('rag','decisions')">Open decisions</button>
       </div>
       <div class="tab-pane active" id="rag-flow">
         <div class="anim-rag" id="rag-anim">
@@ -471,11 +471,12 @@ function closeModalOnBg(e,id){ if(!e.target.closest('.modal-box')) closeModal(id
  
 function switchTab(modal,tab){
   const box=document.getElementById('modal-'+modal);
+  if(!box) return;
   box.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   box.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  const btn = Array.from(box.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick').includes("'"+tab+"'"));
+  const btn=Array.from(box.querySelectorAll('.tab-btn')).find(b=>b.dataset.tab===tab);
   if(btn) btn.classList.add('active');
-  const pane = document.getElementById(modal+'-'+tab);
+  const pane=box.querySelector('#'+modal+'-'+tab);
   if(pane) pane.classList.add('active');
 }
  
@@ -555,3 +556,4 @@ document.addEventListener('keydown',e=>{
 </script>
 </body>
 </html>
+ 
