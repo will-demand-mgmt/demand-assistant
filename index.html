@@ -305,6 +305,52 @@
  
     .ms-week-tag{font-size:11px;color:var(--text3);margin-top:3px;}
  
+ 
+    /* CHECKLIST */
+    .ck-group{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;}
+    .ck-group-header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:.5px solid var(--border);background:var(--bg3);}
+    .ck-group-icon{width:34px;height:34px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+    .ck-group-title{font-size:13px;font-weight:600;color:var(--text);}
+    .ck-group-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+    .ck-group-badge{margin-left:auto;font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px;background:var(--bg);color:var(--text3);border:.5px solid var(--border);white-space:nowrap;flex-shrink:0;}
+    .ck-group-badge.done{background:#E0F5EE;color:#085041;border-color:#9FE1CB;}
+    .ck-items{display:flex;flex-direction:column;}
+    .ck-item{display:flex;align-items:flex-start;gap:12px;padding:11px 18px;border-bottom:.5px solid var(--border);transition:background .12s;}
+    .ck-item:last-child{border-bottom:none;}
+    .ck-item:hover{background:var(--bg3);}
+    .ck-item.resolved{opacity:.45;}
+    .ck-item.resolved .ck-item-q{text-decoration:line-through;color:var(--text3);}
+    .ck-check{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px;transition:all .15s;margin-top:1px;padding:0;}
+    .ck-check:hover{border-color:var(--green);color:var(--green);}
+    .ck-item.resolved .ck-check{background:var(--green);border-color:var(--green);color:#fff;}
+    .ck-item-body{flex:1;}
+    .ck-item-q{font-size:12.5px;color:var(--text);line-height:1.5;}
+    .ck-item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap;}
+    .ck-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;}
+    .tag-it{background:#E6F1FB;color:#185FA5;}
+    .tag-dm{background:#E0F5EE;color:#085041;}
+    .tag-exec{background:#EEEDFE;color:#3C3489;}
+    .tag-legal{background:#FAECE7;color:#993C1D;}
+    .tag-vendor{background:#F1EFE8;color:#5F5E5A;}
+    .ck-source{font-size:10px;color:var(--text3);font-style:italic;}
+    .ck-priority{flex-shrink:0;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;align-self:flex-start;margin-top:1px;}
+    .p-critical{background:#FCEBEB;color:#A32D2D;border:.5px solid #F09595;}
+    .p-high{background:#FAEEDA;color:#633806;border:.5px solid #FAC775;}
+    .p-medium{background:#EEEDFE;color:#3C3489;border:.5px solid #CECBF6;}
+    .p-low{background:#F1EFE8;color:#5F5E5A;border:.5px solid #D3D1C7;}
+    @media(prefers-color-scheme:dark){
+      .tag-it{background:#042C53;color:#85B7EB;}
+      .tag-dm{background:#04342C;color:#9FE1CB;}
+      .tag-exec{background:#26215C;color:#CECBF6;}
+      .tag-legal{background:#4A1B0C;color:#F0997B;}
+      .tag-vendor{background:#2C2C2A;color:#B4B2A9;}
+      .p-critical{background:#501313;color:#F09595;border-color:#A32D2D;}
+      .p-high{background:#412402;color:#FAC775;border-color:#854F0B;}
+      .p-medium{background:#26215C;color:#CECBF6;border-color:#3C3489;}
+      .p-low{background:#2C2C2A;color:#B4B2A9;border-color:#444441;}
+      .ck-group-badge.done{background:#04342C;color:#9FE1CB;border-color:#1D9E75;}
+    }
+ 
     footer{text-align:center;padding:20px 40px;font-size:11px;color:var(--text3);border-top:.5px solid var(--border);background:var(--bg2);}
     footer strong{color:var(--text2);}
   </style>
@@ -513,6 +559,365 @@
     <span>Phase 1 delivers standalone value &mdash; Phase 2 begins only when Phase 1 is stable</span>
   </div>
  
+</section>
+ 
+ 
+<section class="roadmap-section" style="margin-top:0;padding-top:0;">
+  <div class="roadmap-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div>
+      <h2>Open Decisions Checklist</h2>
+      <p>All unresolved decisions aggregated from every architecture layer and roadmap milestone. Bring this to your next steering meeting.</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 32 resolved</span>
+      <button id="ck-reset" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text3);cursor:pointer;font-family:var(--font);">Reset all</button>
+      <button id="ck-export" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green);border:none;color:#fff;cursor:pointer;font-family:var(--font);">&#8681; Export open</button>
+    </div>
+  </div>
+ 
+  <div id="checklist-wrap" style="display:flex;flex-direction:column;gap:16px;">
+ 
+    <!-- GROUP: INFRASTRUCTURE & PLATFORM -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#E6F1FB;color:#185FA5;"><i class="ti ti-server"></i></span>
+        <div>
+          <div class="ck-group-title">Infrastructure &amp; Platform</div>
+          <div class="ck-group-sub">Cloud environment, vector DB, LLM provider</div>
+        </div>
+        <span class="ck-group-badge" id="badge-infra">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="infra" data-id="i1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is our cloud environment — Azure, AWS, or on-premise?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Knowledge store · Vector DB</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which vector DB platform: Azure AI Search, Pinecone, or Weaviate?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Vector DB · M2</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which LLM provider: Azure OpenAI (GPT-4o) or Anthropic Claude API?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent core · M4</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is the metadata cache technology: Redis, PostgreSQL, or Azure Table Storage?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Metadata cache</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Is multilingual content present in demands or documents? If yes, a multilingual embedding model must be chosen before first indexing.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Vector DB · RAG engine</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- GROUP: SOURCE SYSTEM APIs -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#FAEEDA;color:#854F0B;"><i class="ti ti-plug"></i></span>
+        <div>
+          <div class="ck-group-title">Source System APIs</div>
+          <div class="ck-group-sub">A-ah!, Teams/Copilot, SharePoint, Jira connectivity</div>
+        </div>
+        <span class="ck-group-badge" id="badge-api">0/7</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="api" data-id="a1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Does A-ah! expose a REST API? This is the single most critical dependency — all other milestones depend on it.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-vendor">Vendor</span><span class="ck-source">A-ah! connector · M1</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Does A-ah! support webhooks on status change, or is polling required?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-vendor">Vendor</span><span class="ck-source">A-ah! connector · Indexing pipeline</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Can IT admin create a Microsoft Graph API app registration with OnlineMeetings.Read.All and Sites.Read.All permissions?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Teams connector · SharePoint connector · M1</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Are Copilot meeting transcripts accessible via Graph API in our tenant, or only visible inside the Teams UI?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Teams connector · M3</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is our Jira version — Cloud or Data Center? The REST API differs between the two.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Jira connector · M1</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a6">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">How are Jira issues linked to A-ah! demands today — custom field, label convention, or epic hierarchy?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Jira connector</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a7">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is the SharePoint folder naming convention for demand documents — is there a consistent root path per demand ID?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint connector</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- GROUP: AGENT DESIGN -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#E0F5EE;color:#085041;"><i class="ti ti-robot"></i></span>
+        <div>
+          <div class="ck-group-title">Agent Design</div>
+          <div class="ck-group-sub">Deployment channel, memory, escalation, response format</div>
+        </div>
+        <span class="ck-group-badge" id="badge-agent">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="agent" data-id="ag1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Primary deployment channel: Microsoft Teams bot or dedicated web portal? This drives the entire front-end development scope.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent interface</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should external stakeholders (vendors, clients) be able to query the agent? If yes, a guest access model is needed.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">Agent interface · Access control</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Stateful or stateless sessions? Stateful enables follow-up questions but requires session storage infrastructure.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Agent interface · Context builder</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">When confidence is low, should the agent escalate to a demand manager via Teams message, or simply reply "I don't have reliable information on this"?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent interface · Response synthesizer</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should the agent proactively suggest 2–3 follow-up questions after each answer? Increases engagement but adds cost per query.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Response synthesizer</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- GROUP: ACCESS & SECURITY -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#FAECE7;color:#993C1D;"><i class="ti ti-shield-lock"></i></span>
+        <div>
+          <div class="ck-group-title">Access Control &amp; Security</div>
+          <div class="ck-group-sub">Roles, permissions, GDPR, audit log</div>
+        </div>
+        <span class="ck-group-badge" id="badge-access">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="access" data-id="ac1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Are the 4 defined roles (Executive, Demand Manager, Developer/PM, Business Stakeholder) sufficient, or are sub-roles needed?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Access control · M5</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Do any SharePoint documents require access restrictions beyond the role level — e.g. visible only to specific individuals?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Access control · SharePoint connector</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is the audit log retention period? GDPR may impose constraints on logs containing personal data (query text may reference names).</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Access control · M5</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Does our organisation require a Data Protection Impact Assessment (DPIA) before deploying an AI system that indexes internal documents?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Access control · M5 · M10</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should meeting minutes from all Teams channels be indexed, or only specific channels (e.g. Demand Follow-up)?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Teams connector · M3</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- GROUP: DATA & KNOWLEDGE -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#EEEDFE;color:#3C3489;"><i class="ti ti-database"></i></span>
+        <div>
+          <div class="ck-group-title">Data &amp; Knowledge Store</div>
+          <div class="ck-group-sub">Indexing scope, chunk size, freshness, historical data</div>
+        </div>
+        <span class="ck-group-badge" id="badge-data">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="data" data-id="d1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">How many total demands exist today and what is the average length of business requirement texts? Required to estimate storage and embedding cost.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Vector DB · M2</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">How far back should historical meeting minutes and documents be indexed at launch — last 6 months, 12 months, or all available history?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Indexing pipeline · M2</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What maximum staleness is acceptable per source — how quickly must a status change in A-ah! be reflected in agent answers?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Indexing pipeline</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What happens if an indexing job fails — should the agent serve stale data with a freshness warning, or block queries until the index is healthy?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Indexing pipeline · M2</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should the agent be able to answer "what changed between version 1 and version 2 of this document", or is latest-version-only sufficient for Phase 1?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint connector</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- GROUP: GOVERNANCE & ROLLOUT -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#F1EFE8;color:#5F5E5A;"><i class="ti ti-flag"></i></span>
+        <div>
+          <div class="ck-group-title">Governance &amp; Rollout</div>
+          <div class="ck-group-sub">Ownership, SLA, Phase 2 write-back approvals, analytics</div>
+        </div>
+        <span class="ck-group-badge" id="badge-gov">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="gov" data-id="g1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Who is the long-term owner of the agent — IT team, demand management team, or a shared responsibility model?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">M12</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What pilot group do we start with — which demand managers and business stakeholders are the best early adopters for M6?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">M6</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which analytics tool will power the usage dashboard in Phase 2 — Power BI, Grafana, or a custom solution?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">M11</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Phase 2 write-back (M10): which fields can the agent propose updating in A-ah!, and who is the approving authority for each update?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">M10</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What name and branding should the agent have internally? A recognisable name drives adoption.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">M12</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+      </div>
+    </div>
+ 
+  </div><!-- end checklist-wrap -->
 </section>
  
 <footer><strong>AI-Driven Demand Management Assistant</strong> · Solution Architecture Draft v1.0 · Phase 1: Read-only</footer>
@@ -2021,6 +2426,80 @@ function showMilestone(id) {
 document.querySelectorAll('.milestone[data-milestone]').forEach(function(el){
   el.addEventListener('click', function(){ showMilestone(el.dataset.milestone); });
 });
+ 
+ 
+// Checklist logic
+var ckState = {};
+var ckGroups = {
+  infra: ['i1','i2','i3','i4','i5'],
+  api:   ['a1','a2','a3','a4','a5','a6','a7'],
+  agent: ['ag1','ag2','ag3','ag4','ag5'],
+  access:['ac1','ac2','ac3','ac4','ac5'],
+  data:  ['d1','d2','d3','d4','d5'],
+  gov:   ['g1','g2','g3','g4','g5']
+};
+var ckTotal = 32;
+ 
+function ckUpdateProgress() {
+  var resolved = Object.values(ckState).filter(Boolean).length;
+  var prog = document.getElementById('ck-progress');
+  if(prog) prog.textContent = resolved + ' / ' + ckTotal + ' resolved';
+  // Update group badges
+  Object.keys(ckGroups).forEach(function(group) {
+    var ids = ckGroups[group];
+    var done = ids.filter(function(id){ return ckState[id]; }).length;
+    var badge = document.getElementById('badge-'+group);
+    if(badge) {
+      badge.textContent = done + '/' + ids.length;
+      badge.classList.toggle('done', done === ids.length);
+    }
+  });
+}
+ 
+document.querySelectorAll('.ck-item').forEach(function(item) {
+  var id = item.dataset.id;
+  var btn = item.querySelector('.ck-check');
+  if(!btn) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    ckState[id] = !ckState[id];
+    item.classList.toggle('resolved', ckState[id]);
+    btn.innerHTML = ckState[id] ? '<i class="ti ti-check"></i>' : '<i class="ti ti-circle"></i>';
+    ckUpdateProgress();
+  });
+});
+ 
+document.getElementById('ck-reset').addEventListener('click', function() {
+  ckState = {};
+  document.querySelectorAll('.ck-item').forEach(function(item) {
+    item.classList.remove('resolved');
+    var btn = item.querySelector('.ck-check');
+    if(btn) btn.innerHTML = '<i class="ti ti-circle"></i>';
+  });
+  ckUpdateProgress();
+});
+ 
+document.getElementById('ck-export').addEventListener('click', function() {
+  var lines = ['OPEN DECISIONS — AI Demand Management Assistant', 'Generated: ' + new Date().toLocaleDateString('en-GB'), ''];
+  var groupNames = {infra:'Infrastructure & Platform', api:'Source System APIs', agent:'Agent Design', access:'Access Control & Security', data:'Data & Knowledge Store', gov:'Governance & Rollout'};
+  Object.keys(ckGroups).forEach(function(group) {
+    var open = ckGroups[group].filter(function(id){ return !ckState[id]; });
+    if(!open.length) return;
+    lines.push('== ' + groupNames[group] + ' ==');
+    open.forEach(function(id) {
+      var el = document.querySelector('[data-id="'+id+'"] .ck-item-q');
+      if(el) lines.push('[ ] ' + el.textContent.trim());
+    });
+    lines.push('');
+  });
+  var blob = new Blob([lines.join('\n')], {type:'text/plain'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'open-decisions-demand-agent.txt';
+  a.click();
+});
+ 
+ckUpdateProgress();
  
 </script>
  
