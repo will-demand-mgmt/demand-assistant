@@ -198,6 +198,48 @@
     .data-model .field-note{font-size:11px;font-style:italic;}
     .data-model tr:hover td{background:var(--bg3);}
  
+ 
+    /* VECTOR SEARCH ANIMATION */
+    .anim-vector{background:#08060F;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:220px;position:relative;overflow:hidden;}
+    .vec-query{background:#1C1535;border:.5px solid #3A2A70;border-radius:6px;padding:8px 12px;font-size:11px;color:#AFA9EC;margin-bottom:12px;}
+    .vec-query-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#534AB7;margin-bottom:3px;}
+    .vec-grid{display:flex;flex-direction:column;gap:5px;}
+    .vec-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:5px;background:#100D20;border:.5px solid #1E1840;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s,border-color .3s,background .3s;}
+    .vec-item.show{opacity:1;transform:none;}
+    .vec-item.match{border-color:#7F77DD;background:#1A1535;}
+    .vec-item.top{border-color:#1D9E75;background:#0A2018;}
+    .vec-score{font-size:10px;font-weight:600;min-width:36px;text-align:right;color:#3A3060;}
+    .vec-item.match .vec-score{color:#7F77DD;}
+    .vec-item.top .vec-score{color:#1D9E75;}
+    .vec-label{font-size:10px;color:#5A5080;flex:1;}
+    .vec-item.match .vec-label{color:#AFA9EC;}
+    .vec-item.top .vec-label{color:#6FCFAA;}
+    .vec-tag{font-size:9px;padding:2px 6px;border-radius:4px;white-space:nowrap;}
+    .vec-item.top .vec-tag{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .vec-item.match .vec-tag{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    .vec-item:not(.match):not(.top) .vec-tag{background:#100D20;color:#3A3060;border:.5px solid #1E1840;}
+    .vec-result-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1D9E75;margin:10px 0 5px;opacity:0;transition:opacity .3s;}
+    .vec-result-label.show{opacity:1;}
+    /* INDEX PIPELINE ANIMATION */
+    .anim-pipeline{background:#080C10;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .pipe-row{display:flex;align-items:center;gap:0;margin-bottom:8px;}
+    .pipe-source{border-radius:6px;padding:7px 10px;font-size:10px;font-weight:500;min-width:80px;text-align:center;opacity:0;transition:opacity .35s,transform .35s;transform:scale(.9);}
+    .pipe-source.show{opacity:1;transform:none;}
+    .pipe-arrow{color:#2A3A4A;font-size:16px;margin:0 4px;opacity:0;transition:opacity .3s;}
+    .pipe-arrow.show{opacity:1;color:#378ADD;}
+    .pipe-step{flex:1;border-radius:5px;padding:6px 8px;font-size:10px;line-height:1.4;opacity:0;transition:opacity .35s,transform .35s;transform:translateY(4px);}
+    .pipe-step.show{opacity:1;transform:none;}
+    .pipe-badge{font-size:9px;font-weight:600;padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle;}
+    /* ACCESS CONTROL ANIMATION */
+    .anim-access{background:#080810;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .access-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;margin-bottom:6px;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s;}
+    .access-row.show{opacity:1;transform:none;}
+    .access-role{font-size:10px;font-weight:600;min-width:130px;padding:4px 8px;border-radius:4px;text-align:center;}
+    .access-arrow{color:#2A3A4A;font-size:14px;flex-shrink:0;}
+    .access-row.show .access-arrow{color:#378ADD;}
+    .access-scope{font-size:10px;color:#6A8A9A;flex:1;}
+    .access-badge{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+ 
     footer{text-align:center;padding:20px 40px;font-size:11px;color:var(--text3);border-top:.5px solid var(--border);background:var(--bg2);}
     footer strong{color:var(--text2);}
   </style>
@@ -291,12 +333,12 @@
   <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>Indexed &amp; vectorized into knowledge store</span></div>
  
   <div class="layer l-store">
-    <div class="layer-label">Knowledge store</div>
+    <div class="layer-label">Knowledge store <span style="color:var(--green)">&#10022;</span></div>
     <div class="node-row">
-      <button class="node" data-simple="ks-vec"><i class="ti ti-database n-icon"></i><div class="n-title">Vector database</div><div class="n-sub">Semantic search over demands</div></button>
-      <button class="node" data-simple="ks-meta"><i class="ti ti-table n-icon"></i><div class="n-title">Metadata cache</div><div class="n-sub">Demand IDs, status, owners</div></button>
-      <button class="node" data-simple="ks-index"><i class="ti ti-refresh n-icon"></i><div class="n-title">Indexing pipeline</div><div class="n-sub">Scheduled + event-triggered</div></button>
-      <button class="node" data-simple="ks-access"><i class="ti ti-lock n-icon"></i><div class="n-title">Access control</div><div class="n-sub">Role-based data visibility</div></button>
+      <button class="node has-dive" data-modal="ks-vec"><i class="ti ti-database n-icon"></i><div class="n-title">Vector database</div><div class="n-sub">Semantic search over demands</div></button>
+      <button class="node has-dive" data-modal="ks-meta"><i class="ti ti-table n-icon"></i><div class="n-title">Metadata cache</div><div class="n-sub">Demand IDs, status, owners</div></button>
+      <button class="node has-dive" data-modal="ks-index"><i class="ti ti-refresh n-icon"></i><div class="n-title">Indexing pipeline</div><div class="n-sub">Scheduled + event-triggered</div></button>
+      <button class="node has-dive" data-modal="ks-access"><i class="ti ti-lock n-icon"></i><div class="n-title">Access control</div><div class="n-sub">Role-based data visibility</div></button>
     </div>
   </div>
  
@@ -919,6 +961,226 @@
   </div>
 </div>
  
+ 
+<!-- MODAL: VECTOR DATABASE -->
+<div class="modal-overlay" id="modal-ks-vec">
+  <div class="modal-box" id="modal-ks-vec-box">
+    <div class="modal-header">
+      <div><h2>Vector Database</h2><p>The semantic search engine at the heart of the knowledge store. Finds relevant demand knowledge even when the exact words don't match.</p></div>
+      <button class="modal-close" data-close="ks-vec"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-vec" data-tab="search">Semantic search demo</button>
+        <button class="tab-btn" data-modal="ks-vec" data-tab="design">Technical design</button>
+        <button class="tab-btn" data-modal="ks-vec" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-vec-search">
+        <div class="anim-vector" id="anim-vec">
+          <div class="vec-query">
+            <div class="vec-query-label">Query embedding</div>
+            &quot;Which demands are related to data governance?&quot;
+          </div>
+          <div class="vec-result-label" id="vec-scanning">Scanning vector space&hellip;</div>
+          <div class="vec-grid">
+            <div class="vec-item" id="v1"><span class="vec-label">DM-044 &mdash; Data Platform Migration (business_requirements chunk)</span><span class="vec-score" id="v1s">0.91</span><span class="vec-tag">top match</span></div>
+            <div class="vec-item" id="v2"><span class="vec-label">DM-031 &mdash; Data Quality Framework (mission brief)</span><span class="vec-score" id="v2s">0.87</span><span class="vec-tag">top match</span></div>
+            <div class="vec-item" id="v3"><span class="vec-label">Teams minutes 02/04 &mdash; governance discussion action items</span><span class="vec-score" id="v3s">0.83</span><span class="vec-tag">match</span></div>
+            <div class="vec-item" id="v4"><span class="vec-label">DM-019 &mdash; GDPR Compliance Demand (SharePoint brief)</span><span class="vec-score" id="v4s">0.79</span><span class="vec-tag">match</span></div>
+            <div class="vec-item" id="v5"><span class="vec-label">DM-007 &mdash; Legacy System Decommission</span><span class="vec-score" id="v5s">0.44</span><span class="vec-tag">below threshold</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-vec"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ks-vec-design">
+        <ul class="decisions-list">
+          <li><div class="d-num">1</div><div class="d-text"><strong>What gets embedded:</strong> Each demand record (chunked by field), document section (~512 tokens), and meeting minute summary. Every chunk carries metadata: source system, demand ID, timestamp, and document type.</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>Embedding model:</strong> text-embedding-3-small (OpenAI, 1536 dimensions) for English-primary content. If multilingual content is needed, switch to multilingual-e5-large before first indexing — migration is costly afterwards.</div></li>
+          <li><div class="d-num">3</div><div class="d-text"><strong>Similarity threshold:</strong> Chunks scoring below 0.70 cosine similarity are excluded from retrieval. This prevents loosely related content from polluting the LLM context.</div></li>
+          <li><div class="d-num">4</div><div class="d-text"><strong>Hybrid search:</strong> Semantic vector search is combined with BM25 keyword search. Final ranking = 0.6 &times; semantic score + 0.4 &times; keyword score. Exact demand IDs (e.g. DM-044) always score highest via keyword boost.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="ks-vec-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Vector DB platform:</strong> Azure AI Search (best if already on Azure — integrated auth, no extra infra), Pinecone (managed, fastest queries), or Weaviate (open source, full control). What is your cloud environment?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Index size estimate:</strong> How many demands exist today, and what is the average length of business requirements? This determines initial storage and embedding cost.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Multilingual content:</strong> Are demands or documents written in multiple languages? The embedding model choice must be made before any data is indexed.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Score threshold tuning:</strong> The 0.70 threshold is a starting point. It must be calibrated on real demand data — too high and the agent says &quot;I don&apos;t know&quot; too often; too low and answers become noisy.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: METADATA CACHE -->
+<div class="modal-overlay" id="modal-ks-meta">
+  <div class="modal-box" id="modal-ks-meta-box">
+    <div class="modal-header">
+      <div><h2>Metadata Cache</h2><p>A fast-lookup structured store for demand attributes — answers factual queries instantly without touching the vector DB.</p></div>
+      <button class="modal-close" data-close="ks-meta"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-meta" data-tab="design">Design &amp; schema</button>
+        <button class="tab-btn" data-modal="ks-meta" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-meta-design">
+        <table class="data-model">
+          <thead><tr><th>Field cached</th><th>Type</th><th>Why cached (not vector)</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">demand_id</td><td class="field-type">string PK</td><td class="field-note">Primary key — instant lookup by ID without semantic search</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-note">Exact match queries: &quot;find demand called Data Platform&quot;</td></tr>
+            <tr><td class="field-name">stage</td><td class="field-type">enum</td><td class="field-note">Factual queries: &quot;is DM-044 in design?&quot; — no embedding needed</td></tr>
+            <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">&quot;Who owns DM-044?&quot; — answered from cache in &lt;10ms</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Portfolio filters: &quot;show all Critical demands&quot;</td></tr>
+            <tr><td class="field-name">updated_at</td><td class="field-type">datetime</td><td class="field-note">Citation timestamp — &quot;Per A-ah! as of 14 May 2025&quot;</td></tr>
+            <tr><td class="field-name">linked_jira[]</td><td class="field-type">string[]</td><td class="field-note">Cross-system join without re-querying Jira API</td></tr>
+            <tr><td class="field-name">doc_refs[]</td><td class="field-type">object[]</td><td class="field-note">SharePoint document links per demand — instant document retrieval</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px 13px;background:var(--bg3);border-radius:var(--r-md);font-size:12px;color:var(--text2);line-height:1.6;">
+          <strong style="color:var(--text)">Two-tier retrieval strategy:</strong> the agent always checks the metadata cache first for structured lookups (&lt;10ms). Only if the query requires semantic understanding does it hit the vector DB (~80&ndash;150ms). This keeps simple factual queries fast and cheap.
+        </div>
+      </div>
+      <div class="tab-pane" id="ks-meta-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Cache technology:</strong> Redis (fastest, in-memory) for hot data, PostgreSQL for structured relational queries, or Azure Table Storage if already on Azure. Choice depends on query patterns and existing infra.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Cache TTL:</strong> How stale can the metadata be? 15-minute TTL is a safe default. If A-ah! supports webhooks, the cache updates on every status change instead of on a schedule.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Portfolio queries:</strong> Should the cache support aggregate queries like &quot;how many demands are in Design phase?&quot; — or is that always delegated to the vector DB? Aggregates are faster from a structured cache.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: INDEXING PIPELINE -->
+<div class="modal-overlay" id="modal-ks-index">
+  <div class="modal-box" id="modal-ks-index-box">
+    <div class="modal-header">
+      <div><h2>Indexing Pipeline</h2><p>Keeps the knowledge store current — combining scheduled sync with event-triggered updates for near-real-time freshness.</p></div>
+      <button class="modal-close" data-close="ks-index"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-index" data-tab="flow">Pipeline animation</button>
+        <button class="tab-btn" data-modal="ks-index" data-tab="schedule">Sync schedule</button>
+        <button class="tab-btn" data-modal="ks-index" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-index-flow">
+        <div class="anim-pipeline" id="anim-pipe">
+          <div class="pipe-row" id="pipe-r1">
+            <div class="pipe-source" id="pipe-src1" style="background:#042C53;color:#B5D4F4;border:.5px solid #0C447C;">A-ah! webhook</div>
+            <div class="pipe-arrow" id="pipe-a1"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p1" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Status change detected &rarr; fetch updated demand fields <span class="pipe-badge" style="background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;">event</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r2">
+            <div class="pipe-source" id="pipe-src2" style="background:#04342C;color:#9FE1CB;border:.5px solid #1D9E75;">Teams Copilot</div>
+            <div class="pipe-arrow" id="pipe-a2"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p2" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Meeting ends &rarr; Graph API fetch minutes &rarr; parse decisions &amp; actions <span class="pipe-badge" style="background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;">event</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r3">
+            <div class="pipe-source" id="pipe-src3" style="background:#4A1B0C;color:#F5C4B3;border:.5px solid #993C1D;">SharePoint</div>
+            <div class="pipe-arrow" id="pipe-a3"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p3" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">New file uploaded &rarr; extract text &rarr; chunk &rarr; embed <span class="pipe-badge" style="background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;">scheduled</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r4">
+            <div class="pipe-source" id="pipe-src4" style="background:#412402;color:#FAC775;border:.5px solid #854F0B;">Jira</div>
+            <div class="pipe-arrow" id="pipe-a4"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p4" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Issue status changes &rarr; sync sprint board snapshot to metadata cache <span class="pipe-badge" style="background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;">scheduled</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r5">
+            <div class="pipe-source" id="pipe-src5" style="background:#0A2018;color:#6FCFAA;border:.5px solid #1D9E75;">All sources</div>
+            <div class="pipe-arrow" id="pipe-a5"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p5" style="background:#0A1020;border:.5px solid #1D9E75;color:#6FCFAA;">Upsert into vector DB + metadata cache &rarr; knowledge store updated &#10003;</div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-pipe"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ks-index-schedule">
+        <table class="data-model">
+          <thead><tr><th>Source</th><th>Trigger type</th><th>Latency</th><th>Fallback</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">A-ah!</td><td class="field-type">Webhook (on status change)</td><td class="field-note">&lt;2 min</td><td class="field-note">15-min polling if no webhook</td></tr>
+            <tr><td class="field-name">Teams Copilot</td><td class="field-type">Event (meeting end)</td><td class="field-note">&lt;5 min after meeting</td><td class="field-note">Hourly Graph API poll</td></tr>
+            <tr><td class="field-name">SharePoint</td><td class="field-type">Scheduled (every 30 min)</td><td class="field-note">&lt;30 min</td><td class="field-note">Nightly full re-index</td></tr>
+            <tr><td class="field-name">Jira</td><td class="field-type">Scheduled (every 15 min)</td><td class="field-note">&lt;15 min</td><td class="field-note">Daily full sync</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="ks-index-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Initial bulk load:</strong> How many demands and documents exist today? The first indexing run may take hours — plan for an off-hours bulk load before go-live.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Incremental vs full re-index:</strong> Incremental sync (only changed records) is faster but risks drift. A weekly full re-index ensures consistency. Both should run in parallel.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Error handling:</strong> What happens if an indexing job fails? Should the agent serve stale data with a freshness warning, or block queries until the index is healthy?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Observability:</strong> The pipeline needs a monitoring dashboard showing last sync time per source, error rates, and index size. This is critical for the team to trust the agent&apos;s answers.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: ACCESS CONTROL -->
+<div class="modal-overlay" id="modal-ks-access">
+  <div class="modal-box" id="modal-ks-access-box">
+    <div class="modal-header">
+      <div><h2>Access Control Layer</h2><p>Ensures every user sees only what they are authorized to see — enforced at retrieval time, before any data reaches the LLM.</p></div>
+      <button class="modal-close" data-close="ks-access"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-access" data-tab="roles">Role matrix</button>
+        <button class="tab-btn" data-modal="ks-access" data-tab="design">Technical design</button>
+        <button class="tab-btn" data-modal="ks-access" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-access-roles">
+        <div class="anim-access" id="anim-access">
+          <div class="access-row" id="acc-r1">
+            <span class="access-role" style="background:#042C53;color:#B5D4F4;border:.5px solid #0C447C;">Executive</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">All demands &middot; All documents &middot; All meeting minutes &middot; Portfolio dashboards</span>
+            <span class="access-badge" style="background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;">full read</span>
+          </div>
+          <div class="access-row" id="acc-r2">
+            <span class="access-role" style="background:#26215C;color:#CECBF6;border:.5px solid #3C3489;">Demand Manager</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">All demands &middot; All documents &middot; Meeting minutes for owned demands</span>
+            <span class="access-badge" style="background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;">full read</span>
+          </div>
+          <div class="access-row" id="acc-r3">
+            <span class="access-role" style="background:#412402;color:#FAC775;border:.5px solid #854F0B;">Developer / PM</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">Assigned demands &middot; Technical docs &middot; Sprint data &middot; No financial data</span>
+            <span class="access-badge" style="background:#1A2A10;color:#639922;border:.5px solid #3B6D11;">scoped read</span>
+          </div>
+          <div class="access-row" id="acc-r4">
+            <span class="access-role" style="background:#4A1B0C;color:#F5C4B3;border:.5px solid #993C1D;">Business Stakeholder</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">Own demands only &middot; Public documents &middot; No meeting minutes</span>
+            <span class="access-badge" style="background:#2A1010;color:#E24B4A;border:.5px solid #A32D2D;">restricted</span>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-access"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ks-access-design">
+        <ul class="decisions-list">
+          <li><div class="d-num">1</div><div class="d-text"><strong>Enforcement point:</strong> Access control is applied at retrieval time — the vector DB and metadata cache queries are filtered by the caller&apos;s role before results are returned. The LLM never sees unauthorized data.</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>Implementation:</strong> Each indexed chunk carries an &quot;allowed_roles&quot; metadata field set at index time (inherited from the source system&apos;s permissions). Vector DB filters by this field before returning results.</div></li>
+          <li><div class="d-num">3</div><div class="d-text"><strong>Role source:</strong> Roles are read from Azure AD group membership at query time — no separate user management. Adding a user to the &quot;Demand Manager&quot; AD group immediately grants the corresponding access.</div></li>
+          <li><div class="d-num">4</div><div class="d-text"><strong>Audit logging:</strong> Every query is logged with: caller identity, role, query text, chunks retrieved, and response generated. This log supports compliance review and helps tune the access model over time.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="ks-access-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Role granularity:</strong> Are the four roles above the right model for your organization, or do you need sub-roles (e.g. Architect, Business Analyst) with different access scopes?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Document-level permissions:</strong> Should some SharePoint documents be restricted beyond role level (e.g. confidential financial data visible only to specific named individuals)?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Audit retention:</strong> How long should query logs be retained? GDPR may impose constraints on logs containing personal data (query text may reference names or demand details).</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Compliance review:</strong> Does your organization require a formal Data Protection Impact Assessment (DPIA) before deploying an AI system that indexes internal documents and conversation history?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
 <script>
 // ── DATA ──────────────────────────────────────────────
 var simpleDetails = {
@@ -1217,6 +1479,83 @@ openModal = function(id) {
     if (id === 'ctx')   runIngestAnim('ctx-s',5);
     if (id === 'synth') runIngestAnim('syn-s',5);
   }, 400);
+};
+ 
+ 
+// Vector DB search animation
+function runVecAnim() {
+  var items = ['v1','v2','v3','v4','v5'];
+  var scanning = document.getElementById('vec-scanning');
+  items.forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('show','top','match'); });
+  if(scanning) { scanning.classList.remove('show'); scanning.textContent='Scanning vector space…'; }
+  if(scanning) setTimeout(function(){ scanning.classList.add('show'); }, 200);
+  items.forEach(function(id, i){
+    setTimeout(function(){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.classList.add('show');
+      if(i<2) el.classList.add('top');
+      else if(i<4) el.classList.add('match');
+    }, 600 + i*300);
+  });
+  setTimeout(function(){
+    if(scanning) scanning.textContent='Top 4 chunks retrieved ✔';
+  }, 600 + 4*300 + 200);
+}
+document.getElementById('replay-vec').addEventListener('click', runVecAnim);
+ 
+// Pipeline animation
+function runPipeAnim() {
+  for(var i=1; i<=5; i++){
+    var src=document.getElementById('pipe-src'+i);
+    var arr=document.getElementById('pipe-a'+i);
+    var step=document.getElementById('pipe-p'+i);
+    if(src) { src.classList.remove('show'); src.style.opacity='0'; src.style.transform='scale(0.9)'; }
+    if(arr) arr.classList.remove('show');
+    if(step) { step.classList.remove('show'); step.style.opacity='0'; step.style.transform='translateY(4px)'; }
+  }
+  for(var j=1; j<=5; j++){
+    (function(idx){
+      var delay = (idx-1)*480;
+      setTimeout(function(){
+        var src=document.getElementById('pipe-src'+idx);
+        var arr=document.getElementById('pipe-a'+idx);
+        var step=document.getElementById('pipe-p'+idx);
+        if(src){ src.style.opacity='1'; src.style.transform='none'; }
+        setTimeout(function(){ if(arr) arr.classList.add('show'); }, 180);
+        setTimeout(function(){ if(step){ step.style.opacity='1'; step.style.transform='none'; } }, 320);
+      }, delay);
+    })(j);
+  }
+}
+document.getElementById('replay-pipe').addEventListener('click', runPipeAnim);
+ 
+// Access control animation
+function runAccessAnim() {
+  for(var i=1; i<=4; i++){
+    var el=document.getElementById('acc-r'+i);
+    if(el) el.classList.remove('show');
+  }
+  for(var j=1; j<=4; j++){
+    (function(idx){
+      setTimeout(function(){
+        var el=document.getElementById('acc-r'+idx);
+        if(el) el.classList.add('show');
+      }, idx*350);
+    })(j);
+  }
+}
+document.getElementById('replay-access').addEventListener('click', runAccessAnim);
+ 
+// Extend openModal for knowledge store modals
+var _openModal3 = openModal;
+openModal = function(id) {
+  _openModal3(id);
+  setTimeout(function(){
+    if(id==='ks-vec')    runVecAnim();
+    if(id==='ks-index')  runPipeAnim();
+    if(id==='ks-access') runAccessAnim();
+  }, 420);
 };
  
 </script>
