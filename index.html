@@ -154,6 +154,50 @@
     .replay-btn{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:11px;font-weight:500;padding:6px 14px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text2);cursor:pointer;font-family:var(--font);transition:background .13s;}
     .replay-btn:hover{background:var(--bg3);}
  
+ 
+    /* API CALL ANIMATION (connectors) */
+    .anim-api{background:#0A1020;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .api-row{display:flex;align-items:stretch;gap:10px;margin-bottom:10px;}
+    .api-box{flex:1;border-radius:6px;padding:10px 12px;font-size:10.5px;line-height:1.5;}
+    .api-box.req{background:#0D2035;border:.5px solid #1D4070;color:#A8C8F0;}
+    .api-box.res{background:#0D2520;border:.5px solid #1D5040;color:#6FCFAA;opacity:0;transition:opacity .4s;}
+    .api-box.res.show{opacity:1;}
+    .api-box-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;}
+    .api-box.req .api-box-label{color:#378ADD;}
+    .api-box.res .api-box-label{color:#1D9E75;}
+    .api-arrow{display:flex;align-items:center;color:#2A4060;font-size:20px;transition:color .3s;}
+    .api-arrow.lit{color:#378ADD;}
+    .api-field{display:flex;justify-content:space-between;gap:8px;padding:2px 0;border-bottom:.5px solid rgba(255,255,255,0.05);}
+    .api-field:last-child{border:none;}
+    .api-field .fk{color:#6A9AC0;font-size:10px;}
+    .api-field .fv{color:#A8C8F0;font-size:10px;font-weight:500;opacity:0;transition:opacity .3s;}
+    .api-field .fv.show{opacity:1;}
+    .api-field.res-field .fk{color:#5A9A7A;}
+    .api-field.res-field .fv{color:#6FCFAA;}
+    .api-status{font-size:10px;padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:6px;opacity:0;transition:opacity .3s;}
+    .api-status.show{opacity:1;}
+    .api-status.ok{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .api-status.pending{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    /* INGESTION PIPELINE ANIMATION (teams) */
+    .anim-ingest{background:#0A0E1A;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .ingest-step{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;margin-bottom:6px;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s;}
+    .ingest-step.show{opacity:1;transform:none;}
+    .ingest-icon{font-size:16px;width:28px;text-align:center;flex-shrink:0;}
+    .ingest-label{font-size:11px;color:#A8C8F0;flex:1;}
+    .ingest-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;white-space:nowrap;}
+    .tag-done{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .tag-proc{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    .tag-idx{background:#1A2A10;color:#639922;border:.5px solid #3B6D11;}
+    /* DATA MODEL TABLE (source systems) */
+    .data-model{width:100%;border-collapse:collapse;font-size:12px;font-family:var(--mono);}
+    .data-model th{text-align:left;padding:6px 10px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:.5px solid var(--border);}
+    .data-model td{padding:6px 10px;border-bottom:.5px solid var(--border);color:var(--text2);vertical-align:top;}
+    .data-model tr:last-child td{border:none;}
+    .data-model .field-name{color:var(--text);font-weight:500;}
+    .data-model .field-type{color:#7F77DD;font-size:10px;}
+    .data-model .field-note{font-size:11px;font-style:italic;}
+    .data-model tr:hover td{background:var(--bg3);}
+ 
     footer{text-align:center;padding:20px 40px;font-size:11px;color:var(--text3);border-top:.5px solid var(--border);background:var(--bg2);}
     footer strong{color:var(--text2);}
   </style>
@@ -215,32 +259,32 @@
     <div class="node-row">
       <button class="node has-dive" data-modal="rag"><i class="ti ti-search n-icon"></i><div class="n-title">RAG engine</div><div class="n-sub">Retrieval-augmented generation</div></button>
       <button class="node has-dive" data-modal="router"><i class="ti ti-route n-icon"></i><div class="n-title">Intent router</div><div class="n-sub">Routes to right connector</div></button>
-      <button class="node" data-simple="ctx"><i class="ti ti-filter n-icon"></i><div class="n-title">Context builder</div><div class="n-sub">Role, demand ID, history</div></button>
-      <button class="node" data-simple="synth"><i class="ti ti-sparkles n-icon"></i><div class="n-title">Response synthesizer</div><div class="n-sub">LLM + source citations</div></button>
+      <button class="node has-dive" data-modal="ctx"><i class="ti ti-filter n-icon"></i><div class="n-title">Context builder</div><div class="n-sub">Role, demand ID, history</div></button>
+      <button class="node has-dive" data-modal="synth"><i class="ti ti-sparkles n-icon"></i><div class="n-title">Response synthesizer</div><div class="n-sub">LLM + source citations</div></button>
     </div>
   </div>
  
   <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>Structured queries to connectors (read-only)</span></div>
  
   <div class="layer l-connector">
-    <div class="layer-label">Integration &amp; connector layer</div>
+    <div class="layer-label">Integration &amp; connector layer <span style="color:var(--green)">&#10022;</span></div>
     <div class="node-row">
-      <button class="node" data-simple="c-aah"><i class="ti ti-list-check n-icon"></i><div class="n-title">A-ah! connector</div><div class="n-sub">Demands, status, requirements</div></button>
-      <button class="node" data-simple="c-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams connector</div><div class="n-sub">Meeting minutes via Copilot</div></button>
-      <button class="node" data-simple="c-sp"><i class="ti ti-files n-icon"></i><div class="n-title">SharePoint connector</div><div class="n-sub">Docs, deliverables, briefs</div></button>
-      <button class="node" data-simple="c-jira"><i class="ti ti-bug n-icon"></i><div class="n-title">Jira connector</div><div class="n-sub">Dev tracking, dashboards</div></button>
+      <button class="node has-dive" data-modal="c-aah"><i class="ti ti-list-check n-icon"></i><div class="n-title">A-ah! connector</div><div class="n-sub">Demands, status, requirements</div></button>
+      <button class="node has-dive" data-modal="c-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams connector</div><div class="n-sub">Meeting minutes via Copilot</div></button>
+      <button class="node has-dive" data-modal="c-sp"><i class="ti ti-files n-icon"></i><div class="n-title">SharePoint connector</div><div class="n-sub">Docs, deliverables, briefs</div></button>
+      <button class="node has-dive" data-modal="c-jira"><i class="ti ti-bug n-icon"></i><div class="n-title">Jira connector</div><div class="n-sub">Dev tracking, dashboards</div></button>
     </div>
   </div>
  
   <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>API / webhook sync (scheduled + event-triggered)</span></div>
  
   <div class="layer l-source">
-    <div class="layer-label">Source systems — existing tools (unchanged)</div>
+    <div class="layer-label">Source systems — existing tools (unchanged) <span style="color:var(--green)">&#10022;</span></div>
     <div class="node-row">
-      <button class="node" data-simple="s-aah"><i class="ti ti-clipboard-list n-icon"></i><div class="n-title">A-ah!</div><div class="n-sub">Demands, statuses, requirements</div></button>
-      <button class="node" data-simple="s-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams + Copilot</div><div class="n-sub">Meetings, minutes, comms</div></button>
-      <button class="node" data-simple="s-sp"><i class="ti ti-folder-open n-icon"></i><div class="n-title">SharePoint</div><div class="n-sub">Deliverables, briefs, decks</div></button>
-      <button class="node" data-simple="s-jira"><i class="ti ti-chart-bar n-icon"></i><div class="n-title">Jira</div><div class="n-sub">Dev dashboards, sprints</div></button>
+      <button class="node has-dive" data-modal="s-aah"><i class="ti ti-clipboard-list n-icon"></i><div class="n-title">A-ah!</div><div class="n-sub">Demands, statuses, requirements</div></button>
+      <button class="node has-dive" data-modal="s-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams + Copilot</div><div class="n-sub">Meetings, minutes, comms</div></button>
+      <button class="node has-dive" data-modal="s-sp"><i class="ti ti-folder-open n-icon"></i><div class="n-title">SharePoint</div><div class="n-sub">Deliverables, briefs, decks</div></button>
+      <button class="node has-dive" data-modal="s-jira"><i class="ti ti-chart-bar n-icon"></i><div class="n-title">Jira</div><div class="n-sub">Dev dashboards, sprints</div></button>
     </div>
   </div>
  
@@ -263,6 +307,9 @@
 </main>
  
 <footer><strong>AI-Driven Demand Management Assistant</strong> · Solution Architecture Draft v1.0 · Phase 1: Read-only</footer>
+ 
+ 
+ 
  
 <!-- MODAL: AI AGENT -->
 <div class="modal-overlay" id="modal-agent">
@@ -393,6 +440,479 @@
           <li><div class="d-num">?</div><div class="d-text"><strong>Classification approach:</strong> LLM zero-shot (simpler) or fine-tuned classifier (faster at scale)? Query volume drives the decision.</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Ambiguous queries:</strong> Ask a clarifying question, or retrieve from all sources and let the synthesizer decide?</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Fallback:</strong> If no connector matches, broad knowledge store search or a clear "no source found" response?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: A-ah! CONNECTOR -->
+<div class="modal-overlay" id="modal-c-aah">
+  <div class="modal-box" id="modal-c-aah-box">
+    <div class="modal-header">
+      <div><h2>A-ah! Connector</h2><p>Live API simulation — how the connector fetches demand data and maps it to the agent knowledge store.</p></div>
+      <button class="modal-close" data-close="c-aah"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-aah" data-tab="flow">API call simulation</button>
+        <button class="tab-btn" data-modal="c-aah" data-tab="fields">Fields read</button>
+        <button class="tab-btn" data-modal="c-aah" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-aah-flow">
+        <div class="anim-api" id="anim-caah">
+          <div class="api-row">
+            <div class="api-box req">
+              <div class="api-box-label">GET /api/demands/DM-044</div>
+              <div class="api-field"><span class="fk">Authorization</span><span class="fv show">Bearer {token}</span></div>
+              <div class="api-field"><span class="fk">fields</span><span class="fv" id="caah-f1">id,title,status,owner,stage</span></div>
+              <div class="api-field"><span class="fk">updated_since</span><span class="fv" id="caah-f2">2025-05-13</span></div>
+            </div>
+            <div class="api-arrow" id="caah-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="api-box res" id="caah-res">
+              <div class="api-status ok" id="caah-status">200 OK</div>
+              <div class="api-box-label">Response</div>
+              <div class="api-field res-field"><span class="fk">id</span><span class="fv" id="caah-r1">DM-044</span></div>
+              <div class="api-field res-field"><span class="fk">title</span><span class="fv" id="caah-r2">Data Platform Migration</span></div>
+              <div class="api-field res-field"><span class="fk">status</span><span class="fv" id="caah-r3">Design</span></div>
+              <div class="api-field res-field"><span class="fk">owner</span><span class="fv" id="caah-r4">M. Rossi</span></div>
+              <div class="api-field res-field"><span class="fk">priority</span><span class="fv" id="caah-r5">High</span></div>
+            </div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-caah"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-aah-fields">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">demand_id</td><td class="field-type">string</td><td class="field-note">Primary identifier — referenced in all agent answers</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-note">Natural language name of the demand</td></tr>
+            <tr><td class="field-name">status / stage</td><td class="field-type">enum</td><td class="field-note">Shaping, HLA, Design, Implementation, Testing, Roll-out, Closure</td></tr>
+            <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">Demand manager responsible — cited in responses</td></tr>
+            <tr><td class="field-name">business_requirements</td><td class="field-type">text</td><td class="field-note">Full text — chunked and vectorized for semantic search</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Critical / High / Medium / Low — used for portfolio summaries</td></tr>
+            <tr><td class="field-name">updated_at</td><td class="field-type">datetime</td><td class="field-note">Drives incremental sync — only changed records re-indexed</td></tr>
+            <tr><td class="field-name">linked_jira</td><td class="field-type">string[]</td><td class="field-note">Jira issue keys linked to this demand</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-aah-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>API availability:</strong> Does A-ah! expose a REST API with authentication tokens? This is the most critical dependency — needs validation before any build starts.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Webhook support:</strong> Does A-ah! support webhooks on status change? If yes, the indexing pipeline can react in real time. If not, polling every 15 minutes is the fallback.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Rate limits:</strong> What are the API rate limits? This affects the initial bulk indexing strategy for all historical demands.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Field mapping:</strong> Are the field names above accurate for your A-ah! instance, or do they differ? The connector mapping must match your actual schema.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: TEAMS CONNECTOR -->
+<div class="modal-overlay" id="modal-c-teams">
+  <div class="modal-box" id="modal-c-teams-box">
+    <div class="modal-header">
+      <div><h2>Teams + Copilot Connector</h2><p>How Copilot meeting minutes are ingested, processed, and made searchable through the agent.</p></div>
+      <button class="modal-close" data-close="c-teams"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-teams" data-tab="flow">Ingestion pipeline</button>
+        <button class="tab-btn" data-modal="c-teams" data-tab="fields">Data extracted</button>
+        <button class="tab-btn" data-modal="c-teams" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-teams-flow">
+        <div class="anim-ingest" id="anim-cteams">
+          <div class="ingest-step" id="ts1"><span class="ingest-icon" style="color:#378ADD"><i class="ti ti-video"></i></span><span class="ingest-label">Teams meeting ends — Copilot generates minutes</span><span class="ingest-tag tag-done">trigger</span></div>
+          <div class="ingest-step" id="ts2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-api"></i></span><span class="ingest-label">Graph API: GET /me/onlineMeetings/{id}/transcripts</span><span class="ingest-tag tag-proc">fetch</span></div>
+          <div class="ingest-step" id="ts3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-filter"></i></span><span class="ingest-label">Extract: decisions, action items, demand references</span><span class="ingest-tag tag-proc">parse</span></div>
+          <div class="ingest-step" id="ts4"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-vector"></i></span><span class="ingest-label">Chunk text → embed → store in vector DB</span><span class="ingest-tag tag-idx">index</span></div>
+          <div class="ingest-step" id="ts5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-check"></i></span><span class="ingest-label">Minutes searchable via agent within minutes of meeting end</span><span class="ingest-tag tag-done">done</span></div>
+        </div>
+        <button class="replay-btn" id="replay-cteams"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-teams-fields">
+        <table class="data-model">
+          <thead><tr><th>Data extracted</th><th>Type</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Meeting title / date</td><td class="field-type">string</td><td class="field-note">Metadata for citation — "Per Teams meeting 08/05"</td></tr>
+            <tr><td class="field-name">Participants</td><td class="field-type">string[]</td><td class="field-note">Linked to demand owners for context enrichment</td></tr>
+            <tr><td class="field-name">Decisions made</td><td class="field-type">text</td><td class="field-note">Key output — vectorized for "what was decided about X?" queries</td></tr>
+            <tr><td class="field-name">Action items</td><td class="field-type">text[]</td><td class="field-note">Owner + deadline — surfaced on "what are the open actions?" queries</td></tr>
+            <tr><td class="field-name">Demand references</td><td class="field-type">string[]</td><td class="field-note">Demand IDs mentioned — links minutes to A-ah! records</td></tr>
+            <tr><td class="field-name">Full transcript</td><td class="field-type">text</td><td class="field-note">Chunked for broad semantic search — not stored raw</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-teams-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Copilot transcript format:</strong> Copilot minutes are structured text. Does your tenant configuration expose them via Graph API, or are they only in the Teams UI? IT admin confirmation needed.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Meeting scope:</strong> Index all meetings in specific channels (e.g. Demand Follow-up) or all meetings where demand managers are participants?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Retention policy:</strong> How far back should historical minutes be indexed at launch? Last 6 months? Last year?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Confidentiality:</strong> Some meeting content may be sensitive. Should the access control layer restrict certain minutes to specific roles?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: SHAREPOINT CONNECTOR -->
+<div class="modal-overlay" id="modal-c-sp">
+  <div class="modal-box" id="modal-c-sp-box">
+    <div class="modal-header">
+      <div><h2>SharePoint Connector</h2><p>How documents stored in SharePoint are indexed and made retrievable through the agent via Microsoft Graph.</p></div>
+      <button class="modal-close" data-close="c-sp"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-sp" data-tab="flow">Indexing pipeline</button>
+        <button class="tab-btn" data-modal="c-sp" data-tab="fields">Document types</button>
+        <button class="tab-btn" data-modal="c-sp" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-sp-flow">
+        <div class="anim-ingest" id="anim-csp">
+          <div class="ingest-step" id="sp1"><span class="ingest-icon" style="color:#D85A30"><i class="ti ti-folder-open"></i></span><span class="ingest-label">New document uploaded to SharePoint demand folder</span><span class="ingest-tag tag-done">event</span></div>
+          <div class="ingest-step" id="sp2"><span class="ingest-icon" style="color:#378ADD"><i class="ti ti-api"></i></span><span class="ingest-label">Graph API: GET /sites/{id}/drive/items — fetch file</span><span class="ingest-tag tag-proc">fetch</span></div>
+          <div class="ingest-step" id="sp3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-file-text"></i></span><span class="ingest-label">Extract text from PDF / DOCX / PPTX</span><span class="ingest-tag tag-proc">parse</span></div>
+          <div class="ingest-step" id="sp4"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-scissors"></i></span><span class="ingest-label">Chunk into ~512 token segments with metadata tags</span><span class="ingest-tag tag-proc">chunk</span></div>
+          <div class="ingest-step" id="sp5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-database"></i></span><span class="ingest-label">Embed + store in vector DB — document searchable</span><span class="ingest-tag tag-idx">index</span></div>
+        </div>
+        <button class="replay-btn" id="replay-csp"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-sp-fields">
+        <table class="data-model">
+          <thead><tr><th>Document type</th><th>Format</th><th>Indexed content</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX / PDF</td><td class="field-note">Scope, objectives, stakeholders — key for exec queries</td></tr>
+            <tr><td class="field-name">Deliverables</td><td class="field-type">DOCX / PDF</td><td class="field-note">Full text — surfaced on "show me the latest deliverable" queries</td></tr>
+            <tr><td class="field-name">Requirement specs</td><td class="field-type">DOCX / XLSX</td><td class="field-note">Chunked by section — linked to A-ah! demand ID in metadata</td></tr>
+            <tr><td class="field-name">Status reports</td><td class="field-type">PDF / DOCX</td><td class="field-note">Latest version always preferred — version metadata tracked</td></tr>
+            <tr><td class="field-name">Presentations</td><td class="field-type">PPTX</td><td class="field-note">Slide text extracted — useful for "what did we present on X?"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-sp-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Folder structure:</strong> How are documents organized in SharePoint? The connector needs a clear root path per demand to link documents to A-ah! IDs.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Versioning:</strong> Should the agent always return the latest version only, or should it be able to answer "what changed between version 1 and version 2"?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>File types:</strong> Are there file formats beyond PDF/DOCX/PPTX/XLSX? Audio or video files are not indexable as text without transcription.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Permissions:</strong> Does the connector service account need read access to all SharePoint libraries, or only specific demand folders?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: JIRA CONNECTOR -->
+<div class="modal-overlay" id="modal-c-jira">
+  <div class="modal-box" id="modal-c-jira-box">
+    <div class="modal-header">
+      <div><h2>Jira Connector</h2><p>How sprint boards and issue data are fetched and surfaced to developers and PMs through the agent.</p></div>
+      <button class="modal-close" data-close="c-jira"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-jira" data-tab="flow">API call simulation</button>
+        <button class="tab-btn" data-modal="c-jira" data-tab="fields">Fields read</button>
+        <button class="tab-btn" data-modal="c-jira" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-jira-flow">
+        <div class="anim-api" id="anim-cjira">
+          <div class="api-row">
+            <div class="api-box req">
+              <div class="api-box-label">GET /rest/api/3/search</div>
+              <div class="api-field"><span class="fk">jql</span><span class="fv show">demand_id = "DM-044"</span></div>
+              <div class="api-field"><span class="fk">fields</span><span class="fv" id="jira-f1">summary,status,assignee,sprint</span></div>
+              <div class="api-field"><span class="fk">maxResults</span><span class="fv" id="jira-f2">50</span></div>
+            </div>
+            <div class="api-arrow" id="jira-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="api-box res" id="jira-res">
+              <div class="api-status ok" id="jira-status">200 OK — 3 issues</div>
+              <div class="api-box-label">Issues returned</div>
+              <div class="api-field res-field"><span class="fk">DM-044-01</span><span class="fv" id="jira-r1">DB schema design — Done</span></div>
+              <div class="api-field res-field"><span class="fk">DM-044-02</span><span class="fv" id="jira-r2">API layer — In Progress</span></div>
+              <div class="api-field res-field"><span class="fk">DM-044-03</span><span class="fv" id="jira-r3">Frontend — To Do</span></div>
+              <div class="api-field res-field"><span class="fk">Sprint</span><span class="fv" id="jira-r4">Sprint 14 — ends 23 May</span></div>
+            </div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-cjira"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-jira-fields">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">issue_key</td><td class="field-type">string</td><td class="field-note">Unique ID — linked to demand via custom field or label</td></tr>
+            <tr><td class="field-name">summary</td><td class="field-type">string</td><td class="field-note">Short description of the task — surfaced in agent answers</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">enum</td><td class="field-note">To Do / In Progress / Done / Blocked — key for progress queries</td></tr>
+            <tr><td class="field-name">assignee</td><td class="field-type">string</td><td class="field-note">Developer name — "who is working on X?" queries</td></tr>
+            <tr><td class="field-name">sprint</td><td class="field-type">object</td><td class="field-note">Sprint name + end date — "when is this due?" queries</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Blocker / Critical / Major / Minor</td></tr>
+            <tr><td class="field-name">custom: demand_id</td><td class="field-type">string</td><td class="field-note">Custom field linking Jira issues back to A-ah! demand</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-jira-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Demand linking field:</strong> How are Jira issues linked to A-ah! demands today? Is there a custom field, a label convention (e.g. DM-044), or an epic hierarchy?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Jira Cloud vs Server:</strong> The REST API differs between Jira Cloud and Jira Data Center. Which version is your team using?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Scope of indexing:</strong> Index all projects, or only projects linked to demands? Indexing everything increases cost and noise.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Real-time vs scheduled:</strong> Jira supports webhooks on issue transitions. Should the agent reflect sprint status in real time, or is daily sync sufficient?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: A-ah! SOURCE -->
+<div class="modal-overlay" id="modal-s-aah">
+  <div class="modal-box" id="modal-s-aah-box">
+    <div class="modal-header">
+      <div><h2>A-ah! — System of Record</h2><p>The authoritative source for all demand data. The agent always reflects A-ah! as the ground truth for status and ownership.</p></div>
+      <button class="modal-close" data-close="s-aah"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-aah" data-tab="lifecycle">Demand lifecycle</button>
+        <button class="tab-btn" data-modal="s-aah" data-tab="data">Data model</button>
+      </div>
+      <div class="tab-pane active" id="s-aah-lifecycle">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding:14px;background:var(--bg3);border-radius:var(--r-md);">
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#E6F1FB;color:#0C447C;border:.5px solid #B5D4F4;font-weight:500;">Shaping</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#EEEDFE;color:#3C3489;border:.5px solid #CECBF6;font-weight:500;">High Level Assessment</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#FAEEDA;color:#633806;border:.5px solid #FAC775;font-weight:500;">Design</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#FAECE7;color:#4A1B0C;border:.5px solid #F5C4B3;font-weight:500;">Implementation &amp; Testing</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#E0F5EE;color:#085041;border:.5px solid #9FE1CB;font-weight:500;">Roll-out</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#F1EFE8;color:#2C2C2A;border:.5px solid #D3D1C7;font-weight:500;">Closure</span>
+        </div>
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">Nothing changes in A-ah!. The connector reads data — it never writes. Your team continues using A-ah! exactly as today.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">Status transitions in A-ah! trigger re-indexing within minutes, keeping the agent always current with the system of record.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">The agent cites A-ah! in every status answer: "Per A-ah!, DM-044 moved to Design on 13 May 2025."</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-aah-data">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">demand_id</td><td class="field-type">string</td><td class="field-note">Unique key — e.g. DM-044</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-note">Human-readable demand name</td></tr>
+            <tr><td class="field-name">stage</td><td class="field-type">enum</td><td class="field-note">6-stage lifecycle (see above)</td></tr>
+            <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">Demand manager name / email</td></tr>
+            <tr><td class="field-name">requestor</td><td class="field-type">string</td><td class="field-note">Business stakeholder who raised the demand</td></tr>
+            <tr><td class="field-name">business_requirements</td><td class="field-type">text</td><td class="field-note">Full requirements text — chunked for semantic search</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Critical / High / Medium / Low</td></tr>
+            <tr><td class="field-name">created_at / updated_at</td><td class="field-type">datetime</td><td class="field-note">Used for incremental sync and citation timestamps</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: TEAMS SOURCE -->
+<div class="modal-overlay" id="modal-s-teams">
+  <div class="modal-box" id="modal-s-teams-box">
+    <div class="modal-header">
+      <div><h2>Microsoft Teams + Copilot</h2><p>Collaboration hub and source of meeting intelligence. Copilot transforms spoken decisions into searchable structured knowledge.</p></div>
+      <button class="modal-close" data-close="s-teams"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-teams" data-tab="overview">How it works</button>
+        <button class="tab-btn" data-modal="s-teams" data-tab="data">Data extracted</button>
+      </div>
+      <div class="tab-pane active" id="s-teams-overview">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Copilot as structured output:</strong> Copilot generates meeting summaries with labelled sections — decisions, action items, next steps. This structure makes parsing reliable and accurate.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Value unlocked:</strong> Today, meeting decisions live only in people's inboxes or chat history. The connector makes them universally searchable — "what was decided about DM-044 in the last three meetings?" becomes a valid agent query.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>No disruption:</strong> Your team continues running meetings and using Copilot exactly as today. The connector only reads — it never writes back to Teams.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Tenant configuration required:</strong> A Teams app registration with appropriate Graph API permissions (OnlineMeetings.Read.All or equivalent) must be configured by your IT admin before the connector can access transcripts.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-teams-data">
+        <table class="data-model">
+          <thead><tr><th>Data point</th><th>Source</th><th>Agent use</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Meeting title &amp; date</td><td class="field-type">Metadata</td><td class="field-note">Citation context in every answer referencing the meeting</td></tr>
+            <tr><td class="field-name">Attendees</td><td class="field-type">Participant list</td><td class="field-note">Linked to demand owners — "who attended the DM-044 review?"</td></tr>
+            <tr><td class="field-name">Decisions</td><td class="field-type">Copilot summary</td><td class="field-note">Most valuable — vectorized for semantic retrieval</td></tr>
+            <tr><td class="field-name">Action items</td><td class="field-type">Copilot summary</td><td class="field-note">Owner + deadline — open actions surfaced on demand</td></tr>
+            <tr><td class="field-name">Full transcript</td><td class="field-type">Copilot transcript</td><td class="field-note">Chunked for broad search — not stored verbatim</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: SHAREPOINT SOURCE -->
+<div class="modal-overlay" id="modal-s-sp">
+  <div class="modal-box" id="modal-s-sp-box">
+    <div class="modal-header">
+      <div><h2>SharePoint</h2><p>Document archive for all demand artefacts — the agent surfaces the right document at the right time, without anyone needing to know where it lives.</p></div>
+      <button class="modal-close" data-close="s-sp"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-sp" data-tab="overview">How it works</button>
+        <button class="tab-btn" data-modal="s-sp" data-tab="data">Document types</button>
+      </div>
+      <div class="tab-pane active" id="s-sp-overview">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Zero change to SharePoint:</strong> Documents are uploaded and organized exactly as today. The connector reads via Microsoft Graph — no SharePoint customization required.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Version awareness:</strong> The connector tracks document versions and always indexes the latest approved file. Older versions are retained but deprioritized in retrieval ranking.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Format support:</strong> PDF, DOCX, PPTX, and XLSX are all supported. Text is extracted, chunked at ~512 tokens, and embedded. PPTX slide notes and XLSX cell content are included.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Folder structure matters:</strong> A consistent naming convention (e.g. /Demands/DM-044/Mission Brief v2.pdf) makes it possible to link documents to A-ah! demand IDs automatically.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-sp-data">
+        <table class="data-model">
+          <thead><tr><th>Document type</th><th>Format</th><th>Agent use</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX / PDF</td><td class="field-note">"Show me the mission brief for DM-044" — agent links the file</td></tr>
+            <tr><td class="field-name">Deliverables</td><td class="field-type">DOCX / PDF</td><td class="field-note">"What deliverables exist for DM-044?" — latest version returned</td></tr>
+            <tr><td class="field-name">Requirement specs</td><td class="field-type">DOCX / XLSX</td><td class="field-note">Chunked by section — semantic search over requirements text</td></tr>
+            <tr><td class="field-name">Status reports</td><td class="field-type">PDF</td><td class="field-note">Periodic reports — useful for exec portfolio queries</td></tr>
+            <tr><td class="field-name">Presentations</td><td class="field-type">PPTX</td><td class="field-note">Slide text extracted — "what did we present on the data platform?"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: JIRA SOURCE -->
+<div class="modal-overlay" id="modal-s-jira">
+  <div class="modal-box" id="modal-s-jira-box">
+    <div class="modal-header">
+      <div><h2>Jira</h2><p>Developer and PM tracking. The agent bridges the high-level A-ah! demand view with the granular Jira task breakdown.</p></div>
+      <button class="modal-close" data-close="s-jira"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-jira" data-tab="overview">How it works</button>
+        <button class="tab-btn" data-modal="s-jira" data-tab="data">Data model</button>
+      </div>
+      <div class="tab-pane active" id="s-jira-overview">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Bridging A-ah! and Jira:</strong> A-ah! says "DM-044 is in Implementation". Jira says which specific tickets are done, in progress, or blocked. The agent answers both levels in a single response.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Developer-friendly queries:</strong> "What Jira tickets are blocking DM-044?" or "Who is working on the API layer?" become valid questions — without needing to find the right board or filter.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Read-only:</strong> The connector never creates, modifies, or transitions Jira issues. Developers continue using Jira boards exactly as today.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Linking convention needed:</strong> Jira issues must reference their A-ah! demand ID (via custom field, label, or epic name) for the connector to build the A-ah! ↔ Jira mapping correctly.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-jira-data">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Agent use</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">issue_key</td><td class="field-type">string</td><td class="field-note">Unique ID — e.g. DM044-01, cited in agent responses</td></tr>
+            <tr><td class="field-name">summary</td><td class="field-type">string</td><td class="field-note">Task description — surfaced in progress queries</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">enum</td><td class="field-note">To Do / In Progress / Done / Blocked</td></tr>
+            <tr><td class="field-name">assignee</td><td class="field-type">string</td><td class="field-note">"Who is working on X?" queries</td></tr>
+            <tr><td class="field-name">sprint</td><td class="field-type">object</td><td class="field-note">Sprint name + end date — delivery date queries</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Blocker / Critical / Major / Minor</td></tr>
+            <tr><td class="field-name">custom: demand_id</td><td class="field-type">string</td><td class="field-note">Links issue to A-ah! demand — required for cross-system queries</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+ 
+<!-- MODAL: CONTEXT BUILDER -->
+<div class="modal-overlay" id="modal-ctx">
+  <div class="modal-box" id="modal-ctx-box">
+    <div class="modal-header">
+      <div><h2>Context Builder</h2><p>Enriches every query with who is asking, what demands they own, and what was discussed before — so the agent always answers in context.</p></div>
+      <button class="modal-close" data-close="ctx"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ctx" data-tab="how">How it works</button>
+        <button class="tab-btn" data-modal="ctx" data-tab="signals">Context signals</button>
+        <button class="tab-btn" data-modal="ctx" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ctx-how">
+        <div class="anim-ingest" id="anim-ctx">
+          <div class="ingest-step" id="ctx-s1"><span class="ingest-icon" style="color:#378ADD"><i class="ti ti-user"></i></span><span class="ingest-label">Caller identified via Azure AD SSO token</span><span class="ingest-tag tag-done">identity</span></div>
+          <div class="ingest-step" id="ctx-s2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-shield"></i></span><span class="ingest-label">Role resolved from AD group: Demand Manager / Executive / Developer</span><span class="ingest-tag tag-proc">role</span></div>
+          <div class="ingest-step" id="ctx-s3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-list-check"></i></span><span class="ingest-label">Demand portfolio loaded: demands owned by or relevant to this user</span><span class="ingest-tag tag-proc">scope</span></div>
+          <div class="ingest-step" id="ctx-s4"><span class="ingest-icon" style="color:#D85A30"><i class="ti ti-history"></i></span><span class="ingest-label">Session history appended: last 3 turns of conversation</span><span class="ingest-tag tag-proc">memory</span></div>
+          <div class="ingest-step" id="ctx-s5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-package"></i></span><span class="ingest-label">Enriched context injected into LLM system prompt before retrieval</span><span class="ingest-tag tag-done">ready</span></div>
+        </div>
+        <button class="replay-btn" id="replay-ctx"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ctx-signals">
+        <table class="data-model">
+          <thead><tr><th>Signal</th><th>Source</th><th>Effect on answer</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Caller role</td><td class="field-type">Azure AD</td><td class="field-note">Executive gets summary; developer gets ticket detail; manager gets full status</td></tr>
+            <tr><td class="field-name">Owned demands</td><td class="field-type">A-ah!</td><td class="field-note">&quot;My demands&quot; resolves to the caller's portfolio — no ambiguity</td></tr>
+            <tr><td class="field-name">Access scope</td><td class="field-type">Access control layer</td><td class="field-note">Filters which demands and documents can appear in the answer</td></tr>
+            <tr><td class="field-name">Conversation history</td><td class="field-type">Session store</td><td class="field-note">Enables follow-up: &quot;and what about the owner?&quot; resolves to the previous demand</td></tr>
+            <tr><td class="field-name">Current date/time</td><td class="field-type">System</td><td class="field-note">Makes &quot;recent&quot;, &quot;last week&quot;, &quot;upcoming&quot; queries resolve correctly</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="ctx-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Session statefulness:</strong> How many previous turns should the agent remember? More history = better follow-ups, but larger context window = higher cost per query.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Role granularity:</strong> Are the three roles (Executive, Demand Manager, Developer) sufficient, or do you need sub-roles (e.g. Business Analyst, Architect) with different data access?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Anonymous queries:</strong> Should the agent work without authentication (anonymous mode, no role context)? If yes, it defaults to the most restricted access scope.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: RESPONSE SYNTHESIZER -->
+<div class="modal-overlay" id="modal-synth">
+  <div class="modal-box" id="modal-synth-box">
+    <div class="modal-header">
+      <div><h2>Response Synthesizer</h2><p>The final step: the LLM assembles retrieved chunks into a coherent, cited, role-appropriate answer.</p></div>
+      <button class="modal-close" data-close="synth"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="synth" data-tab="how">Assembly process</button>
+        <button class="tab-btn" data-modal="synth" data-tab="formats">Output formats</button>
+        <button class="tab-btn" data-modal="synth" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="synth-how">
+        <div class="anim-ingest" id="anim-synth">
+          <div class="ingest-step" id="syn-s1"><span class="ingest-icon" style="color:#534AB7"><i class="ti ti-packages"></i></span><span class="ingest-label">Top-k chunks received from RAG engine (with scores)</span><span class="ingest-tag tag-proc">input</span></div>
+          <div class="ingest-step" id="syn-s2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-user"></i></span><span class="ingest-label">Role context injected: Executive → concise summary; Developer → technical detail</span><span class="ingest-tag tag-proc">adapt</span></div>
+          <div class="ingest-step" id="syn-s3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-brain"></i></span><span class="ingest-label">LLM synthesizes answer — instructed to use ONLY provided context</span><span class="ingest-tag tag-proc">generate</span></div>
+          <div class="ingest-step" id="syn-s4"><span class="ingest-icon" style="color:#D85A30"><i class="ti ti-link"></i></span><span class="ingest-label">Source citations appended: system, field, and timestamp for each fact</span><span class="ingest-tag tag-proc">cite</span></div>
+          <div class="ingest-step" id="syn-s5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-send"></i></span><span class="ingest-label">Formatted response delivered to channel (Teams card or plain text)</span><span class="ingest-tag tag-done">deliver</span></div>
+        </div>
+        <button class="replay-btn" id="replay-synth"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="synth-formats">
+        <table class="data-model">
+          <thead><tr><th>Channel</th><th>Format</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Teams bot</td><td class="field-type">Adaptive Card</td><td class="field-note">Rich card with title, status badge, owner, source link, and suggested follow-up</td></tr>
+            <tr><td class="field-name">Web widget</td><td class="field-type">Markdown</td><td class="field-note">Formatted text with bold fields, bullet lists, and clickable document links</td></tr>
+            <tr><td class="field-name">API response</td><td class="field-type">JSON</td><td class="field-note">Structured object: answer, citations[], confidence_score, suggested_questions[]</td></tr>
+            <tr><td class="field-name">Fallback</td><td class="field-type">Plain text</td><td class="field-note">Used when channel formatting is unknown or unsupported</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="synth-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Confidence threshold:</strong> Below what confidence score should the agent say &quot;I'm not sure&quot; instead of answering? Too low = hallucination risk; too high = too many non-answers.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Suggested follow-ups:</strong> Should the agent proactively suggest 2-3 related questions after each answer? Increases engagement but adds LLM tokens.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Citation detail level:</strong> Should citations include just the source system name, or also the specific field, document page, or meeting date? More detail = more trust, more tokens.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Language of response:</strong> Should the agent always respond in the language of the query (auto-detect), or always in a fixed language regardless of input?</div></li>
         </ul>
       </div>
     </div>
@@ -610,7 +1130,104 @@ function runRagAnim() {
   }, 3200);
 }
 document.getElementById('replay-rag').addEventListener('click', runRagAnim);
+ 
+ 
+// ── CONNECTOR API ANIMATION HELPER ───────────────────
+function runApiAnim(cfg) {
+  var arrow   = document.getElementById(cfg.arrowId);
+  var res     = document.getElementById(cfg.resId);
+  var status  = document.getElementById(cfg.statusId);
+  if (!arrow || !res || !status) return;
+  // reset
+  res.classList.remove('show');
+  status.classList.remove('show');
+  arrow.classList.remove('lit');
+  cfg.reqFields.forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('show'); });
+  cfg.resFields.forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('show'); });
+  // animate req fields
+  cfg.reqFields.forEach(function(id, i){
+    setTimeout(function(){ var el=document.getElementById(id); if(el) el.classList.add('show'); }, 300 + i*200);
+  });
+  // arrow lights up
+  setTimeout(function(){ arrow.classList.add('lit'); }, 300 + cfg.reqFields.length*200 + 100);
+  // response box appears
+  setTimeout(function(){ res.classList.add('show'); status.classList.add('show'); }, 300 + cfg.reqFields.length*200 + 500);
+  // res fields type in
+  cfg.resFields.forEach(function(id, i){
+    setTimeout(function(){ var el=document.getElementById(id); if(el) el.classList.add('show'); }, 300 + cfg.reqFields.length*200 + 700 + i*220);
+  });
+}
+ 
+// A-ah! connector
+document.getElementById('replay-caah').addEventListener('click', function(){
+  runApiAnim({arrowId:'caah-arrow',resId:'caah-res',statusId:'caah-status',
+    reqFields:['caah-f1','caah-f2'], resFields:['caah-r1','caah-r2','caah-r3','caah-r4','caah-r5']});
+});
+ 
+// Jira connector
+document.getElementById('replay-cjira').addEventListener('click', function(){
+  runApiAnim({arrowId:'jira-arrow',resId:'jira-res',statusId:'jira-status',
+    reqFields:['jira-f1','jira-f2'], resFields:['jira-r1','jira-r2','jira-r3','jira-r4']});
+});
+ 
+// Auto-run on modal open
+var origOpenModal = openModal;
+openModal = function(id) {
+  origOpenModal(id);
+  setTimeout(function(){
+    if (id === 'c-aah') runApiAnim({arrowId:'caah-arrow',resId:'caah-res',statusId:'caah-status',
+      reqFields:['caah-f1','caah-f2'], resFields:['caah-r1','caah-r2','caah-r3','caah-r4','caah-r5']});
+    if (id === 'c-jira') runApiAnim({arrowId:'jira-arrow',resId:'jira-res',statusId:'jira-status',
+      reqFields:['jira-f1','jira-f2'], resFields:['jira-r1','jira-r2','jira-r3','jira-r4']});
+    if (id === 'c-teams') runIngestAnim('ts', 5);
+    if (id === 'c-sp') runIngestAnim('sp', 5);
+  }, 400);
+};
+ 
+// ── INGEST ANIMATION HELPER ───────────────────────────
+function runIngestAnim(prefix, count) {
+  for (var i=1; i<=count; i++) {
+    var el = document.getElementById(prefix+i);
+    if (el) { el.classList.remove('show'); }
+  }
+  for (var j=1; j<=count; j++) {
+    (function(idx){
+      setTimeout(function(){
+        var el = document.getElementById(prefix+idx);
+        if (el) el.classList.add('show');
+      }, idx * 420);
+    })(j);
+  }
+}
+ 
+document.getElementById('replay-cteams').addEventListener('click', function(){ runIngestAnim('ts',5); });
+document.getElementById('replay-csp').addEventListener('click',   function(){ runIngestAnim('sp',5); });
+ 
+ 
+// Context builder animation
+document.getElementById('replay-ctx').addEventListener('click', function(){ runIngestAnim('ctx-s',5); });
+// Synth animation
+document.getElementById('replay-synth').addEventListener('click', function(){ runIngestAnim('syn-s',5); });
+ 
+// Extend openModal for new modals
+var _openModal2 = openModal;
+openModal = function(id) {
+  _openModal2(id);
+  setTimeout(function(){
+    if (id === 'ctx')   runIngestAnim('ctx-s',5);
+    if (id === 'synth') runIngestAnim('syn-s',5);
+  }, 400);
+};
+ 
 </script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 </body>
 </html>
- 
