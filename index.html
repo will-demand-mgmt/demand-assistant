@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Driven Demand Management Assistant — Architecture</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#F5F4F0; --bg2:#FFFFFF; --bg3:#EEECEA;
+      --text:#18181A; --text2:#5A5A5E; --text3:#9A9A9E;
+      --border:rgba(0,0,0,0.10); --border2:rgba(0,0,0,0.20);
+      --green:#1A9E75; --green-bg:#E0F5EE; --green-dk:#085041;
+      --font:'DM Sans',sans-serif; --mono:'DM Mono',monospace;
+      --r-md:8px; --r-lg:12px; --r-xl:18px;
+    }
+    @media(prefers-color-scheme:dark){
+      :root{--bg:#141414;--bg2:#1E1E1E;--bg3:#252525;--text:#E8E6DF;--text2:#A8A6A0;--text3:#666460;--border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.18);--green-bg:#042C24;--green-dk:#9FE1CB;}
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:15px;scroll-behavior:smooth;}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+
+    header{background:var(--bg2);border-bottom:.5px solid var(--border);padding:22px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+    .h-eyebrow{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:5px;}
+    header h1{font-size:21px;font-weight:600;line-height:1.25;}
+    header p{font-size:13px;color:var(--text2);margin-top:5px;line-height:1.6;max-width:540px;}
+    .h-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:4px 11px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);margin-top:10px;}
+    .h-meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:11px;color:var(--text3);padding-top:2px;}
+    .phase-pill{font-size:10px;font-weight:600;padding:4px 11px;border-radius:20px;background:#FAEEDA;color:#633806;border:.5px solid #FAC775;}
+    @media(prefers-color-scheme:dark){.phase-pill{background:#412402;color:#FAC775;border-color:#854F0B;}}
+
+    main{max-width:860px;margin:0 auto;padding:28px 20px 60px;}
+
+    .legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;padding:12px 14px;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-lg);}
+    .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
+    .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+
+    .layer{margin-bottom:9px;}
+    .layer-label{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;padding-left:1px;}
+    .node-row{display:flex;gap:7px;flex-wrap:wrap;}
+
+    .node{flex:1;min-width:115px;border:.5px solid var(--border);border-radius:var(--r-md);padding:10px 11px;cursor:pointer;text-align:left;background:var(--bg2);transition:transform .13s,border-color .13s,background .13s;}
+    .node:hover{transform:translateY(-2px);}
+    .node .n-icon{font-size:17px;margin-bottom:4px;}
+    .node .n-title{font-size:11.5px;font-weight:600;line-height:1.3;}
+    .node .n-sub{font-size:10.5px;color:var(--text2);margin-top:2px;line-height:1.35;}
+    .node.has-dive::after{content:"deep dive \2197";display:block;margin-top:6px;font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--green);opacity:.7;}
+    .node.has-dive:hover::after{opacity:1;}
+
+    .l-agent .node-single{border:1.5px solid var(--green);border-radius:var(--r-lg);background:var(--green-bg);padding:15px 20px;cursor:pointer;text-align:left;width:100%;transition:background .14s,transform .13s;}
+    .l-agent .node-single:hover{background:#c5edd9;transform:translateY(-2px);}
+    .l-agent .node-single .n-title{font-size:14px;font-weight:600;color:var(--green-dk);}
+    .l-agent .node-single .n-sub{font-size:12.5px;color:#0F6E56;margin-top:4px;line-height:1.5;}
+    .l-agent .node-single .n-icon{font-size:22px;color:var(--green);margin-bottom:6px;}
+    .agent-badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--green);color:#fff;margin-top:7px;letter-spacing:.05em;}
+    .l-agent .node-single .deep-hint{display:block;margin-top:8px;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--green);opacity:.8;}
+    @media(prefers-color-scheme:dark){.l-agent .node-single{background:#04342C;}.l-agent .node-single:hover{background:#085041;}.l-agent .node-single .n-title{color:#9FE1CB;}.l-agent .node-single .n-sub{color:#5DCAA5;}.l-agent .node-single .n-icon{color:#5DCAA5;}}
+
+    .l-consumer .node{border-color:#B5D4F4;background:#E6F1FB;}.l-consumer .node:hover{background:#d5e9f7;}
+    .l-consumer .node .n-title{color:#0C447C;}.l-consumer .node .n-sub{color:#185FA5;}.l-consumer .node .n-icon{color:#185FA5;}
+    .l-core .node{border-color:#CECBF6;background:#EEEDFE;}.l-core .node:hover{background:#dcdafc;}
+    .l-core .node .n-title{color:#3C3489;}.l-core .node .n-sub{color:#534AB7;}.l-core .node .n-icon{color:#534AB7;}
+    .l-connector .node{border-color:#FAC775;background:#FAEEDA;}.l-connector .node:hover{background:#f5e2bd;}
+    .l-connector .node .n-title{color:#633806;}.l-connector .node .n-sub{color:#854F0B;}.l-connector .node .n-icon{color:#BA7517;}
+    .l-source .node{border-color:#F5C4B3;background:#FAECE7;}.l-source .node:hover{background:#f5d9cc;}
+    .l-source .node .n-title{color:#4A1B0C;}.l-source .node .n-sub{color:#993C1D;}.l-source .node .n-icon{color:#D85A30;}
+    .l-store .node{border-color:#D3D1C7;background:#F1EFE8;}.l-store .node:hover{background:#e5e3d9;}
+    .l-store .node .n-title{color:#2C2C2A;}.l-store .node .n-sub{color:#5F5E5A;}.l-store .node .n-icon{color:#888780;}
+    @media(prefers-color-scheme:dark){
+      .l-consumer .node{border-color:#0C447C;background:#042C53;}.l-consumer .node:hover{background:#083d72;}
+      .l-consumer .node .n-title{color:#B5D4F4;}.l-consumer .node .n-sub{color:#85B7EB;}.l-consumer .node .n-icon{color:#85B7EB;}
+      .l-core .node{border-color:#3C3489;background:#26215C;}.l-core .node:hover{background:#342d72;}
+      .l-core .node .n-title{color:#CECBF6;}.l-core .node .n-sub{color:#AFA9EC;}.l-core .node .n-icon{color:#AFA9EC;}
+      .l-connector .node{border-color:#854F0B;background:#412402;}.l-connector .node:hover{background:#5a3408;}
+      .l-connector .node .n-title{color:#FAC775;}.l-connector .node .n-sub{color:#EF9F27;}.l-connector .node .n-icon{color:#EF9F27;}
+      .l-source .node{border-color:#993C1D;background:#4A1B0C;}.l-source .node:hover{background:#622511;}
+      .l-source .node .n-title{color:#F5C4B3;}.l-source .node .n-sub{color:#F0997B;}.l-source .node .n-icon{color:#F0997B;}
+      .l-store .node{border-color:#444441;background:#2C2C2A;}.l-store .node:hover{background:#3a3a37;}
+      .l-store .node .n-title{color:#D3D1C7;}.l-store .node .n-sub{color:#B4B2A9;}.l-store .node .n-icon{color:#888780;}
+    }
+
+    .layer-arrow{display:flex;align-items:center;justify-content:center;gap:7px;margin:2px 0;color:var(--text3);font-size:11px;}
+    .layer-arrow i{font-size:14px;}
+
+    #detail-panel{margin-top:14px;border:.5px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;background:var(--bg3);font-size:13px;color:var(--text);line-height:1.65;display:none;position:relative;}
+    #detail-panel.visible{display:block;}
+    #detail-panel .dp-close{position:absolute;top:9px;right:11px;cursor:pointer;color:var(--text3);font-size:17px;background:none;border:none;padding:4px;border-radius:4px;}
+    .dp-title{font-weight:600;font-size:14px;margin-bottom:5px;}
+    .dp-body{color:var(--text2);}
+
+    /* MODAL - clean architecture, no inline onclick on overlay */
+    .modal-overlay{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal-box{background:var(--bg2);border-radius:var(--r-xl);border:.5px solid var(--border2);width:100%;max-width:720px;max-height:90vh;overflow-y:auto;transform:translateY(18px) scale(.97);transition:transform .22s,opacity .22s;opacity:0;pointer-events:none;box-shadow:0 24px 60px rgba(0,0,0,.25);}
+    .modal-overlay.open .modal-box{transform:none;opacity:1;pointer-events:all;}
+    .modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 22px 0;}
+    .modal-header h2{font-size:18px;font-weight:600;line-height:1.2;}
+    .modal-header p{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.55;}
+    .modal-close{flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--text3);font-size:20px;padding:6px;border-radius:6px;transition:background .12s,color .12s;line-height:1;}
+    .modal-close:hover{background:var(--bg3);color:var(--text);}
+    .modal-body{padding:16px 22px 22px;}
+
+    .tab-bar{display:flex;gap:4px;margin-bottom:16px;border-bottom:.5px solid var(--border);}
+    .tab-btn{font-family:var(--font);font-size:12px;font-weight:500;padding:7px 14px;cursor:pointer;border:none;background:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;border-radius:4px 4px 0 0;transition:color .12s;}
+    .tab-btn.active{color:var(--text);border-bottom-color:var(--green);}
+    .tab-btn:hover:not(.active){color:var(--text2);background:var(--bg3);}
+    .tab-pane{display:none;}.tab-pane.active{display:block;}
+
+    .decisions-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+    .decisions-list li{display:flex;gap:10px;align-items:flex-start;background:var(--bg3);border-radius:var(--r-md);padding:10px 13px;font-size:13px;line-height:1.55;}
+    .d-num{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+    .d-text{color:var(--text2);}
+    .d-text strong{color:var(--text);font-weight:600;}
+
+    /* AGENT ANIM */
+    .anim-agent{background:#0A0E1A;border-radius:var(--r-lg);padding:18px;min-height:240px;font-family:var(--mono);}
+    .chat-window{display:flex;flex-direction:column;gap:10px;}
+    .chat-bubble{max-width:85%;padding:9px 13px;border-radius:10px;font-size:12px;line-height:1.55;opacity:0;animation:bubbleIn .4s forwards;}
+    .chat-bubble.user{background:#1C3557;color:#A8C8F0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .chat-bubble.agent{background:#0D2E22;color:#6FCFAA;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .chat-bubble.typing{background:#0D2E22;color:#3A7A5A;font-style:italic;}
+    @keyframes bubbleIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .flow-trace{margin-top:14px;display:flex;flex-direction:column;gap:4px;}
+    .trace-step{display:flex;align-items:center;gap:8px;font-size:10.5px;color:#4A8A6A;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;}
+    .trace-step.show{opacity:1;transform:none;}
+    .trace-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75;flex-shrink:0;box-shadow:0 0 6px #1D9E75;}
+    .trace-step.done .trace-dot{background:#6FCFAA;box-shadow:none;}
+    .trace-label{color:#6FCFAA;}
+    .trace-src{color:#3A6A54;font-size:10px;margin-left:2px;}
+
+    /* RAG ANIM */
+    .anim-rag{background:#0D0A1E;border-radius:var(--r-lg);padding:18px;min-height:280px;font-family:var(--mono);}
+    .rag-stage{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr;align-items:start;}
+    .rag-col{display:flex;flex-direction:column;gap:5px;}
+    .rag-col-title{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#534AB7;margin-bottom:6px;}
+    .rag-arrow-col{display:flex;align-items:center;justify-content:center;padding-top:28px;color:#3A3060;font-size:18px;}
+    .rag-arrow-col.lit{color:#7F77DD;}
+    .chunk{background:#1A1535;border:.5px solid #2E2858;border-radius:5px;padding:6px 8px;font-size:10px;color:#7A70C0;line-height:1.45;opacity:0;transform:scale(.94);transition:opacity .3s,transform .3s,border-color .3s,background .3s;}
+    .chunk.show{opacity:1;transform:none;}
+    .chunk.selected{border-color:#7F77DD;background:#221E40;color:#CECBF6;}
+    .chunk-score{font-size:9px;color:#534AB7;margin-top:3px;}
+    .chunk.selected .chunk-score{color:#7F77DD;}
+    .rag-query-box{background:#1C3557;border-radius:var(--r-md);padding:9px 12px;font-size:11px;color:#A8C8F0;margin-bottom:14px;}
+    .rag-query-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#378ADD;margin-bottom:3px;}
+    .synth-box{background:#0D2010;border:.5px solid #1D5030;border-radius:var(--r-md);padding:10px 12px;font-size:11px;line-height:1.55;min-height:60px;margin-top:12px;opacity:0;transition:opacity .4s;}
+    .synth-box.show{opacity:1;}
+    .synth-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1D9E75;margin-bottom:5px;}
+    .synth-text{color:#6FCFAA;}
+    .synth-cite{color:#3A6A54;font-size:10px;margin-top:4px;}
+
+    .replay-btn{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:11px;font-weight:500;padding:6px 14px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text2);cursor:pointer;font-family:var(--font);transition:background .13s;}
+    .replay-btn:hover{background:var(--bg3);}
+
+
+    /* API CALL ANIMATION (connectors) */
+    .anim-api{background:#0A1020;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .api-row{display:flex;align-items:stretch;gap:10px;margin-bottom:10px;}
+    .api-box{flex:1;border-radius:6px;padding:10px 12px;font-size:10.5px;line-height:1.5;}
+    .api-box.req{background:#0D2035;border:.5px solid #1D4070;color:#A8C8F0;}
+    .api-box.res{background:#0D2520;border:.5px solid #1D5040;color:#6FCFAA;opacity:0;transition:opacity .4s;}
+    .api-box.res.show{opacity:1;}
+    .api-box-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;}
+    .api-box.req .api-box-label{color:#378ADD;}
+    .api-box.res .api-box-label{color:#1D9E75;}
+    .api-arrow{display:flex;align-items:center;color:#2A4060;font-size:20px;transition:color .3s;}
+    .api-arrow.lit{color:#378ADD;}
+    .api-field{display:flex;justify-content:space-between;gap:8px;padding:2px 0;border-bottom:.5px solid rgba(255,255,255,0.05);}
+    .api-field:last-child{border:none;}
+    .api-field .fk{color:#6A9AC0;font-size:10px;}
+    .api-field .fv{color:#A8C8F0;font-size:10px;font-weight:500;opacity:0;transition:opacity .3s;}
+    .api-field .fv.show{opacity:1;}
+    .api-field.res-field .fk{color:#5A9A7A;}
+    .api-field.res-field .fv{color:#6FCFAA;}
+    .api-status{font-size:10px;padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:6px;opacity:0;transition:opacity .3s;}
+    .api-status.show{opacity:1;}
+    .api-status.ok{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .api-status.pending{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    /* INGESTION PIPELINE ANIMATION (teams) */
+    .anim-ingest{background:#0A0E1A;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .ingest-step{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;margin-bottom:6px;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s;}
+    .ingest-step.show{opacity:1;transform:none;}
+    .ingest-icon{font-size:16px;width:28px;text-align:center;flex-shrink:0;}
+    .ingest-label{font-size:11px;color:#A8C8F0;flex:1;}
+    .ingest-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;white-space:nowrap;}
+    .tag-done{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .tag-proc{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    .tag-idx{background:#1A2A10;color:#639922;border:.5px solid #3B6D11;}
+    /* DATA MODEL TABLE (source systems) */
+    .data-model{width:100%;border-collapse:collapse;font-size:12px;font-family:var(--mono);}
+    .data-model th{text-align:left;padding:6px 10px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:.5px solid var(--border);}
+    .data-model td{padding:6px 10px;border-bottom:.5px solid var(--border);color:var(--text2);vertical-align:top;}
+    .data-model tr:last-child td{border:none;}
+    .data-model .field-name{color:var(--text);font-weight:500;}
+    .data-model .field-type{color:#7F77DD;font-size:10px;}
+    .data-model .field-note{font-size:11px;font-style:italic;}
+    .data-model tr:hover td{background:var(--bg3);}
+
+
+    /* VECTOR SEARCH ANIMATION */
+    .anim-vector{background:#08060F;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:220px;position:relative;overflow:hidden;}
+    .vec-query{background:#1C1535;border:.5px solid #3A2A70;border-radius:6px;padding:8px 12px;font-size:11px;color:#AFA9EC;margin-bottom:12px;}
+    .vec-query-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#534AB7;margin-bottom:3px;}
+    .vec-grid{display:flex;flex-direction:column;gap:5px;}
+    .vec-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:5px;background:#100D20;border:.5px solid #1E1840;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s,border-color .3s,background .3s;}
+    .vec-item.show{opacity:1;transform:none;}
+    .vec-item.match{border-color:#7F77DD;background:#1A1535;}
+    .vec-item.top{border-color:#1D9E75;background:#0A2018;}
+    .vec-score{font-size:10px;font-weight:600;min-width:36px;text-align:right;color:#3A3060;}
+    .vec-item.match .vec-score{color:#7F77DD;}
+    .vec-item.top .vec-score{color:#1D9E75;}
+    .vec-label{font-size:10px;color:#5A5080;flex:1;}
+    .vec-item.match .vec-label{color:#AFA9EC;}
+    .vec-item.top .vec-label{color:#6FCFAA;}
+    .vec-tag{font-size:9px;padding:2px 6px;border-radius:4px;white-space:nowrap;}
+    .vec-item.top .vec-tag{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .vec-item.match .vec-tag{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    .vec-item:not(.match):not(.top) .vec-tag{background:#100D20;color:#3A3060;border:.5px solid #1E1840;}
+    .vec-result-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1D9E75;margin:10px 0 5px;opacity:0;transition:opacity .3s;}
+    .vec-result-label.show{opacity:1;}
+    /* INDEX PIPELINE ANIMATION */
+    .anim-pipeline{background:#080C10;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .pipe-row{display:flex;align-items:center;gap:0;margin-bottom:8px;}
+    .pipe-source{border-radius:6px;padding:7px 10px;font-size:10px;font-weight:500;min-width:80px;text-align:center;opacity:0;transition:opacity .35s,transform .35s;transform:scale(.9);}
+    .pipe-source.show{opacity:1;transform:none;}
+    .pipe-arrow{color:#2A3A4A;font-size:16px;margin:0 4px;opacity:0;transition:opacity .3s;}
+    .pipe-arrow.show{opacity:1;color:#378ADD;}
+    .pipe-step{flex:1;border-radius:5px;padding:6px 8px;font-size:10px;line-height:1.4;opacity:0;transition:opacity .35s,transform .35s;transform:translateY(4px);}
+    .pipe-step.show{opacity:1;transform:none;}
+    .pipe-badge{font-size:9px;font-weight:600;padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle;}
+    /* ACCESS CONTROL ANIMATION */
+    .anim-access{background:#080810;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .access-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;margin-bottom:6px;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s;}
+    .access-row.show{opacity:1;transform:none;}
+    .access-role{font-size:10px;font-weight:600;min-width:130px;padding:4px 8px;border-radius:4px;text-align:center;}
+    .access-arrow{color:#2A3A4A;font-size:14px;flex-shrink:0;}
+    .access-row.show .access-arrow{color:#378ADD;}
+    .access-scope{font-size:10px;color:#6A8A9A;flex:1;}
+    .access-badge{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+
+
+    /* CONSUMER CHAT SIMULATION */
+    .anim-chat{background:#0A0E1A;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:220px;}
+    .chat-exchange{display:flex;flex-direction:column;gap:8px;}
+    .cx-bubble{max-width:88%;padding:9px 13px;border-radius:10px;font-size:11.5px;line-height:1.6;opacity:0;transition:opacity .35s,transform .35s;transform:translateY(6px);}
+    .cx-bubble.show{opacity:1;transform:none;}
+    .cx-bubble.q{background:#1C3557;color:#A8C8F0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .cx-bubble.a{background:#0D2E22;color:#6FCFAA;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .cx-bubble.q2{background:#1C2A50;color:#9AB8E0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .cx-bubble.a2{background:#0A2818;color:#5DBFA0;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .cx-cite{font-size:9.5px;color:#3A6A54;margin-top:4px;display:block;}
+    .cx-role-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px;}
+    /* QUERY EXAMPLES LIST */
+    .query-list{display:flex;flex-direction:column;gap:7px;}
+    .query-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r-md);border-left:2px solid var(--green);font-size:12.5px;color:var(--text2);line-height:1.5;}
+    .query-item i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px;}
+
+    /* ROADMAP SECTION */
+    .roadmap-section{max-width:860px;margin:32px auto 0;padding:0 20px 60px;}
+    .roadmap-header{margin-bottom:22px;}
+    .roadmap-header h2{font-size:17px;font-weight:600;color:var(--text);margin-bottom:4px;}
+    .roadmap-header p{font-size:13px;color:var(--text2);line-height:1.6;}
+    .roadmap-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:640px){.roadmap-grid{grid-template-columns:1fr;}}
+    .phase-card{border-radius:var(--r-xl);border:.5px solid var(--border2);background:var(--bg2);overflow:hidden;}
+    .phase-card-header{padding:18px 20px 14px;}
+    .phase-pill-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:12px;margin-bottom:10px;}
+    .phase-card-header h3{font-size:15px;font-weight:600;line-height:1.25;margin-bottom:4px;}
+    .phase-card-header p{font-size:12.5px;color:var(--text2);line-height:1.55;}
+    .phase-timeline{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--text3);}
+    .phase-timeline i{font-size:13px;}
+    .phase-body{padding:0 20px 18px;}
+    .phase-divider{height:.5px;background:var(--border);margin:0 0 14px;}
+    .milestone-list{display:flex;flex-direction:column;gap:0;}
+    .milestone{display:flex;gap:12px;padding:9px 4px;border-bottom:.5px solid var(--border);cursor:pointer;transition:background .12s;border-radius:4px;}
+    .milestone:last-child{border-bottom:none;}
+    .milestone:hover{background:var(--bg3);}
+    .m-dot-col{display:flex;flex-direction:column;align-items:center;padding-top:3px;}
+    .m-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .m-line{width:1px;flex:1;margin-top:3px;min-height:14px;}
+    .milestone:last-child .m-line{display:none;}
+    .m-content{flex:1;}
+    .m-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;}
+    .m-sub{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4;}
+    .m-week{font-size:10px;font-weight:500;margin-top:3px;}
+    .dep-bar{margin-top:14px;padding:10px 13px;border-radius:var(--r-md);font-size:12px;line-height:1.6;}
+    .dep-bar strong{display:block;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;}
+    .phase-connector{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 0;font-size:11px;color:var(--text3);}
+    .phase-connector i{font-size:20px;color:var(--green);}
+    #roadmap-detail{margin-top:14px;border:.5px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;background:var(--bg3);font-size:13px;color:var(--text);line-height:1.65;display:none;position:relative;}
+    #roadmap-detail.visible{display:block;}
+    #roadmap-detail .rd-close{position:absolute;top:9px;right:11px;cursor:pointer;color:var(--text3);font-size:17px;background:none;border:none;padding:4px;border-radius:4px;}
+    .rd-title{font-weight:600;font-size:14px;margin-bottom:8px;}
+    .rd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media(max-width:500px){.rd-grid{grid-template-columns:1fr;}}
+    .rd-box{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-md);padding:10px 12px;}
+    .rd-box-label{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;}
+    .rd-box ul{list-style:disc;padding-left:14px;display:flex;flex-direction:column;gap:4px;}
+    .rd-box ul li{font-size:12px;color:var(--text2);line-height:1.45;}
+    .query-list{display:flex;flex-direction:column;gap:7px;}
+    .query-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r-md);border-left:2px solid var(--green);font-size:12.5px;color:var(--text2);line-height:1.5;}
+    .query-item i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px;}
+
+    .ms-week-tag{font-size:11px;color:var(--text3);margin-top:3px;}
+
+
+    /* CHECKLIST */
+    .ck-group{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;}
+    .ck-group-header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:.5px solid var(--border);background:var(--bg3);}
+    .ck-group-icon{width:34px;height:34px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+    .ck-group-title{font-size:13px;font-weight:600;color:var(--text);}
+    .ck-group-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+    .ck-group-badge{margin-left:auto;font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px;background:var(--bg);color:var(--text3);border:.5px solid var(--border);white-space:nowrap;flex-shrink:0;}
+    .ck-group-badge.done{background:#E0F5EE;color:#085041;border-color:#9FE1CB;}
+    .ck-items{display:flex;flex-direction:column;}
+    .ck-item{display:flex;align-items:flex-start;gap:12px;padding:11px 18px;border-bottom:.5px solid var(--border);transition:background .12s;}
+    .ck-item:last-child{border-bottom:none;}
+    .ck-item:hover{background:var(--bg3);}
+    .ck-item.resolved{opacity:.45;}
+    .ck-item.resolved .ck-item-q{text-decoration:line-through;color:var(--text3);}
+    .ck-check{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px;transition:all .15s;margin-top:1px;padding:0;}
+    .ck-check:hover{border-color:var(--green);color:var(--green);}
+    .ck-item.resolved .ck-check{background:var(--green);border-color:var(--green);color:#fff;}
+    .ck-item-body{flex:1;}
+    .ck-item-q{font-size:12.5px;color:var(--text);line-height:1.5;}
+    .ck-item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap;}
+    .ck-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;}
+    .tag-it{background:#E6F1FB;color:#185FA5;}
+    .tag-dm{background:#E0F5EE;color:#085041;}
+    .tag-exec{background:#EEEDFE;color:#3C3489;}
+    .tag-legal{background:#FAECE7;color:#993C1D;}
+    .tag-vendor{background:#F1EFE8;color:#5F5E5A;}
+    .ck-source{font-size:10px;color:var(--text3);font-style:italic;}
+    .ck-priority{flex-shrink:0;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;align-self:flex-start;margin-top:1px;}
+    .p-critical{background:#FCEBEB;color:#A32D2D;border:.5px solid #F09595;}
+    .p-high{background:#FAEEDA;color:#633806;border:.5px solid #FAC775;}
+    .p-medium{background:#EEEDFE;color:#3C3489;border:.5px solid #CECBF6;}
+    .p-low{background:#F1EFE8;color:#5F5E5A;border:.5px solid #D3D1C7;}
+    @media(prefers-color-scheme:dark){
+      .tag-it{background:#042C53;color:#85B7EB;}
+      .tag-dm{background:#04342C;color:#9FE1CB;}
+      .tag-exec{background:#26215C;color:#CECBF6;}
+      .tag-legal{background:#4A1B0C;color:#F0997B;}
+      .tag-vendor{background:#2C2C2A;color:#B4B2A9;}
+      .p-critical{background:#501313;color:#F09595;border-color:#A32D2D;}
+      .p-high{background:#412402;color:#FAC775;border-color:#854F0B;}
+      .p-medium{background:#26215C;color:#CECBF6;border-color:#3C3489;}
+      .p-low{background:#2C2C2A;color:#B4B2A9;border-color:#444441;}
+      .ck-group-badge.done{background:#04342C;color:#9FE1CB;border-color:#1D9E75;}
+    }
+
+    footer{text-align:center;padding:20px 40px;font-size:11px;color:var(--text3);border-top:.5px solid var(--border);background:var(--bg2);}
+    footer strong{color:var(--text2);}
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="h-eyebrow">Solution Architecture — Draft v1.0</div>
+    <h1>AI-Driven Demand Management Assistant</h1>
+    <p>From fragmented knowledge to real-time decision intelligence. A unified AI layer connecting A-ah!, Microsoft Teams, SharePoint, and Jira into a single conversational interface.</p>
+    <span class="h-badge"><i class="ti ti-sparkles"></i> Any demand · Any time · Instant answers</span>
+  </div>
+  <div class="h-meta">
+    <span class="phase-pill">Phase 1 — Read-only</span>
+    <span>Click any node to explore</span>
+    <span style="font-size:10px;margin-top:4px;color:var(--green)">&#10022; animated deep dives available</span>
+    <a href="https://will-demand-mgmt.github.io/demand-assistant/preview" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;margin-top:4px;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-arrow-left" style="font-size:12px;"></i> Back to overview</a>
+  </div>
+</header>
+
+<main>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>Consumers</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div>AI Agent</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div>Intelligence Core</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>Connectors</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#D85A30"></div>Source Systems</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#888780"></div>Knowledge Store</div>
+    <div class="legend-item" style="margin-left:auto"><span style="color:var(--green);font-size:10px;font-weight:600">&#10022; = animated deep dive</span></div>
+  </div>
+
+  <div class="layer l-consumer">
+    <div class="layer-label">Consumers — any stakeholder, any time <span style="color:var(--green)">&#10022;</span></div>
+    <div class="node-row">
+      <button class="node has-dive" data-modal="cons-exec"><i class="ti ti-building-skyscraper n-icon"></i><div class="n-title">Executives</div><div class="n-sub">Portfolio overview, status</div></button>
+      <button class="node has-dive" data-modal="cons-dm"><i class="ti ti-layout-dashboard n-icon"></i><div class="n-title">Demand managers</div><div class="n-sub">Your team — demand details</div></button>
+      <button class="node has-dive" data-modal="cons-dev"><i class="ti ti-code n-icon"></i><div class="n-title">Developers &amp; PMs</div><div class="n-sub">Sprint context, blockers</div></button>
+      <button class="node has-dive" data-modal="cons-biz"><i class="ti ti-briefcase n-icon"></i><div class="n-title">Business stakeholders</div><div class="n-sub">Their demand status &amp; docs</div></button>
+    </div>
+  </div>
+
+  <div class="layer-arrow"><i class="ti ti-arrows-down-up"></i><span>Natural language Q&amp;A — Teams bot or web interface</span></div>
+
+  <div class="layer l-agent">
+    <div class="layer-label">AI agent interface <span style="color:var(--green)">&#10022;</span></div>
+    <button class="node-single" data-modal="agent">
+      <i class="ti ti-robot n-icon"></i>
+      <div class="n-title">Demand Management AI Assistant</div>
+      <div class="n-sub">Conversational interface — understands demand context, user intent, and role. Responds in natural language with cited sources.</div>
+      <span class="agent-badge">Any demand · Any time · Instant answers</span>
+      <span class="deep-hint">&#10022; click for animated deep dive</span>
+    </button>
+  </div>
+
+  <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>Query decomposition &amp; retrieval requests</span></div>
+
+  <div class="layer l-core">
+    <div class="layer-label">Intelligence core <span style="color:var(--green)">&#10022;</span></div>
+    <div class="node-row">
+      <button class="node has-dive" data-modal="rag"><i class="ti ti-search n-icon"></i><div class="n-title">RAG engine</div><div class="n-sub">Retrieval-augmented generation</div></button>
+      <button class="node has-dive" data-modal="router"><i class="ti ti-route n-icon"></i><div class="n-title">Intent router</div><div class="n-sub">Routes to right connector</div></button>
+      <button class="node has-dive" data-modal="ctx"><i class="ti ti-filter n-icon"></i><div class="n-title">Context builder</div><div class="n-sub">Role, demand ID, history</div></button>
+      <button class="node has-dive" data-modal="synth"><i class="ti ti-sparkles n-icon"></i><div class="n-title">Response synthesizer</div><div class="n-sub">LLM + source citations</div></button>
+    </div>
+  </div>
+
+  <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>Structured queries to connectors (read-only)</span></div>
+
+  <div class="layer l-connector">
+    <div class="layer-label">Integration &amp; connector layer <span style="color:var(--green)">&#10022;</span></div>
+    <div class="node-row">
+      <button class="node has-dive" data-modal="c-aah"><i class="ti ti-list-check n-icon"></i><div class="n-title">A-ah! connector</div><div class="n-sub">Demands, status, requirements</div></button>
+      <button class="node has-dive" data-modal="c-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams connector</div><div class="n-sub">Meeting minutes via Copilot</div></button>
+      <button class="node has-dive" data-modal="c-sp"><i class="ti ti-files n-icon"></i><div class="n-title">SharePoint connector</div><div class="n-sub">Docs, deliverables, briefs</div></button>
+      <button class="node has-dive" data-modal="c-jira"><i class="ti ti-bug n-icon"></i><div class="n-title">Jira connector</div><div class="n-sub">Dev tracking, dashboards</div></button>
+    </div>
+  </div>
+
+  <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>API / webhook sync (scheduled + event-triggered)</span></div>
+
+  <div class="layer l-source">
+    <div class="layer-label">Source systems — existing tools (unchanged) <span style="color:var(--green)">&#10022;</span></div>
+    <div class="node-row">
+      <button class="node has-dive" data-modal="s-aah"><i class="ti ti-clipboard-list n-icon"></i><div class="n-title">A-ah!</div><div class="n-sub">Demands, statuses, requirements</div></button>
+      <button class="node has-dive" data-modal="s-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams + Copilot</div><div class="n-sub">Meetings, minutes, comms</div></button>
+      <button class="node has-dive" data-modal="s-sp"><i class="ti ti-folder-open n-icon"></i><div class="n-title">SharePoint</div><div class="n-sub">Deliverables, briefs, decks</div></button>
+      <button class="node has-dive" data-modal="s-jira"><i class="ti ti-chart-bar n-icon"></i><div class="n-title">Jira</div><div class="n-sub">Dev dashboards, sprints</div></button>
+    </div>
+  </div>
+
+  <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>Indexed &amp; vectorized into knowledge store</span></div>
+
+  <div class="layer l-store">
+    <div class="layer-label">Knowledge store <span style="color:var(--green)">&#10022;</span></div>
+    <div class="node-row">
+      <button class="node has-dive" data-modal="ks-vec"><i class="ti ti-database n-icon"></i><div class="n-title">Vector database</div><div class="n-sub">Semantic search over demands</div></button>
+      <button class="node has-dive" data-modal="ks-meta"><i class="ti ti-table n-icon"></i><div class="n-title">Metadata cache</div><div class="n-sub">Demand IDs, status, owners</div></button>
+      <button class="node has-dive" data-modal="ks-index"><i class="ti ti-refresh n-icon"></i><div class="n-title">Indexing pipeline</div><div class="n-sub">Scheduled + event-triggered</div></button>
+      <button class="node has-dive" data-modal="ks-access"><i class="ti ti-lock n-icon"></i><div class="n-title">Access control</div><div class="n-sub">Role-based data visibility</div></button>
+    </div>
+  </div>
+
+  <div id="detail-panel">
+    <button class="dp-close" id="dp-close-btn"><i class="ti ti-x"></i></button>
+    <div id="dp-content"></div>
+  </div>
+</main>
+
+
+<section class="roadmap-section">
+  <div class="roadmap-header">
+    <h2>Implementation Roadmap</h2>
+    <p>A phased approach from foundation to full intelligence. Each phase delivers standalone value while preparing the ground for the next. Click any milestone for detail.</p>
+  </div>
+  <div class="roadmap-grid">
+
+    <!-- PHASE 1 -->
+    <div class="phase-card">
+      <div class="phase-card-header" style="background:linear-gradient(135deg,#085041 0%,#0F6E56 100%);">
+        <span class="phase-pill-tag" style="background:rgba(255,255,255,0.15);color:#fff;border:.5px solid rgba(255,255,255,0.3);"><i class="ti ti-rocket"></i> Phase 1</span>
+        <h3 style="color:#fff;">Foundation &amp; Read-only Agent</h3>
+        <p style="color:rgba(255,255,255,0.75);">Connect existing systems, build the knowledge store, and deploy a read-only conversational agent. Zero disruption to current tools.</p>
+        <div class="phase-timeline" style="color:rgba(255,255,255,0.6);"><i class="ti ti-calendar"></i> Estimated duration: <strong style="color:#fff;margin-left:3px;">3&ndash;4 months</strong></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-divider"></div>
+        <div class="milestone-list">
+          <div class="milestone" data-milestone="p1-m1">
+            <div class="m-dot-col"><div class="m-dot" style="background:#378ADD;"></div><div class="m-line" style="background:#E6F1FB;"></div></div>
+            <div class="m-content"><div class="m-title">M1 &mdash; API assessment &amp; connectivity</div><div class="m-sub">Validate A-ah! REST API, Graph API permissions, Jira REST API access and service account setup</div><div class="m-week" style="color:#378ADD;">Weeks 1&ndash;3</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m2">
+            <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
+            <div class="m-content"><div class="m-title">M2 &mdash; Knowledge store setup</div><div class="m-sub">Deploy vector DB and metadata cache. Initial bulk indexing of all historical demands, documents, and meeting minutes</div><div class="m-week" style="color:#7F77DD;">Weeks 4&ndash;7</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m3">
+            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
+            <div class="m-content"><div class="m-title">M3 &mdash; Connector development</div><div class="m-sub">Build and test all 4 connectors: A-ah!, Teams/Copilot, SharePoint, Jira. Implement incremental sync and event triggers</div><div class="m-week" style="color:#EF9F27;">Weeks 6&ndash;10</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m4">
+            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
+            <div class="m-content"><div class="m-title">M4 &mdash; Agent core &amp; RAG engine</div><div class="m-sub">Deploy LLM integration, RAG pipeline, intent router, context builder. System prompt tuned for demand vocabulary</div><div class="m-week" style="color:#1D9E75;">Weeks 8&ndash;12</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m5">
+            <div class="m-dot-col"><div class="m-dot" style="background:#D85A30;"></div><div class="m-line" style="background:#FAECE7;"></div></div>
+            <div class="m-content"><div class="m-title">M5 &mdash; Access control &amp; SSO</div><div class="m-sub">Integrate Azure AD, implement role matrix, per-chunk access metadata, audit logging, GDPR review</div><div class="m-week" style="color:#D85A30;">Weeks 10&ndash;13</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m6">
+            <div class="m-dot-col"><div class="m-dot" style="background:#888780;"></div><div class="m-line" style="display:none;"></div></div>
+            <div class="m-content"><div class="m-title">M6 &mdash; Pilot &amp; go-live</div><div class="m-sub">Internal pilot with demand managers and selected stakeholders. Feedback, threshold tuning, Teams bot deployment and rollout</div><div class="m-week" style="color:#888780;">Weeks 13&ndash;16</div></div>
+          </div>
+        </div>
+        <div class="dep-bar" style="background:#E6F1FB;border:.5px solid #B5D4F4;">
+          <strong style="color:#185FA5;">&#128204; Critical dependency</strong>
+          <span style="color:#0C447C;">A-ah! REST API availability must be confirmed in Week 1. All subsequent milestones depend on it.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-card">
+      <div class="phase-card-header" style="background:linear-gradient(135deg,#26215C 0%,#3C3489 100%);">
+        <span class="phase-pill-tag" style="background:rgba(255,255,255,0.15);color:#fff;border:.5px solid rgba(255,255,255,0.3);"><i class="ti ti-stars"></i> Phase 2</span>
+        <h3 style="color:#fff;">Intelligence &amp; Write Capabilities</h3>
+        <p style="color:rgba(255,255,255,0.75);">Expand from read-only to proactive intelligence. The agent suggests, alerts, and where authorized acts on behalf of the demand manager.</p>
+        <div class="phase-timeline" style="color:rgba(255,255,255,0.6);"><i class="ti ti-calendar"></i> Estimated start: <strong style="color:#fff;margin-left:3px;">Month 5 onwards</strong></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-divider"></div>
+        <div class="milestone-list">
+          <div class="milestone" data-milestone="p2-m1">
+            <div class="m-dot-col"><div class="m-dot" style="background:#534AB7;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
+            <div class="m-content"><div class="m-title">M7 &mdash; Proactive alerts</div><div class="m-sub">Agent monitors demand portfolio and sends Teams alerts: stalled demands, approaching deadlines, open action items</div><div class="m-week" style="color:#534AB7;">Month 5&ndash;6</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m2">
+            <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
+            <div class="m-content"><div class="m-title">M8 &mdash; Status update automation</div><div class="m-sub">Agent drafts weekly status summaries per demand. Manager reviews and approves before any update is shared</div><div class="m-week" style="color:#7F77DD;">Month 6&ndash;7</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m3">
+            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
+            <div class="m-content"><div class="m-title">M9 &mdash; Meeting intelligence</div><div class="m-sub">Post-meeting: agent extracts action items from Copilot minutes, suggests Jira updates, flags decisions needing sign-off</div><div class="m-week" style="color:#1D9E75;">Month 7&ndash;8</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m4">
+            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
+            <div class="m-content"><div class="m-title">M10 &mdash; Write-back to A-ah!</div><div class="m-sub">With explicit manager approval, agent updates demand status in A-ah!. Full audit trail. Human-in-the-loop always required</div><div class="m-week" style="color:#EF9F27;">Month 8&ndash;9</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m5">
+            <div class="m-dot-col"><div class="m-dot" style="background:#D85A30;"></div><div class="m-line" style="background:#FAECE7;"></div></div>
+            <div class="m-content"><div class="m-title">M11 &mdash; Analytics dashboard</div><div class="m-sub">Usage analytics: most queried demands, unanswered questions, knowledge gaps. Drives continuous improvement</div><div class="m-week" style="color:#D85A30;">Month 9&ndash;10</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m6">
+            <div class="m-dot-col"><div class="m-dot" style="background:#888780;"></div><div class="m-line" style="display:none;"></div></div>
+            <div class="m-content"><div class="m-title">M12 &mdash; Organisation-wide rollout</div><div class="m-sub">Full deployment to all profiles. Onboarding materials, governance model, SLA definition, long-term ownership assigned</div><div class="m-week" style="color:#888780;">Month 10&ndash;12</div></div>
+          </div>
+        </div>
+        <div class="dep-bar" style="background:#EEEDFE;border:.5px solid #CECBF6;">
+          <strong style="color:#3C3489;">&#128204; Phase 2 prerequisite</strong>
+          <span style="color:#534AB7;">Phase 1 must be stable for at least 4 weeks. Write-back capabilities (M10) require formal governance approval and a DPIA.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector">
+    <i class="ti ti-arrow-right"></i>
+    <span>Phase 1 delivers standalone value &mdash; Phase 2 begins only when Phase 1 is stable</span>
+  </div>
+
+</section>
+
+
+<section class="roadmap-section" style="margin-top:0;padding-top:0;">
+  <div class="roadmap-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div>
+      <h2>Open Decisions Checklist</h2>
+      <p>All unresolved decisions aggregated from every architecture layer and roadmap milestone. Bring this to your next steering meeting.</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 32 resolved</span>
+      <button id="ck-reset" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text3);cursor:pointer;font-family:var(--font);">Reset all</button>
+      <button id="ck-export" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green);border:none;color:#fff;cursor:pointer;font-family:var(--font);">&#8681; Export open</button>
+    </div>
+  </div>
+
+  <div id="checklist-wrap" style="display:flex;flex-direction:column;gap:16px;">
+
+    <!-- GROUP: INFRASTRUCTURE & PLATFORM -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#E6F1FB;color:#185FA5;"><i class="ti ti-server"></i></span>
+        <div>
+          <div class="ck-group-title">Infrastructure &amp; Platform</div>
+          <div class="ck-group-sub">Cloud environment, vector DB, LLM provider</div>
+        </div>
+        <span class="ck-group-badge" id="badge-infra">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="infra" data-id="i1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is our cloud environment — Azure, AWS, or on-premise?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Knowledge store · Vector DB</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which vector DB platform: Azure AI Search, Pinecone, or Weaviate?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Vector DB · M2</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which LLM provider: Azure OpenAI (GPT-4o) or Anthropic Claude API?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent core · M4</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is the metadata cache technology: Redis, PostgreSQL, or Azure Table Storage?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Metadata cache</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="infra" data-id="i5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Is multilingual content present in demands or documents? If yes, a multilingual embedding model must be chosen before first indexing.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Vector DB · RAG engine</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP: SOURCE SYSTEM APIs -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#FAEEDA;color:#854F0B;"><i class="ti ti-plug"></i></span>
+        <div>
+          <div class="ck-group-title">Source System APIs</div>
+          <div class="ck-group-sub">A-ah!, Teams/Copilot, SharePoint, Jira connectivity</div>
+        </div>
+        <span class="ck-group-badge" id="badge-api">0/7</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="api" data-id="a1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Does A-ah! expose a REST API? This is the single most critical dependency — all other milestones depend on it.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-vendor">Vendor</span><span class="ck-source">A-ah! connector · M1</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Does A-ah! support webhooks on status change, or is polling required?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-vendor">Vendor</span><span class="ck-source">A-ah! connector · Indexing pipeline</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Can IT admin create a Microsoft Graph API app registration with OnlineMeetings.Read.All and Sites.Read.All permissions?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Teams connector · SharePoint connector · M1</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Are Copilot meeting transcripts accessible via Graph API in our tenant, or only visible inside the Teams UI?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Teams connector · M3</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is our Jira version — Cloud or Data Center? The REST API differs between the two.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Jira connector · M1</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a6">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">How are Jira issues linked to A-ah! demands today — custom field, label convention, or epic hierarchy?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Jira connector</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a7">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is the SharePoint folder naming convention for demand documents — is there a consistent root path per demand ID?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint connector</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP: AGENT DESIGN -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#E0F5EE;color:#085041;"><i class="ti ti-robot"></i></span>
+        <div>
+          <div class="ck-group-title">Agent Design</div>
+          <div class="ck-group-sub">Deployment channel, memory, escalation, response format</div>
+        </div>
+        <span class="ck-group-badge" id="badge-agent">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="agent" data-id="ag1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Primary deployment channel: Microsoft Teams bot or dedicated web portal? This drives the entire front-end development scope.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent interface</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should external stakeholders (vendors, clients) be able to query the agent? If yes, a guest access model is needed.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">Agent interface · Access control</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Stateful or stateless sessions? Stateful enables follow-up questions but requires session storage infrastructure.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Agent interface · Context builder</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">When confidence is low, should the agent escalate to a demand manager via Teams message, or simply reply "I don't have reliable information on this"?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent interface · Response synthesizer</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="agent" data-id="ag5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should the agent proactively suggest 2–3 follow-up questions after each answer? Increases engagement but adds cost per query.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Response synthesizer</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP: ACCESS & SECURITY -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#FAECE7;color:#993C1D;"><i class="ti ti-shield-lock"></i></span>
+        <div>
+          <div class="ck-group-title">Access Control &amp; Security</div>
+          <div class="ck-group-sub">Roles, permissions, GDPR, audit log</div>
+        </div>
+        <span class="ck-group-badge" id="badge-access">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="access" data-id="ac1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Are the 4 defined roles (Executive, Demand Manager, Developer/PM, Business Stakeholder) sufficient, or are sub-roles needed?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Access control · M5</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Do any SharePoint documents require access restrictions beyond the role level — e.g. visible only to specific individuals?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Access control · SharePoint connector</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What is the audit log retention period? GDPR may impose constraints on logs containing personal data (query text may reference names).</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Access control · M5</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Does our organisation require a Data Protection Impact Assessment (DPIA) before deploying an AI system that indexes internal documents?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Access control · M5 · M10</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="access" data-id="ac5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should meeting minutes from all Teams channels be indexed, or only specific channels (e.g. Demand Follow-up)?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Teams connector · M3</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP: DATA & KNOWLEDGE -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#EEEDFE;color:#3C3489;"><i class="ti ti-database"></i></span>
+        <div>
+          <div class="ck-group-title">Data &amp; Knowledge Store</div>
+          <div class="ck-group-sub">Indexing scope, chunk size, freshness, historical data</div>
+        </div>
+        <span class="ck-group-badge" id="badge-data">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="data" data-id="d1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">How many total demands exist today and what is the average length of business requirement texts? Required to estimate storage and embedding cost.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Vector DB · M2</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">How far back should historical meeting minutes and documents be indexed at launch — last 6 months, 12 months, or all available history?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Indexing pipeline · M2</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What maximum staleness is acceptable per source — how quickly must a status change in A-ah! be reflected in agent answers?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Indexing pipeline</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What happens if an indexing job fails — should the agent serve stale data with a freshness warning, or block queries until the index is healthy?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Indexing pipeline · M2</span></div>
+          </div>
+          <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="data" data-id="d5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Should the agent be able to answer "what changed between version 1 and version 2 of this document", or is latest-version-only sufficient for Phase 1?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint connector</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP: GOVERNANCE & ROLLOUT -->
+    <div class="ck-group">
+      <div class="ck-group-header">
+        <span class="ck-group-icon" style="background:#F1EFE8;color:#5F5E5A;"><i class="ti ti-flag"></i></span>
+        <div>
+          <div class="ck-group-title">Governance &amp; Rollout</div>
+          <div class="ck-group-sub">Ownership, SLA, Phase 2 write-back approvals, analytics</div>
+        </div>
+        <span class="ck-group-badge" id="badge-gov">0/5</span>
+      </div>
+      <div class="ck-items">
+        <div class="ck-item" data-group="gov" data-id="g1">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Who is the long-term owner of the agent — IT team, demand management team, or a shared responsibility model?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">M12</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g2">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What pilot group do we start with — which demand managers and business stakeholders are the best early adopters for M6?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">M6</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g3">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which analytics tool will power the usage dashboard in Phase 2 — Power BI, Grafana, or a custom solution?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">M11</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g4">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Phase 2 write-back (M10): which fields can the agent propose updating in A-ah!, and who is the approving authority for each update?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">M10</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
+        <div class="ck-item" data-group="gov" data-id="g5">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">What name and branding should the agent have internally? A recognisable name drives adoption.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">M12</span></div>
+          </div>
+          <span class="ck-priority p-low">Low</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end checklist-wrap -->
+</section>
+
+<footer><strong>AI-Driven Demand Management Assistant</strong> · Solution Architecture Draft v1.0 · Phase 1: Read-only</footer>
+
+
+
+
+<!-- MODAL: AI AGENT -->
+<div class="modal-overlay" id="modal-agent">
+  <div class="modal-box" id="modal-agent-box">
+    <div class="modal-header">
+      <div><h2>AI Agent Interface</h2><p>The single conversational entry point. Understands demand vocabulary, infers intent, and always cites sources.</p></div>
+      <button class="modal-close" data-close="agent"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="agent" data-tab="flow">Live query demo</button>
+        <button class="tab-btn" data-modal="agent" data-tab="arch">Technical design</button>
+        <button class="tab-btn" data-modal="agent" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="agent-flow">
+        <div class="anim-agent"><div class="chat-window" id="chat-window"></div><div class="flow-trace" id="flow-trace"></div></div>
+        <button class="replay-btn" id="replay-agent"><i class="ti ti-refresh"></i> Replay demo</button>
+      </div>
+      <div class="tab-pane" id="agent-arch">
+        <ul class="decisions-list">
+          <li><div class="d-num">1</div><div class="d-text"><strong>Deployment channel:</strong> Microsoft Teams bot (via Azure Bot Service) is the recommended primary channel. A web widget serves as secondary for external stakeholders.</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>LLM model:</strong> Azure OpenAI (GPT-4o) if on Azure, or Claude API. The system prompt is injected with demand vocabulary and status lifecycle definitions.</div></li>
+          <li><div class="d-num">3</div><div class="d-text"><strong>Identity &amp; SSO:</strong> The agent authenticates via Azure AD. Role is inferred from AD group membership — no separate user management required.</div></li>
+          <li><div class="d-num">4</div><div class="d-text"><strong>Response format:</strong> Structured answers with summary, source citation, and follow-up suggestion. Teams adaptive cards for rich formatting; plain text fallback otherwise.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="agent-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Teams bot vs web app:</strong> Do most stakeholders prefer Teams or a dedicated portal? This drives the primary deployment choice.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>External access:</strong> Should external stakeholders be able to query the agent? If yes, a guest access model is needed alongside AD integration.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Conversation memory:</strong> Stateful (remembers previous questions) or stateless (every query independent)? Stateful enables follow-ups but requires session storage.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Escalation path:</strong> When confidence is low, escalate to a demand manager via Teams, or respond "I don't have reliable information on this"?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RAG ENGINE -->
+<div class="modal-overlay" id="modal-rag">
+  <div class="modal-box" id="modal-rag-box">
+    <div class="modal-header">
+      <div><h2>RAG Engine</h2><p>Retrieval-Augmented Generation: every answer is grounded in real demand data, never invented.</p></div>
+      <button class="modal-close" data-close="rag"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="rag" data-tab="flow">Step-by-step animation</button>
+        <button class="tab-btn" data-modal="rag" data-tab="arch">Technical design</button>
+        <button class="tab-btn" data-modal="rag" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="rag-flow">
+        <div class="anim-rag">
+          <div class="rag-query-box"><div class="rag-query-label">Incoming query</div>What is the current status of the Data Platform demand and who is the owner?</div>
+          <div class="rag-stage">
+            <div class="rag-col">
+              <div class="rag-col-title">&#9312; Retrieve</div>
+              <div class="chunk" id="c1"><div>A-ah! #DM-044</div><div>Data Platform Migration</div><div class="chunk-score">score: —</div></div>
+              <div class="chunk" id="c2"><div>A-ah! #DM-044</div><div>Status: Design phase</div><div class="chunk-score">score: —</div></div>
+              <div class="chunk" id="c3"><div>SharePoint brief</div><div>Data Platform v2 mission</div><div class="chunk-score">score: —</div></div>
+              <div class="chunk" id="c4"><div>Teams minutes 08/05</div><div>Owner: M. Rossi</div><div class="chunk-score">score: —</div></div>
+            </div>
+            <div class="rag-arrow-col" id="rarrow1"><i class="ti ti-arrow-right"></i></div>
+            <div class="rag-col">
+              <div class="rag-col-title">&#9313; Rank</div>
+              <div class="chunk" id="r1"><div>DM-044 status</div><div class="chunk-score">score: 0.94 &#10022;</div></div>
+              <div class="chunk" id="r2"><div>DM-044 owner</div><div class="chunk-score">score: 0.91 &#10022;</div></div>
+              <div class="chunk" id="r3"><div>Mission brief</div><div class="chunk-score">score: 0.72</div></div>
+            </div>
+            <div class="rag-arrow-col" id="rarrow2"><i class="ti ti-arrow-right"></i></div>
+            <div class="rag-col">
+              <div class="rag-col-title">&#9314; Context</div>
+              <div class="chunk" id="ctx1"><div>DM-044: Design phase</div><div class="chunk-score">injected &#10003;</div></div>
+              <div class="chunk" id="ctx2"><div>Owner: M. Rossi</div><div class="chunk-score">injected &#10003;</div></div>
+            </div>
+          </div>
+          <div class="synth-box" id="synth-box">
+            <div class="synth-label">&#9315; LLM synthesis</div>
+            <div class="synth-text" id="synth-text"></div>
+            <div class="synth-cite" id="synth-cite"></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-rag"><i class="ti ti-refresh"></i> Replay animation</button>
+      </div>
+      <div class="tab-pane" id="rag-arch">
+        <ul class="decisions-list">
+          <li><div class="d-num">1</div><div class="d-text"><strong>Embedding model:</strong> text-embedding-3-small (OpenAI). Each demand record, document chunk (~512 tokens), and meeting summary is embedded and stored at index time.</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>Retrieval strategy:</strong> Hybrid search — semantic (cosine similarity) + keyword (BM25). Results are re-ranked before passing to the LLM.</div></li>
+          <li><div class="d-num">3</div><div class="d-text"><strong>Context budget:</strong> Top-k=5 chunks injected into LLM context, each tagged with source system and timestamp for accurate citation.</div></li>
+          <li><div class="d-num">4</div><div class="d-text"><strong>Hallucination guard:</strong> LLM instructed to answer only from provided context and say "I don't have this information" when uncertain.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="rag-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Vector DB choice:</strong> Azure AI Search (zero infra if already on Azure) vs Pinecone vs Weaviate. Depends on your cloud environment.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Chunk size:</strong> 512 tokens default. Demand records with long requirement fields may need larger windows. Needs empirical testing with real A-ah! data.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Multi-lingual support:</strong> Are demands and documents in multiple languages? If yes, a multilingual embedding model is needed from day one.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Re-ranking latency:</strong> A cross-encoder adds ~100–200ms. Acceptable trade-off for your use case?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: INTENT ROUTER -->
+<div class="modal-overlay" id="modal-router">
+  <div class="modal-box" id="modal-router-box">
+    <div class="modal-header">
+      <div><h2>Intent Router</h2><p>Classifies every query and dispatches it to the right connector — or multiple connectors in parallel.</p></div>
+      <button class="modal-close" data-close="router"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="router" data-tab="arch">Routing logic</button>
+        <button class="tab-btn" data-modal="router" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="router-arch">
+        <ul class="decisions-list">
+          <li><div class="d-num">1</div><div class="d-text"><strong>Status query → A-ah! connector.</strong> Keywords: demand ID (DM-###), "status", "stage", "phase", "shaping", "design", "roll-out".</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>Document query → SharePoint connector.</strong> Keywords: "document", "brief", "deliverable", "presentation", "PDF", "latest version".</div></li>
+          <li><div class="d-num">3</div><div class="d-text"><strong>Meeting query → Teams connector.</strong> Keywords: "meeting", "minutes", "decision", "discussed", "action item", date references.</div></li>
+          <li><div class="d-num">4</div><div class="d-text"><strong>Dev query → Jira connector.</strong> Keywords: "ticket", "sprint", "blocker", "developer", "progress", "release".</div></li>
+          <li><div class="d-num">5</div><div class="d-text"><strong>Multi-source → parallel dispatch.</strong> "Status of DM-044 and last meeting decision?" triggers A-ah! + Teams simultaneously.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="router-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Classification approach:</strong> LLM zero-shot (simpler) or fine-tuned classifier (faster at scale)? Query volume drives the decision.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Ambiguous queries:</strong> Ask a clarifying question, or retrieve from all sources and let the synthesizer decide?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Fallback:</strong> If no connector matches, broad knowledge store search or a clear "no source found" response?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: A-ah! CONNECTOR -->
+<div class="modal-overlay" id="modal-c-aah">
+  <div class="modal-box" id="modal-c-aah-box">
+    <div class="modal-header">
+      <div><h2>A-ah! Connector</h2><p>Live API simulation — how the connector fetches demand data and maps it to the agent knowledge store.</p></div>
+      <button class="modal-close" data-close="c-aah"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-aah" data-tab="flow">API call simulation</button>
+        <button class="tab-btn" data-modal="c-aah" data-tab="fields">Fields read</button>
+        <button class="tab-btn" data-modal="c-aah" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-aah-flow">
+        <div class="anim-api" id="anim-caah">
+          <div class="api-row">
+            <div class="api-box req">
+              <div class="api-box-label">GET /api/demands/DM-044</div>
+              <div class="api-field"><span class="fk">Authorization</span><span class="fv show">Bearer {token}</span></div>
+              <div class="api-field"><span class="fk">fields</span><span class="fv" id="caah-f1">id,title,status,owner,stage</span></div>
+              <div class="api-field"><span class="fk">updated_since</span><span class="fv" id="caah-f2">2025-05-13</span></div>
+            </div>
+            <div class="api-arrow" id="caah-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="api-box res" id="caah-res">
+              <div class="api-status ok" id="caah-status">200 OK</div>
+              <div class="api-box-label">Response</div>
+              <div class="api-field res-field"><span class="fk">id</span><span class="fv" id="caah-r1">DM-044</span></div>
+              <div class="api-field res-field"><span class="fk">title</span><span class="fv" id="caah-r2">Data Platform Migration</span></div>
+              <div class="api-field res-field"><span class="fk">status</span><span class="fv" id="caah-r3">Design</span></div>
+              <div class="api-field res-field"><span class="fk">owner</span><span class="fv" id="caah-r4">M. Rossi</span></div>
+              <div class="api-field res-field"><span class="fk">priority</span><span class="fv" id="caah-r5">High</span></div>
+            </div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-caah"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-aah-fields">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">demand_id</td><td class="field-type">string</td><td class="field-note">Primary identifier — referenced in all agent answers</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-note">Natural language name of the demand</td></tr>
+            <tr><td class="field-name">status / stage</td><td class="field-type">enum</td><td class="field-note">Shaping, HLA, Design, Implementation, Testing, Roll-out, Closure</td></tr>
+            <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">Demand manager responsible — cited in responses</td></tr>
+            <tr><td class="field-name">business_requirements</td><td class="field-type">text</td><td class="field-note">Full text — chunked and vectorized for semantic search</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Critical / High / Medium / Low — used for portfolio summaries</td></tr>
+            <tr><td class="field-name">updated_at</td><td class="field-type">datetime</td><td class="field-note">Drives incremental sync — only changed records re-indexed</td></tr>
+            <tr><td class="field-name">linked_jira</td><td class="field-type">string[]</td><td class="field-note">Jira issue keys linked to this demand</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-aah-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>API availability:</strong> Does A-ah! expose a REST API with authentication tokens? This is the most critical dependency — needs validation before any build starts.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Webhook support:</strong> Does A-ah! support webhooks on status change? If yes, the indexing pipeline can react in real time. If not, polling every 15 minutes is the fallback.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Rate limits:</strong> What are the API rate limits? This affects the initial bulk indexing strategy for all historical demands.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Field mapping:</strong> Are the field names above accurate for your A-ah! instance, or do they differ? The connector mapping must match your actual schema.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: TEAMS CONNECTOR -->
+<div class="modal-overlay" id="modal-c-teams">
+  <div class="modal-box" id="modal-c-teams-box">
+    <div class="modal-header">
+      <div><h2>Teams + Copilot Connector</h2><p>How Copilot meeting minutes are ingested, processed, and made searchable through the agent.</p></div>
+      <button class="modal-close" data-close="c-teams"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-teams" data-tab="flow">Ingestion pipeline</button>
+        <button class="tab-btn" data-modal="c-teams" data-tab="fields">Data extracted</button>
+        <button class="tab-btn" data-modal="c-teams" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-teams-flow">
+        <div class="anim-ingest" id="anim-cteams">
+          <div class="ingest-step" id="ts1"><span class="ingest-icon" style="color:#378ADD"><i class="ti ti-video"></i></span><span class="ingest-label">Teams meeting ends — Copilot generates minutes</span><span class="ingest-tag tag-done">trigger</span></div>
+          <div class="ingest-step" id="ts2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-api"></i></span><span class="ingest-label">Graph API: GET /me/onlineMeetings/{id}/transcripts</span><span class="ingest-tag tag-proc">fetch</span></div>
+          <div class="ingest-step" id="ts3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-filter"></i></span><span class="ingest-label">Extract: decisions, action items, demand references</span><span class="ingest-tag tag-proc">parse</span></div>
+          <div class="ingest-step" id="ts4"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-vector"></i></span><span class="ingest-label">Chunk text → embed → store in vector DB</span><span class="ingest-tag tag-idx">index</span></div>
+          <div class="ingest-step" id="ts5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-check"></i></span><span class="ingest-label">Minutes searchable via agent within minutes of meeting end</span><span class="ingest-tag tag-done">done</span></div>
+        </div>
+        <button class="replay-btn" id="replay-cteams"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-teams-fields">
+        <table class="data-model">
+          <thead><tr><th>Data extracted</th><th>Type</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Meeting title / date</td><td class="field-type">string</td><td class="field-note">Metadata for citation — "Per Teams meeting 08/05"</td></tr>
+            <tr><td class="field-name">Participants</td><td class="field-type">string[]</td><td class="field-note">Linked to demand owners for context enrichment</td></tr>
+            <tr><td class="field-name">Decisions made</td><td class="field-type">text</td><td class="field-note">Key output — vectorized for "what was decided about X?" queries</td></tr>
+            <tr><td class="field-name">Action items</td><td class="field-type">text[]</td><td class="field-note">Owner + deadline — surfaced on "what are the open actions?" queries</td></tr>
+            <tr><td class="field-name">Demand references</td><td class="field-type">string[]</td><td class="field-note">Demand IDs mentioned — links minutes to A-ah! records</td></tr>
+            <tr><td class="field-name">Full transcript</td><td class="field-type">text</td><td class="field-note">Chunked for broad semantic search — not stored raw</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-teams-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Copilot transcript format:</strong> Copilot minutes are structured text. Does your tenant configuration expose them via Graph API, or are they only in the Teams UI? IT admin confirmation needed.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Meeting scope:</strong> Index all meetings in specific channels (e.g. Demand Follow-up) or all meetings where demand managers are participants?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Retention policy:</strong> How far back should historical minutes be indexed at launch? Last 6 months? Last year?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Confidentiality:</strong> Some meeting content may be sensitive. Should the access control layer restrict certain minutes to specific roles?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SHAREPOINT CONNECTOR -->
+<div class="modal-overlay" id="modal-c-sp">
+  <div class="modal-box" id="modal-c-sp-box">
+    <div class="modal-header">
+      <div><h2>SharePoint Connector</h2><p>How documents stored in SharePoint are indexed and made retrievable through the agent via Microsoft Graph.</p></div>
+      <button class="modal-close" data-close="c-sp"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-sp" data-tab="flow">Indexing pipeline</button>
+        <button class="tab-btn" data-modal="c-sp" data-tab="fields">Document types</button>
+        <button class="tab-btn" data-modal="c-sp" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-sp-flow">
+        <div class="anim-ingest" id="anim-csp">
+          <div class="ingest-step" id="sp1"><span class="ingest-icon" style="color:#D85A30"><i class="ti ti-folder-open"></i></span><span class="ingest-label">New document uploaded to SharePoint demand folder</span><span class="ingest-tag tag-done">event</span></div>
+          <div class="ingest-step" id="sp2"><span class="ingest-icon" style="color:#378ADD"><i class="ti ti-api"></i></span><span class="ingest-label">Graph API: GET /sites/{id}/drive/items — fetch file</span><span class="ingest-tag tag-proc">fetch</span></div>
+          <div class="ingest-step" id="sp3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-file-text"></i></span><span class="ingest-label">Extract text from PDF / DOCX / PPTX</span><span class="ingest-tag tag-proc">parse</span></div>
+          <div class="ingest-step" id="sp4"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-scissors"></i></span><span class="ingest-label">Chunk into ~512 token segments with metadata tags</span><span class="ingest-tag tag-proc">chunk</span></div>
+          <div class="ingest-step" id="sp5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-database"></i></span><span class="ingest-label">Embed + store in vector DB — document searchable</span><span class="ingest-tag tag-idx">index</span></div>
+        </div>
+        <button class="replay-btn" id="replay-csp"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-sp-fields">
+        <table class="data-model">
+          <thead><tr><th>Document type</th><th>Format</th><th>Indexed content</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX / PDF</td><td class="field-note">Scope, objectives, stakeholders — key for exec queries</td></tr>
+            <tr><td class="field-name">Deliverables</td><td class="field-type">DOCX / PDF</td><td class="field-note">Full text — surfaced on "show me the latest deliverable" queries</td></tr>
+            <tr><td class="field-name">Requirement specs</td><td class="field-type">DOCX / XLSX</td><td class="field-note">Chunked by section — linked to A-ah! demand ID in metadata</td></tr>
+            <tr><td class="field-name">Status reports</td><td class="field-type">PDF / DOCX</td><td class="field-note">Latest version always preferred — version metadata tracked</td></tr>
+            <tr><td class="field-name">Presentations</td><td class="field-type">PPTX</td><td class="field-note">Slide text extracted — useful for "what did we present on X?"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-sp-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Folder structure:</strong> How are documents organized in SharePoint? The connector needs a clear root path per demand to link documents to A-ah! IDs.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Versioning:</strong> Should the agent always return the latest version only, or should it be able to answer "what changed between version 1 and version 2"?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>File types:</strong> Are there file formats beyond PDF/DOCX/PPTX/XLSX? Audio or video files are not indexable as text without transcription.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Permissions:</strong> Does the connector service account need read access to all SharePoint libraries, or only specific demand folders?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: JIRA CONNECTOR -->
+<div class="modal-overlay" id="modal-c-jira">
+  <div class="modal-box" id="modal-c-jira-box">
+    <div class="modal-header">
+      <div><h2>Jira Connector</h2><p>How sprint boards and issue data are fetched and surfaced to developers and PMs through the agent.</p></div>
+      <button class="modal-close" data-close="c-jira"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="c-jira" data-tab="flow">API call simulation</button>
+        <button class="tab-btn" data-modal="c-jira" data-tab="fields">Fields read</button>
+        <button class="tab-btn" data-modal="c-jira" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="c-jira-flow">
+        <div class="anim-api" id="anim-cjira">
+          <div class="api-row">
+            <div class="api-box req">
+              <div class="api-box-label">GET /rest/api/3/search</div>
+              <div class="api-field"><span class="fk">jql</span><span class="fv show">demand_id = "DM-044"</span></div>
+              <div class="api-field"><span class="fk">fields</span><span class="fv" id="jira-f1">summary,status,assignee,sprint</span></div>
+              <div class="api-field"><span class="fk">maxResults</span><span class="fv" id="jira-f2">50</span></div>
+            </div>
+            <div class="api-arrow" id="jira-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="api-box res" id="jira-res">
+              <div class="api-status ok" id="jira-status">200 OK — 3 issues</div>
+              <div class="api-box-label">Issues returned</div>
+              <div class="api-field res-field"><span class="fk">DM-044-01</span><span class="fv" id="jira-r1">DB schema design — Done</span></div>
+              <div class="api-field res-field"><span class="fk">DM-044-02</span><span class="fv" id="jira-r2">API layer — In Progress</span></div>
+              <div class="api-field res-field"><span class="fk">DM-044-03</span><span class="fv" id="jira-r3">Frontend — To Do</span></div>
+              <div class="api-field res-field"><span class="fk">Sprint</span><span class="fv" id="jira-r4">Sprint 14 — ends 23 May</span></div>
+            </div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-cjira"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="c-jira-fields">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">issue_key</td><td class="field-type">string</td><td class="field-note">Unique ID — linked to demand via custom field or label</td></tr>
+            <tr><td class="field-name">summary</td><td class="field-type">string</td><td class="field-note">Short description of the task — surfaced in agent answers</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">enum</td><td class="field-note">To Do / In Progress / Done / Blocked — key for progress queries</td></tr>
+            <tr><td class="field-name">assignee</td><td class="field-type">string</td><td class="field-note">Developer name — "who is working on X?" queries</td></tr>
+            <tr><td class="field-name">sprint</td><td class="field-type">object</td><td class="field-note">Sprint name + end date — "when is this due?" queries</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Blocker / Critical / Major / Minor</td></tr>
+            <tr><td class="field-name">custom: demand_id</td><td class="field-type">string</td><td class="field-note">Custom field linking Jira issues back to A-ah! demand</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="c-jira-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Demand linking field:</strong> How are Jira issues linked to A-ah! demands today? Is there a custom field, a label convention (e.g. DM-044), or an epic hierarchy?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Jira Cloud vs Server:</strong> The REST API differs between Jira Cloud and Jira Data Center. Which version is your team using?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Scope of indexing:</strong> Index all projects, or only projects linked to demands? Indexing everything increases cost and noise.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Real-time vs scheduled:</strong> Jira supports webhooks on issue transitions. Should the agent reflect sprint status in real time, or is daily sync sufficient?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: A-ah! SOURCE -->
+<div class="modal-overlay" id="modal-s-aah">
+  <div class="modal-box" id="modal-s-aah-box">
+    <div class="modal-header">
+      <div><h2>A-ah! — System of Record</h2><p>The authoritative source for all demand data. The agent always reflects A-ah! as the ground truth for status and ownership.</p></div>
+      <button class="modal-close" data-close="s-aah"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-aah" data-tab="lifecycle">Demand lifecycle</button>
+        <button class="tab-btn" data-modal="s-aah" data-tab="data">Data model</button>
+      </div>
+      <div class="tab-pane active" id="s-aah-lifecycle">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding:14px;background:var(--bg3);border-radius:var(--r-md);">
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#E6F1FB;color:#0C447C;border:.5px solid #B5D4F4;font-weight:500;">Shaping</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#EEEDFE;color:#3C3489;border:.5px solid #CECBF6;font-weight:500;">High Level Assessment</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#FAEEDA;color:#633806;border:.5px solid #FAC775;font-weight:500;">Design</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#FAECE7;color:#4A1B0C;border:.5px solid #F5C4B3;font-weight:500;">Implementation &amp; Testing</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#E0F5EE;color:#085041;border:.5px solid #9FE1CB;font-weight:500;">Roll-out</span>
+          <i class="ti ti-arrow-right" style="color:var(--text3);font-size:12px;"></i>
+          <span style="font-size:11px;padding:5px 10px;border-radius:5px;background:#F1EFE8;color:#2C2C2A;border:.5px solid #D3D1C7;font-weight:500;">Closure</span>
+        </div>
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">Nothing changes in A-ah!. The connector reads data — it never writes. Your team continues using A-ah! exactly as today.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">Status transitions in A-ah! trigger re-indexing within minutes, keeping the agent always current with the system of record.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">The agent cites A-ah! in every status answer: "Per A-ah!, DM-044 moved to Design on 13 May 2025."</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-aah-data">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">demand_id</td><td class="field-type">string</td><td class="field-note">Unique key — e.g. DM-044</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-note">Human-readable demand name</td></tr>
+            <tr><td class="field-name">stage</td><td class="field-type">enum</td><td class="field-note">6-stage lifecycle (see above)</td></tr>
+            <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">Demand manager name / email</td></tr>
+            <tr><td class="field-name">requestor</td><td class="field-type">string</td><td class="field-note">Business stakeholder who raised the demand</td></tr>
+            <tr><td class="field-name">business_requirements</td><td class="field-type">text</td><td class="field-note">Full requirements text — chunked for semantic search</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Critical / High / Medium / Low</td></tr>
+            <tr><td class="field-name">created_at / updated_at</td><td class="field-type">datetime</td><td class="field-note">Used for incremental sync and citation timestamps</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: TEAMS SOURCE -->
+<div class="modal-overlay" id="modal-s-teams">
+  <div class="modal-box" id="modal-s-teams-box">
+    <div class="modal-header">
+      <div><h2>Microsoft Teams + Copilot</h2><p>Collaboration hub and source of meeting intelligence. Copilot transforms spoken decisions into searchable structured knowledge.</p></div>
+      <button class="modal-close" data-close="s-teams"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-teams" data-tab="overview">How it works</button>
+        <button class="tab-btn" data-modal="s-teams" data-tab="data">Data extracted</button>
+      </div>
+      <div class="tab-pane active" id="s-teams-overview">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Copilot as structured output:</strong> Copilot generates meeting summaries with labelled sections — decisions, action items, next steps. This structure makes parsing reliable and accurate.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Value unlocked:</strong> Today, meeting decisions live only in people's inboxes or chat history. The connector makes them universally searchable — "what was decided about DM-044 in the last three meetings?" becomes a valid agent query.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>No disruption:</strong> Your team continues running meetings and using Copilot exactly as today. The connector only reads — it never writes back to Teams.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Tenant configuration required:</strong> A Teams app registration with appropriate Graph API permissions (OnlineMeetings.Read.All or equivalent) must be configured by your IT admin before the connector can access transcripts.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-teams-data">
+        <table class="data-model">
+          <thead><tr><th>Data point</th><th>Source</th><th>Agent use</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Meeting title &amp; date</td><td class="field-type">Metadata</td><td class="field-note">Citation context in every answer referencing the meeting</td></tr>
+            <tr><td class="field-name">Attendees</td><td class="field-type">Participant list</td><td class="field-note">Linked to demand owners — "who attended the DM-044 review?"</td></tr>
+            <tr><td class="field-name">Decisions</td><td class="field-type">Copilot summary</td><td class="field-note">Most valuable — vectorized for semantic retrieval</td></tr>
+            <tr><td class="field-name">Action items</td><td class="field-type">Copilot summary</td><td class="field-note">Owner + deadline — open actions surfaced on demand</td></tr>
+            <tr><td class="field-name">Full transcript</td><td class="field-type">Copilot transcript</td><td class="field-note">Chunked for broad search — not stored verbatim</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SHAREPOINT SOURCE -->
+<div class="modal-overlay" id="modal-s-sp">
+  <div class="modal-box" id="modal-s-sp-box">
+    <div class="modal-header">
+      <div><h2>SharePoint</h2><p>Document archive for all demand artefacts — the agent surfaces the right document at the right time, without anyone needing to know where it lives.</p></div>
+      <button class="modal-close" data-close="s-sp"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-sp" data-tab="overview">How it works</button>
+        <button class="tab-btn" data-modal="s-sp" data-tab="data">Document types</button>
+      </div>
+      <div class="tab-pane active" id="s-sp-overview">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Zero change to SharePoint:</strong> Documents are uploaded and organized exactly as today. The connector reads via Microsoft Graph — no SharePoint customization required.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Version awareness:</strong> The connector tracks document versions and always indexes the latest approved file. Older versions are retained but deprioritized in retrieval ranking.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Format support:</strong> PDF, DOCX, PPTX, and XLSX are all supported. Text is extracted, chunked at ~512 tokens, and embedded. PPTX slide notes and XLSX cell content are included.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Folder structure matters:</strong> A consistent naming convention (e.g. /Demands/DM-044/Mission Brief v2.pdf) makes it possible to link documents to A-ah! demand IDs automatically.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-sp-data">
+        <table class="data-model">
+          <thead><tr><th>Document type</th><th>Format</th><th>Agent use</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX / PDF</td><td class="field-note">"Show me the mission brief for DM-044" — agent links the file</td></tr>
+            <tr><td class="field-name">Deliverables</td><td class="field-type">DOCX / PDF</td><td class="field-note">"What deliverables exist for DM-044?" — latest version returned</td></tr>
+            <tr><td class="field-name">Requirement specs</td><td class="field-type">DOCX / XLSX</td><td class="field-note">Chunked by section — semantic search over requirements text</td></tr>
+            <tr><td class="field-name">Status reports</td><td class="field-type">PDF</td><td class="field-note">Periodic reports — useful for exec portfolio queries</td></tr>
+            <tr><td class="field-name">Presentations</td><td class="field-type">PPTX</td><td class="field-note">Slide text extracted — "what did we present on the data platform?"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: JIRA SOURCE -->
+<div class="modal-overlay" id="modal-s-jira">
+  <div class="modal-box" id="modal-s-jira-box">
+    <div class="modal-header">
+      <div><h2>Jira</h2><p>Developer and PM tracking. The agent bridges the high-level A-ah! demand view with the granular Jira task breakdown.</p></div>
+      <button class="modal-close" data-close="s-jira"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="s-jira" data-tab="overview">How it works</button>
+        <button class="tab-btn" data-modal="s-jira" data-tab="data">Data model</button>
+      </div>
+      <div class="tab-pane active" id="s-jira-overview">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Bridging A-ah! and Jira:</strong> A-ah! says "DM-044 is in Implementation". Jira says which specific tickets are done, in progress, or blocked. The agent answers both levels in a single response.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Developer-friendly queries:</strong> "What Jira tickets are blocking DM-044?" or "Who is working on the API layer?" become valid questions — without needing to find the right board or filter.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Read-only:</strong> The connector never creates, modifies, or transitions Jira issues. Developers continue using Jira boards exactly as today.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Linking convention needed:</strong> Jira issues must reference their A-ah! demand ID (via custom field, label, or epic name) for the connector to build the A-ah! ↔ Jira mapping correctly.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="s-jira-data">
+        <table class="data-model">
+          <thead><tr><th>Field</th><th>Type</th><th>Agent use</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">issue_key</td><td class="field-type">string</td><td class="field-note">Unique ID — e.g. DM044-01, cited in agent responses</td></tr>
+            <tr><td class="field-name">summary</td><td class="field-type">string</td><td class="field-note">Task description — surfaced in progress queries</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">enum</td><td class="field-note">To Do / In Progress / Done / Blocked</td></tr>
+            <tr><td class="field-name">assignee</td><td class="field-type">string</td><td class="field-note">"Who is working on X?" queries</td></tr>
+            <tr><td class="field-name">sprint</td><td class="field-type">object</td><td class="field-note">Sprint name + end date — delivery date queries</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Blocker / Critical / Major / Minor</td></tr>
+            <tr><td class="field-name">custom: demand_id</td><td class="field-type">string</td><td class="field-note">Links issue to A-ah! demand — required for cross-system queries</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: CONTEXT BUILDER -->
+<div class="modal-overlay" id="modal-ctx">
+  <div class="modal-box" id="modal-ctx-box">
+    <div class="modal-header">
+      <div><h2>Context Builder</h2><p>Enriches every query with who is asking, what demands they own, and what was discussed before — so the agent always answers in context.</p></div>
+      <button class="modal-close" data-close="ctx"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ctx" data-tab="how">How it works</button>
+        <button class="tab-btn" data-modal="ctx" data-tab="signals">Context signals</button>
+        <button class="tab-btn" data-modal="ctx" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ctx-how">
+        <div class="anim-ingest" id="anim-ctx">
+          <div class="ingest-step" id="ctx-s1"><span class="ingest-icon" style="color:#378ADD"><i class="ti ti-user"></i></span><span class="ingest-label">Caller identified via Azure AD SSO token</span><span class="ingest-tag tag-done">identity</span></div>
+          <div class="ingest-step" id="ctx-s2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-shield"></i></span><span class="ingest-label">Role resolved from AD group: Demand Manager / Executive / Developer</span><span class="ingest-tag tag-proc">role</span></div>
+          <div class="ingest-step" id="ctx-s3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-list-check"></i></span><span class="ingest-label">Demand portfolio loaded: demands owned by or relevant to this user</span><span class="ingest-tag tag-proc">scope</span></div>
+          <div class="ingest-step" id="ctx-s4"><span class="ingest-icon" style="color:#D85A30"><i class="ti ti-history"></i></span><span class="ingest-label">Session history appended: last 3 turns of conversation</span><span class="ingest-tag tag-proc">memory</span></div>
+          <div class="ingest-step" id="ctx-s5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-package"></i></span><span class="ingest-label">Enriched context injected into LLM system prompt before retrieval</span><span class="ingest-tag tag-done">ready</span></div>
+        </div>
+        <button class="replay-btn" id="replay-ctx"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ctx-signals">
+        <table class="data-model">
+          <thead><tr><th>Signal</th><th>Source</th><th>Effect on answer</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Caller role</td><td class="field-type">Azure AD</td><td class="field-note">Executive gets summary; developer gets ticket detail; manager gets full status</td></tr>
+            <tr><td class="field-name">Owned demands</td><td class="field-type">A-ah!</td><td class="field-note">&quot;My demands&quot; resolves to the caller's portfolio — no ambiguity</td></tr>
+            <tr><td class="field-name">Access scope</td><td class="field-type">Access control layer</td><td class="field-note">Filters which demands and documents can appear in the answer</td></tr>
+            <tr><td class="field-name">Conversation history</td><td class="field-type">Session store</td><td class="field-note">Enables follow-up: &quot;and what about the owner?&quot; resolves to the previous demand</td></tr>
+            <tr><td class="field-name">Current date/time</td><td class="field-type">System</td><td class="field-note">Makes &quot;recent&quot;, &quot;last week&quot;, &quot;upcoming&quot; queries resolve correctly</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="ctx-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Session statefulness:</strong> How many previous turns should the agent remember? More history = better follow-ups, but larger context window = higher cost per query.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Role granularity:</strong> Are the three roles (Executive, Demand Manager, Developer) sufficient, or do you need sub-roles (e.g. Business Analyst, Architect) with different data access?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Anonymous queries:</strong> Should the agent work without authentication (anonymous mode, no role context)? If yes, it defaults to the most restricted access scope.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RESPONSE SYNTHESIZER -->
+<div class="modal-overlay" id="modal-synth">
+  <div class="modal-box" id="modal-synth-box">
+    <div class="modal-header">
+      <div><h2>Response Synthesizer</h2><p>The final step: the LLM assembles retrieved chunks into a coherent, cited, role-appropriate answer.</p></div>
+      <button class="modal-close" data-close="synth"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="synth" data-tab="how">Assembly process</button>
+        <button class="tab-btn" data-modal="synth" data-tab="formats">Output formats</button>
+        <button class="tab-btn" data-modal="synth" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="synth-how">
+        <div class="anim-ingest" id="anim-synth">
+          <div class="ingest-step" id="syn-s1"><span class="ingest-icon" style="color:#534AB7"><i class="ti ti-packages"></i></span><span class="ingest-label">Top-k chunks received from RAG engine (with scores)</span><span class="ingest-tag tag-proc">input</span></div>
+          <div class="ingest-step" id="syn-s2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-user"></i></span><span class="ingest-label">Role context injected: Executive → concise summary; Developer → technical detail</span><span class="ingest-tag tag-proc">adapt</span></div>
+          <div class="ingest-step" id="syn-s3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-brain"></i></span><span class="ingest-label">LLM synthesizes answer — instructed to use ONLY provided context</span><span class="ingest-tag tag-proc">generate</span></div>
+          <div class="ingest-step" id="syn-s4"><span class="ingest-icon" style="color:#D85A30"><i class="ti ti-link"></i></span><span class="ingest-label">Source citations appended: system, field, and timestamp for each fact</span><span class="ingest-tag tag-proc">cite</span></div>
+          <div class="ingest-step" id="syn-s5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-send"></i></span><span class="ingest-label">Formatted response delivered to channel (Teams card or plain text)</span><span class="ingest-tag tag-done">deliver</span></div>
+        </div>
+        <button class="replay-btn" id="replay-synth"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="synth-formats">
+        <table class="data-model">
+          <thead><tr><th>Channel</th><th>Format</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">Teams bot</td><td class="field-type">Adaptive Card</td><td class="field-note">Rich card with title, status badge, owner, source link, and suggested follow-up</td></tr>
+            <tr><td class="field-name">Web widget</td><td class="field-type">Markdown</td><td class="field-note">Formatted text with bold fields, bullet lists, and clickable document links</td></tr>
+            <tr><td class="field-name">API response</td><td class="field-type">JSON</td><td class="field-note">Structured object: answer, citations[], confidence_score, suggested_questions[]</td></tr>
+            <tr><td class="field-name">Fallback</td><td class="field-type">Plain text</td><td class="field-note">Used when channel formatting is unknown or unsupported</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="synth-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Confidence threshold:</strong> Below what confidence score should the agent say &quot;I'm not sure&quot; instead of answering? Too low = hallucination risk; too high = too many non-answers.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Suggested follow-ups:</strong> Should the agent proactively suggest 2-3 related questions after each answer? Increases engagement but adds LLM tokens.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Citation detail level:</strong> Should citations include just the source system name, or also the specific field, document page, or meeting date? More detail = more trust, more tokens.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Language of response:</strong> Should the agent always respond in the language of the query (auto-detect), or always in a fixed language regardless of input?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: VECTOR DATABASE -->
+<div class="modal-overlay" id="modal-ks-vec">
+  <div class="modal-box" id="modal-ks-vec-box">
+    <div class="modal-header">
+      <div><h2>Vector Database</h2><p>The semantic search engine at the heart of the knowledge store. Finds relevant demand knowledge even when the exact words don't match.</p></div>
+      <button class="modal-close" data-close="ks-vec"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-vec" data-tab="search">Semantic search demo</button>
+        <button class="tab-btn" data-modal="ks-vec" data-tab="design">Technical design</button>
+        <button class="tab-btn" data-modal="ks-vec" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-vec-search">
+        <div class="anim-vector" id="anim-vec">
+          <div class="vec-query">
+            <div class="vec-query-label">Query embedding</div>
+            &quot;Which demands are related to data governance?&quot;
+          </div>
+          <div class="vec-result-label" id="vec-scanning">Scanning vector space&hellip;</div>
+          <div class="vec-grid">
+            <div class="vec-item" id="v1"><span class="vec-label">DM-044 &mdash; Data Platform Migration (business_requirements chunk)</span><span class="vec-score" id="v1s">0.91</span><span class="vec-tag">top match</span></div>
+            <div class="vec-item" id="v2"><span class="vec-label">DM-031 &mdash; Data Quality Framework (mission brief)</span><span class="vec-score" id="v2s">0.87</span><span class="vec-tag">top match</span></div>
+            <div class="vec-item" id="v3"><span class="vec-label">Teams minutes 02/04 &mdash; governance discussion action items</span><span class="vec-score" id="v3s">0.83</span><span class="vec-tag">match</span></div>
+            <div class="vec-item" id="v4"><span class="vec-label">DM-019 &mdash; GDPR Compliance Demand (SharePoint brief)</span><span class="vec-score" id="v4s">0.79</span><span class="vec-tag">match</span></div>
+            <div class="vec-item" id="v5"><span class="vec-label">DM-007 &mdash; Legacy System Decommission</span><span class="vec-score" id="v5s">0.44</span><span class="vec-tag">below threshold</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-vec"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ks-vec-design">
+        <ul class="decisions-list">
+          <li><div class="d-num">1</div><div class="d-text"><strong>What gets embedded:</strong> Each demand record (chunked by field), document section (~512 tokens), and meeting minute summary. Every chunk carries metadata: source system, demand ID, timestamp, and document type.</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>Embedding model:</strong> text-embedding-3-small (OpenAI, 1536 dimensions) for English-primary content. If multilingual content is needed, switch to multilingual-e5-large before first indexing — migration is costly afterwards.</div></li>
+          <li><div class="d-num">3</div><div class="d-text"><strong>Similarity threshold:</strong> Chunks scoring below 0.70 cosine similarity are excluded from retrieval. This prevents loosely related content from polluting the LLM context.</div></li>
+          <li><div class="d-num">4</div><div class="d-text"><strong>Hybrid search:</strong> Semantic vector search is combined with BM25 keyword search. Final ranking = 0.6 &times; semantic score + 0.4 &times; keyword score. Exact demand IDs (e.g. DM-044) always score highest via keyword boost.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="ks-vec-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Vector DB platform:</strong> Azure AI Search (best if already on Azure — integrated auth, no extra infra), Pinecone (managed, fastest queries), or Weaviate (open source, full control). What is your cloud environment?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Index size estimate:</strong> How many demands exist today, and what is the average length of business requirements? This determines initial storage and embedding cost.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Multilingual content:</strong> Are demands or documents written in multiple languages? The embedding model choice must be made before any data is indexed.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Score threshold tuning:</strong> The 0.70 threshold is a starting point. It must be calibrated on real demand data — too high and the agent says &quot;I don&apos;t know&quot; too often; too low and answers become noisy.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: METADATA CACHE -->
+<div class="modal-overlay" id="modal-ks-meta">
+  <div class="modal-box" id="modal-ks-meta-box">
+    <div class="modal-header">
+      <div><h2>Metadata Cache</h2><p>A fast-lookup structured store for demand attributes — answers factual queries instantly without touching the vector DB.</p></div>
+      <button class="modal-close" data-close="ks-meta"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-meta" data-tab="design">Design &amp; schema</button>
+        <button class="tab-btn" data-modal="ks-meta" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-meta-design">
+        <table class="data-model">
+          <thead><tr><th>Field cached</th><th>Type</th><th>Why cached (not vector)</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">demand_id</td><td class="field-type">string PK</td><td class="field-note">Primary key — instant lookup by ID without semantic search</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-note">Exact match queries: &quot;find demand called Data Platform&quot;</td></tr>
+            <tr><td class="field-name">stage</td><td class="field-type">enum</td><td class="field-note">Factual queries: &quot;is DM-044 in design?&quot; — no embedding needed</td></tr>
+            <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">&quot;Who owns DM-044?&quot; — answered from cache in &lt;10ms</td></tr>
+            <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Portfolio filters: &quot;show all Critical demands&quot;</td></tr>
+            <tr><td class="field-name">updated_at</td><td class="field-type">datetime</td><td class="field-note">Citation timestamp — &quot;Per A-ah! as of 14 May 2025&quot;</td></tr>
+            <tr><td class="field-name">linked_jira[]</td><td class="field-type">string[]</td><td class="field-note">Cross-system join without re-querying Jira API</td></tr>
+            <tr><td class="field-name">doc_refs[]</td><td class="field-type">object[]</td><td class="field-note">SharePoint document links per demand — instant document retrieval</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px 13px;background:var(--bg3);border-radius:var(--r-md);font-size:12px;color:var(--text2);line-height:1.6;">
+          <strong style="color:var(--text)">Two-tier retrieval strategy:</strong> the agent always checks the metadata cache first for structured lookups (&lt;10ms). Only if the query requires semantic understanding does it hit the vector DB (~80&ndash;150ms). This keeps simple factual queries fast and cheap.
+        </div>
+      </div>
+      <div class="tab-pane" id="ks-meta-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Cache technology:</strong> Redis (fastest, in-memory) for hot data, PostgreSQL for structured relational queries, or Azure Table Storage if already on Azure. Choice depends on query patterns and existing infra.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Cache TTL:</strong> How stale can the metadata be? 15-minute TTL is a safe default. If A-ah! supports webhooks, the cache updates on every status change instead of on a schedule.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Portfolio queries:</strong> Should the cache support aggregate queries like &quot;how many demands are in Design phase?&quot; — or is that always delegated to the vector DB? Aggregates are faster from a structured cache.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: INDEXING PIPELINE -->
+<div class="modal-overlay" id="modal-ks-index">
+  <div class="modal-box" id="modal-ks-index-box">
+    <div class="modal-header">
+      <div><h2>Indexing Pipeline</h2><p>Keeps the knowledge store current — combining scheduled sync with event-triggered updates for near-real-time freshness.</p></div>
+      <button class="modal-close" data-close="ks-index"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-index" data-tab="flow">Pipeline animation</button>
+        <button class="tab-btn" data-modal="ks-index" data-tab="schedule">Sync schedule</button>
+        <button class="tab-btn" data-modal="ks-index" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-index-flow">
+        <div class="anim-pipeline" id="anim-pipe">
+          <div class="pipe-row" id="pipe-r1">
+            <div class="pipe-source" id="pipe-src1" style="background:#042C53;color:#B5D4F4;border:.5px solid #0C447C;">A-ah! webhook</div>
+            <div class="pipe-arrow" id="pipe-a1"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p1" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Status change detected &rarr; fetch updated demand fields <span class="pipe-badge" style="background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;">event</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r2">
+            <div class="pipe-source" id="pipe-src2" style="background:#04342C;color:#9FE1CB;border:.5px solid #1D9E75;">Teams Copilot</div>
+            <div class="pipe-arrow" id="pipe-a2"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p2" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Meeting ends &rarr; Graph API fetch minutes &rarr; parse decisions &amp; actions <span class="pipe-badge" style="background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;">event</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r3">
+            <div class="pipe-source" id="pipe-src3" style="background:#4A1B0C;color:#F5C4B3;border:.5px solid #993C1D;">SharePoint</div>
+            <div class="pipe-arrow" id="pipe-a3"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p3" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">New file uploaded &rarr; extract text &rarr; chunk &rarr; embed <span class="pipe-badge" style="background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;">scheduled</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r4">
+            <div class="pipe-source" id="pipe-src4" style="background:#412402;color:#FAC775;border:.5px solid #854F0B;">Jira</div>
+            <div class="pipe-arrow" id="pipe-a4"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p4" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Issue status changes &rarr; sync sprint board snapshot to metadata cache <span class="pipe-badge" style="background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;">scheduled</span></div>
+          </div>
+          <div class="pipe-row" id="pipe-r5">
+            <div class="pipe-source" id="pipe-src5" style="background:#0A2018;color:#6FCFAA;border:.5px solid #1D9E75;">All sources</div>
+            <div class="pipe-arrow" id="pipe-a5"><i class="ti ti-arrow-right"></i></div>
+            <div class="pipe-step" id="pipe-p5" style="background:#0A1020;border:.5px solid #1D9E75;color:#6FCFAA;">Upsert into vector DB + metadata cache &rarr; knowledge store updated &#10003;</div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-pipe"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ks-index-schedule">
+        <table class="data-model">
+          <thead><tr><th>Source</th><th>Trigger type</th><th>Latency</th><th>Fallback</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">A-ah!</td><td class="field-type">Webhook (on status change)</td><td class="field-note">&lt;2 min</td><td class="field-note">15-min polling if no webhook</td></tr>
+            <tr><td class="field-name">Teams Copilot</td><td class="field-type">Event (meeting end)</td><td class="field-note">&lt;5 min after meeting</td><td class="field-note">Hourly Graph API poll</td></tr>
+            <tr><td class="field-name">SharePoint</td><td class="field-type">Scheduled (every 30 min)</td><td class="field-note">&lt;30 min</td><td class="field-note">Nightly full re-index</td></tr>
+            <tr><td class="field-name">Jira</td><td class="field-type">Scheduled (every 15 min)</td><td class="field-note">&lt;15 min</td><td class="field-note">Daily full sync</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="ks-index-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Initial bulk load:</strong> How many demands and documents exist today? The first indexing run may take hours — plan for an off-hours bulk load before go-live.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Incremental vs full re-index:</strong> Incremental sync (only changed records) is faster but risks drift. A weekly full re-index ensures consistency. Both should run in parallel.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Error handling:</strong> What happens if an indexing job fails? Should the agent serve stale data with a freshness warning, or block queries until the index is healthy?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Observability:</strong> The pipeline needs a monitoring dashboard showing last sync time per source, error rates, and index size. This is critical for the team to trust the agent&apos;s answers.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ACCESS CONTROL -->
+<div class="modal-overlay" id="modal-ks-access">
+  <div class="modal-box" id="modal-ks-access-box">
+    <div class="modal-header">
+      <div><h2>Access Control Layer</h2><p>Ensures every user sees only what they are authorized to see — enforced at retrieval time, before any data reaches the LLM.</p></div>
+      <button class="modal-close" data-close="ks-access"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="ks-access" data-tab="roles">Role matrix</button>
+        <button class="tab-btn" data-modal="ks-access" data-tab="design">Technical design</button>
+        <button class="tab-btn" data-modal="ks-access" data-tab="decisions">Open decisions</button>
+      </div>
+      <div class="tab-pane active" id="ks-access-roles">
+        <div class="anim-access" id="anim-access">
+          <div class="access-row" id="acc-r1">
+            <span class="access-role" style="background:#042C53;color:#B5D4F4;border:.5px solid #0C447C;">Executive</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">All demands &middot; All documents &middot; All meeting minutes &middot; Portfolio dashboards</span>
+            <span class="access-badge" style="background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;">full read</span>
+          </div>
+          <div class="access-row" id="acc-r2">
+            <span class="access-role" style="background:#26215C;color:#CECBF6;border:.5px solid #3C3489;">Demand Manager</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">All demands &middot; All documents &middot; Meeting minutes for owned demands</span>
+            <span class="access-badge" style="background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;">full read</span>
+          </div>
+          <div class="access-row" id="acc-r3">
+            <span class="access-role" style="background:#412402;color:#FAC775;border:.5px solid #854F0B;">Developer / PM</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">Assigned demands &middot; Technical docs &middot; Sprint data &middot; No financial data</span>
+            <span class="access-badge" style="background:#1A2A10;color:#639922;border:.5px solid #3B6D11;">scoped read</span>
+          </div>
+          <div class="access-row" id="acc-r4">
+            <span class="access-role" style="background:#4A1B0C;color:#F5C4B3;border:.5px solid #993C1D;">Business Stakeholder</span>
+            <i class="ti ti-arrow-right access-arrow"></i>
+            <span class="access-scope">Own demands only &middot; Public documents &middot; No meeting minutes</span>
+            <span class="access-badge" style="background:#2A1010;color:#E24B4A;border:.5px solid #A32D2D;">restricted</span>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-access"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="ks-access-design">
+        <ul class="decisions-list">
+          <li><div class="d-num">1</div><div class="d-text"><strong>Enforcement point:</strong> Access control is applied at retrieval time — the vector DB and metadata cache queries are filtered by the caller&apos;s role before results are returned. The LLM never sees unauthorized data.</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>Implementation:</strong> Each indexed chunk carries an &quot;allowed_roles&quot; metadata field set at index time (inherited from the source system&apos;s permissions). Vector DB filters by this field before returning results.</div></li>
+          <li><div class="d-num">3</div><div class="d-text"><strong>Role source:</strong> Roles are read from Azure AD group membership at query time — no separate user management. Adding a user to the &quot;Demand Manager&quot; AD group immediately grants the corresponding access.</div></li>
+          <li><div class="d-num">4</div><div class="d-text"><strong>Audit logging:</strong> Every query is logged with: caller identity, role, query text, chunks retrieved, and response generated. This log supports compliance review and helps tune the access model over time.</div></li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="ks-access-decisions">
+        <ul class="decisions-list">
+          <li><div class="d-num">?</div><div class="d-text"><strong>Role granularity:</strong> Are the four roles above the right model for your organization, or do you need sub-roles (e.g. Architect, Business Analyst) with different access scopes?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Document-level permissions:</strong> Should some SharePoint documents be restricted beyond role level (e.g. confidential financial data visible only to specific named individuals)?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Audit retention:</strong> How long should query logs be retained? GDPR may impose constraints on logs containing personal data (query text may reference names or demand details).</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Compliance review:</strong> Does your organization require a formal Data Protection Impact Assessment (DPIA) before deploying an AI system that indexes internal documents and conversation history?</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: EXECUTIVES -->
+<div class="modal-overlay" id="modal-cons-exec">
+  <div class="modal-box" id="modal-cons-exec-box">
+    <div class="modal-header">
+      <div><h2>Executives</h2><p>Portfolio-level visibility without coordination overhead. Real-time answers on demand status, risks, and priorities.</p></div>
+      <button class="modal-close" data-close="cons-exec"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-exec" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-exec" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-exec" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-exec-demo">
+        <div class="anim-chat" id="anim-exec">
+          <div class="cx-role-label" style="color:#378ADD">&#128100; Executive &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="ex-q1">How many demands are currently in the Design phase, and which ones are high priority?</div>
+            <div class="cx-bubble a" id="ex-a1">There are <strong>4 demands</strong> currently in Design phase. Of these, <strong>2 are high priority</strong>: DM-044 (Data Platform Migration) and DM-038 (Customer Portal Redesign). The remaining two are medium priority.<span class="cx-cite">Source: A-ah! &middot; updated today</span></div>
+            <div class="cx-bubble q2" id="ex-q2">What is blocking DM-044?</div>
+            <div class="cx-bubble a2" id="ex-a2">DM-044 has <strong>1 open blocker</strong> in Jira (DM044-02 &mdash; API layer, assigned to L. Bianchi). The design review was completed on 10 May per the Teams meeting minutes. No decision is pending from your side.<span class="cx-cite">Source: Jira &middot; Teams minutes 10 May</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-exec"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-exec-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-chart-pie"></i>&ldquo;Give me a summary of all demands by lifecycle stage.&rdquo;</div>
+          <div class="query-item"><i class="ti ti-alert-triangle"></i>&ldquo;Which demands are at risk of missing their roll-out date?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-flag"></i>&ldquo;What are the top 3 critical demands this quarter?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-clock"></i>&ldquo;Which demands have been in the same stage for more than 30 days?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-users"></i>&ldquo;What decisions are pending my approval across all demands?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-trending-up"></i>&ldquo;How many demands moved to Roll-out this month?&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-exec-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">&#10003;</div><div class="d-text"><strong>No more status meetings just to get an update.</strong> Executives get portfolio visibility on demand, in seconds, without scheduling a call with the demand management team.</div></li>
+          <li><div class="d-num" style="background:#378ADD">&#10003;</div><div class="d-text"><strong>Cross-system intelligence in one answer.</strong> A single query combines A-ah! status, Jira blockers, and Teams meeting decisions &mdash; no switching between tools or waiting for someone to compile a report.</div></li>
+          <li><div class="d-num" style="background:#378ADD">&#10003;</div><div class="d-text"><strong>Always current, always cited.</strong> Every answer includes the source system and timestamp. Executives know exactly how fresh the information is and where it comes from.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DEMAND MANAGERS -->
+<div class="modal-overlay" id="modal-cons-dm">
+  <div class="modal-box" id="modal-cons-dm-box">
+    <div class="modal-header">
+      <div><h2>Demand Managers</h2><p>The agent handles repetitive information requests so your team can focus on decisions, governance, and stakeholder relationships.</p></div>
+      <button class="modal-close" data-close="cons-dm"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-dm" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-dm" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-dm" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-dm-demo">
+        <div class="anim-chat" id="anim-dm">
+          <div class="cx-role-label" style="color:#1D9E75">&#128101; Demand Manager &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="dm-q1">What action items from last week&rsquo;s DM-044 meeting are still open?</div>
+            <div class="cx-bubble a" id="dm-a1">From the Teams meeting on <strong>10 May</strong>, 2 action items remain open: (1) L. Bianchi to complete API layer design by 17 May &mdash; <em>in progress</em>; (2) M. Rossi to share updated mission brief with sponsor &mdash; <em>not started</em>.<span class="cx-cite">Source: Teams Copilot minutes &middot; 10 May</span></div>
+            <div class="cx-bubble q2" id="dm-q2">Show me the latest mission brief for DM-044.</div>
+            <div class="cx-bubble a2" id="dm-a2">The latest approved document is <strong>DM-044 Mission Brief v2.1</strong>, uploaded to SharePoint on 8 May 2025. <u>Open document &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-044/</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-dm"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-dm-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-checklist"></i>&ldquo;What are all open action items across my demands this week?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-file-description"></i>&ldquo;Show me the latest deliverable for DM-031.&rdquo;</div>
+          <div class="query-item"><i class="ti ti-calendar-event"></i>&ldquo;What was decided in the last steering meeting for DM-038?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-user-check"></i>&ldquo;Who is the business requestor for demand DM-019?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-history"></i>&ldquo;When did DM-044 move from HLA to Design, and why?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-report"></i>&ldquo;Summarize the current status of all my demands for a weekly report.&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-dm-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#1D9E75">&#10003;</div><div class="d-text"><strong>Eliminate repetitive status requests.</strong> The agent absorbs the constant stream of &ldquo;what&rsquo;s the status of X?&rdquo; messages from colleagues, freeing your team from being a human information relay.</div></li>
+          <li><div class="d-num" style="background:#1D9E75">&#10003;</div><div class="d-text"><strong>Meeting memory at your fingertips.</strong> Action items, decisions, and risk flags from every Copilot-recorded meeting are instantly retrievable &mdash; no more digging through chat history or email threads.</div></li>
+          <li><div class="d-num" style="background:#1D9E75">&#10003;</div><div class="d-text"><strong>Document retrieval without navigation.</strong> The latest version of any mission brief, deliverable, or spec is one query away &mdash; no more SharePoint folder archaeology.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DEVELOPERS & PMs -->
+<div class="modal-overlay" id="modal-cons-dev">
+  <div class="modal-box" id="modal-cons-dev-box">
+    <div class="modal-header">
+      <div><h2>Developers &amp; Project Managers</h2><p>Technical context and sprint clarity without waiting for a sync meeting or navigating between Jira and A-ah!.</p></div>
+      <button class="modal-close" data-close="cons-dev"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-dev" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-dev" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-dev" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-dev-demo">
+        <div class="anim-chat" id="anim-dev">
+          <div class="cx-role-label" style="color:#EF9F27">&#128187; Developer &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="dev-q1">What are the business requirements for DM-044 that I need to implement in the API layer?</div>
+            <div class="cx-bubble a" id="dev-a1">DM-044 requires the API to expose <strong>3 core endpoints</strong>: demand status retrieval, owner lookup, and requirements export. Full spec is in the mission brief v2.1 (SharePoint). The key constraint is read-only access &mdash; no write operations in Phase 1.<span class="cx-cite">Source: A-ah! requirements &middot; SharePoint DM-044/</span></div>
+            <div class="cx-bubble q2" id="dev-q2">Which of my Jira tickets for DM-044 are still open in this sprint?</div>
+            <div class="cx-bubble a2" id="dev-a2">Sprint 14 has <strong>2 open tickets</strong> assigned to you for DM-044: DM044-02 (API layer &mdash; In Progress) and DM044-05 (Unit tests &mdash; To Do). Sprint ends <strong>23 May</strong>.<span class="cx-cite">Source: Jira &middot; Sprint 14</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-dev"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-dev-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-code"></i>&ldquo;What are the technical requirements for DM-044?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-bug"></i>&ldquo;Which Jira tickets linked to DM-038 are currently blocked?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-calendar"></i>&ldquo;When is the expected roll-out date for DM-031?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-users"></i>&ldquo;Who is the demand manager I should contact for DM-019?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-git-branch"></i>&ldquo;Has the scope of DM-044 changed since the last sprint?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-checkbox"></i>&ldquo;What acceptance criteria were agreed in the last DM-044 design meeting?&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-dev-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#EF9F27">&#10003;</div><div class="d-text"><strong>Business context without interrupting the team.</strong> Developers get the &ldquo;why&rdquo; behind their tickets directly from A-ah! requirements &mdash; without pinging the demand manager on Teams.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">&#10003;</div><div class="d-text"><strong>Sprint clarity in one query.</strong> Open tickets, blockers, and deadlines across all their assigned demands in a single answer &mdash; no Jira board navigation required.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">&#10003;</div><div class="d-text"><strong>Meeting decisions made accessible.</strong> Acceptance criteria, scope changes, and design decisions from Teams meetings are searchable &mdash; no more &ldquo;where was that agreed?&rdquo; moments.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: BUSINESS STAKEHOLDERS -->
+<div class="modal-overlay" id="modal-cons-biz">
+  <div class="modal-box" id="modal-cons-biz-box">
+    <div class="modal-header">
+      <div><h2>Business Stakeholders</h2><p>Self-service visibility on their own demands &mdash; status, documents, and next steps &mdash; without needing to contact the demand team.</p></div>
+      <button class="modal-close" data-close="cons-biz"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-biz" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-biz" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-biz" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-biz-demo">
+        <div class="anim-chat" id="anim-biz">
+          <div class="cx-role-label" style="color:#D85A30">&#127970; Business Stakeholder &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="biz-q1">What is the current status of my demand for the Customer Portal redesign?</div>
+            <div class="cx-bubble a" id="biz-a1">Your demand <strong>DM-038</strong> (Customer Portal Redesign) is currently in the <strong>Design phase</strong>. The demand manager is F. Marino. Expected roll-out: Q3 2025. No decisions are pending from your side at this stage.<span class="cx-cite">Source: A-ah! &middot; updated 13 May 2025</span></div>
+            <div class="cx-bubble q2" id="biz-q2">Is there a presentation I can share with my team about DM-038?</div>
+            <div class="cx-bubble a2" id="biz-a2">Yes &mdash; the <strong>DM-038 Mission Brief v1.3</strong> (PPTX) was last updated on 2 May 2025 and is available in SharePoint. <u>Open file &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-038/</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-biz"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-biz-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-progress"></i>&ldquo;What is the status of my demand DM-038?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-calendar-due"></i>&ldquo;When is my demand expected to go live?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-file-text"></i>&ldquo;Can you show me the latest mission brief for my demand?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-user"></i>&ldquo;Who is the demand manager responsible for DM-038?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-message-question"></i>&ldquo;What were the last decisions made about my demand?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-checklist"></i>&ldquo;What do I need to provide or approve for the demand to progress?&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-biz-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#D85A30">&#10003;</div><div class="d-text"><strong>No more chasing the demand team for updates.</strong> Stakeholders get self-service visibility on their own demands at any time &mdash; weekends, evenings, before a board meeting &mdash; without waiting for a response.</div></li>
+          <li><div class="d-num" style="background:#D85A30">&#10003;</div><div class="d-text"><strong>Scoped to what they can see.</strong> The access control layer ensures stakeholders only see their own demands and public documents. No risk of exposure to other business units&rsquo; data.</div></li>
+          <li><div class="d-num" style="background:#D85A30">&#10003;</div><div class="d-text"><strong>Reduces parallel communication significantly.</strong> This persona generates the highest volume of repetitive queries today. The agent absorbs them entirely, freeing the demand team from being an information bottleneck.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: MILESTONE DETAIL -->
+<div class="modal-overlay" id="modal-milestone">
+  <div class="modal-box" id="modal-milestone-box">
+    <div class="modal-header" id="milestone-modal-header">
+      <div><h2 id="ms-title">Milestone</h2><div class="ms-week-tag" id="ms-week"></div></div>
+      <button class="modal-close" data-close="milestone"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar" id="ms-tab-bar">
+        <button class="tab-btn active" data-modal="milestone" data-tab="ms-deliverables">Deliverables</button>
+        <button class="tab-btn" data-modal="milestone" data-tab="ms-decisions">Key decisions</button>
+        <button class="tab-btn" id="ms-risk-tab" data-modal="milestone" data-tab="ms-risk">Risk</button>
+      </div>
+      <div class="tab-pane active" id="milestone-ms-deliverables">
+        <ul class="decisions-list" id="ms-deliverables-list"></ul>
+      </div>
+      <div class="tab-pane" id="milestone-ms-decisions">
+        <ul class="decisions-list" id="ms-decisions-list"></ul>
+      </div>
+      <div class="tab-pane" id="milestone-ms-risk">
+        <div id="ms-risk-content" style="padding:12px 14px;background:#FAECE7;border-radius:var(--r-md);font-size:13px;color:#4A1B0C;border:.5px solid #F5C4B3;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+var simpleDetails = {
+  exec:{title:"Executives",body:"Executives can query the agent for real-time portfolio summaries — how many demands are in each lifecycle stage, which are at risk, and what decisions are pending — without coordinating with your team."},
+  dm:{title:"Demand managers",body:"Your team can reduce recurring status update requests. The agent serves as first point of contact for repetitive questions, freeing you to focus on decision-making."},
+  dev:{title:"Developers & PMs",body:"Devs and PMs can query progress, blockers, and sprint context from Jira without waiting for a team sync. The agent bridges A-ah! status with Jira technical detail."},
+  biz:{title:"Business stakeholders",body:"Stakeholders can self-serve the status of their own demands, retrieve the latest mission brief from SharePoint, or check requirements stage — instantly."},
+  ctx:{title:"Context builder",body:"Enriches each query with the caller's role (from Azure AD), their team's demand portfolio, and conversation history. An executive's question resolves differently than a developer's."},
+  synth:{title:"Response synthesizer",body:"The LLM assembles the final answer from retrieved chunks, adds source citations ('Per A-ah! as of today...'), and formats the response for the channel — chat message or Teams adaptive card."},
+  "c-aah":{title:"A-ah! connector",body:"Reads demand records via the A-ah! API: status, lifecycle stage, business requirements, responsible team. The authoritative source — always reflected faithfully."},
+  "c-teams":{title:"Teams + Copilot connector",body:"Ingests Copilot-generated meeting minutes via the Microsoft Graph API. Meeting decisions and action items become searchable through the agent."},
+  "c-sp":{title:"SharePoint connector",body:"Uses Microsoft Graph API to index documents: mission briefs, deliverable PDFs, presentations. Always surfaces the latest approved version."},
+  "c-jira":{title:"Jira connector",body:"Reads sprint boards, issue statuses, and dashboard data via Jira REST API. Lets developers and PMs query progress without leaving their workflow."},
+  "s-aah":{title:"A-ah! (source system)",body:"System of record. Statuses: Shaping > High Level Assessment > Design > Implementation & Testing > Roll-out > Closure. Nothing changes in how your team uses A-ah!."},
+  "s-teams":{title:"Teams + Copilot",body:"Collaboration hub. Copilot records follow-up meetings and produces structured minutes with decision logs, action items, and risk flags — all made searchable."},
+  "s-sp":{title:"SharePoint",body:"Document archive. Stores mission briefs, deliverables, presentations, and compliance artefacts. The connector always surfaces the latest approved version."},
+  "s-jira":{title:"Jira",body:"Developer and PM tracking. A-ah! holds the demand-level view; Jira holds the technical task breakdown. The agent bridges them in its answers."},
+  "ks-vec":{title:"Vector database",body:"Stores embeddings of demand records, document chunks, and meeting summaries. Enables semantic search — finds conceptually related results, not just keyword matches. Options: Azure AI Search, Pinecone, Weaviate."},
+  "ks-meta":{title:"Metadata cache",body:"Fast-lookup store for structured demand attributes: IDs, statuses, owners, dates. Answers factual queries without hitting the vector DB every time."},
+  "ks-index":{title:"Indexing pipeline",body:"Scheduled jobs sync source systems regularly. Event-triggered sync fires on A-ah! status changes or new SharePoint uploads. Copilot minutes ingested after each meeting."},
+  "ks-access":{title:"Access control",body:"Enforces role-based visibility. Executives see all demands. Business stakeholders see only their own. Developers see technical detail. Filters retrieval before it reaches the LLM."}
+};
+
+// ── SIMPLE PANEL ──────────────────────────────────────
+function showSimple(id) {
+  var d = simpleDetails[id];
+  if (!d) return;
+  document.getElementById('dp-content').innerHTML = '<div class="dp-title">' + d.title + '</div><div class="dp-body">' + d.body + '</div>';
+  var p = document.getElementById('detail-panel');
+  p.classList.add('visible');
+  setTimeout(function(){ p.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 50);
+}
+function closeSimple() {
+  document.getElementById('detail-panel').classList.remove('visible');
+}
+document.getElementById('dp-close-btn').addEventListener('click', closeSimple);
+
+// Wire up simple nodes via data-simple attribute
+document.querySelectorAll('[data-simple]').forEach(function(btn) {
+  btn.addEventListener('click', function() { showSimple(btn.dataset.simple); });
+});
+
+// ── MODAL ─────────────────────────────────────────────
+function openModal(id) {
+  closeSimple();
+  var overlay = document.getElementById('modal-' + id);
+  if (!overlay) return;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (id === 'agent') setTimeout(runAgentAnim, 400);
+  if (id === 'rag')   setTimeout(runRagAnim, 400);
+}
+
+function closeModal(id) {
+  var overlay = document.getElementById('modal-' + id);
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Wire up modal-open nodes via data-modal attribute
+document.querySelectorAll('[data-modal]').forEach(function(btn) {
+  // Only wire buttons that are NOT tab buttons (tab buttons also have data-tab)
+  if (!btn.dataset.tab) {
+    btn.addEventListener('click', function() { openModal(btn.dataset.modal); });
+  }
+});
+
+// Wire up close buttons via data-close attribute
+document.querySelectorAll('[data-close]').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeModal(btn.dataset.close);
+  });
+});
+
+// Close on backdrop click (click on overlay but not on modal-box)
+document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      var id = overlay.id.replace('modal-', '');
+      closeModal(id);
+    }
+  });
+});
+
+// ── TABS ──────────────────────────────────────────────
+document.querySelectorAll('.tab-btn[data-tab]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var modal = btn.dataset.modal;
+    var tab   = btn.dataset.tab;
+    var box   = document.getElementById('modal-' + modal);
+    if (!box) return;
+    box.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    box.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active');
+    var pane = document.getElementById(modal + '-' + tab);
+    if (pane) pane.classList.add('active');
+  });
+});
+
+// ── KEYBOARD ──────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(function(m) {
+      var id = m.id.replace('modal-', '');
+      closeModal(id);
+    });
+    closeSimple();
+  }
+});
+
+// ── AGENT ANIMATION ───────────────────────────────────
+var agentScript = [
+  {delay:0,    role:'user',   text:'What is the current status of demand DM-044?'},
+  {delay:800,  role:'typing', text:'Searching A-ah! and knowledge store\u2026'},
+  {delay:1600, role:'trace',  steps:[
+    {label:'Intent router',    src:'\u2192 status query detected'},
+    {label:'A-ah! connector',  src:'\u2192 fetching DM-044'},
+    {label:'RAG engine',       src:'\u2192 top-3 chunks retrieved'},
+    {label:'Context builder',  src:'\u2192 caller: Executive role'}
+  ]},
+  {delay:3200, role:'agent',  text:'Demand <strong>DM-044</strong> (Data Platform Migration) is currently in the <strong>Design phase</strong>. Owner: M. Rossi. Last update: 13 May 2025.<br><br><span style="font-size:10px;color:#3A6A54">Source: A-ah! \u00b7 updated 14 May 2025</span>'}
+];
+
+function runAgentAnim() {
+  var cw = document.getElementById('chat-window');
+  var ft = document.getElementById('flow-trace');
+  if (!cw || !ft) return;
+  cw.innerHTML = '';
+  ft.innerHTML = '';
+  agentScript.forEach(function(step) {
+    setTimeout(function() {
+      if (step.role === 'trace') {
+        step.steps.forEach(function(s, i) {
+          var div = document.createElement('div');
+          div.className = 'trace-step';
+          div.innerHTML = '<div class="trace-dot"></div><span class="trace-label">' + s.label + '</span><span class="trace-src">' + s.src + '</span>';
+          ft.appendChild(div);
+          setTimeout(function(){ div.classList.add('show'); }, i * 220);
+          setTimeout(function(){ div.classList.add('done'); }, i * 220 + 600);
+        });
+      } else {
+        var prev = cw.querySelector('.typing');
+        if (prev) cw.removeChild(prev);
+        var b = document.createElement('div');
+        b.className = 'chat-bubble ' + step.role;
+        b.innerHTML = step.text;
+        cw.appendChild(b);
+      }
+    }, step.delay);
+  });
+}
+document.getElementById('replay-agent').addEventListener('click', runAgentAnim);
+
+// ── RAG ANIMATION ─────────────────────────────────────
+function runRagAnim() {
+  var ids1 = ['c1','c2','c3','c4'];
+  var ids2 = ['r1','r2','r3'];
+  var ids3 = ['ctx1','ctx2'];
+  var synth     = document.getElementById('synth-box');
+  var synthText = document.getElementById('synth-text');
+  var synthCite = document.getElementById('synth-cite');
+  var a1 = document.getElementById('rarrow1');
+  var a2 = document.getElementById('rarrow2');
+  if (!synth || !synthText || !synthCite || !a1 || !a2) return;
+
+  ids1.concat(ids2).concat(ids3).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.classList.remove('show','selected'); }
+  });
+  synth.classList.remove('show');
+  synthText.textContent = '';
+  synthCite.textContent = '';
+  a1.classList.remove('lit');
+  a2.classList.remove('lit');
+
+  ids1.forEach(function(id, i) {
+    setTimeout(function() {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('show');
+    }, 300 + i * 180);
+  });
+  setTimeout(function(){ a1.classList.add('lit'); }, 1300);
+  ids2.forEach(function(id, i) {
+    setTimeout(function() {
+      var el = document.getElementById(id);
+      if (el) { el.classList.add('show'); if (i < 2) el.classList.add('selected'); }
+    }, 1500 + i * 200);
+  });
+  setTimeout(function(){ a2.classList.add('lit'); }, 2400);
+  ids3.forEach(function(id, i) {
+    setTimeout(function() {
+      var el = document.getElementById(id);
+      if (el) { el.classList.add('show'); el.classList.add('selected'); }
+    }, 2600 + i * 200);
+  });
+  setTimeout(function() {
+    synth.classList.add('show');
+    var answer = 'Demand DM-044 is currently in Design phase. Owner: M. Rossi.';
+    var i = 0;
+    var iv = setInterval(function() {
+      synthText.textContent = answer.slice(0, ++i);
+      if (i >= answer.length) {
+        clearInterval(iv);
+        synthCite.textContent = 'Source: A-ah! (score 0.94) \u00b7 Teams minutes 08/05 (score 0.91)';
+      }
+    }, 28);
+  }, 3200);
+}
+document.getElementById('replay-rag').addEventListener('click', runRagAnim);
+
+
+// ── CONNECTOR API ANIMATION HELPER ───────────────────
+function runApiAnim(cfg) {
+  var arrow   = document.getElementById(cfg.arrowId);
+  var res     = document.getElementById(cfg.resId);
+  var status  = document.getElementById(cfg.statusId);
+  if (!arrow || !res || !status) return;
+  // reset
+  res.classList.remove('show');
+  status.classList.remove('show');
+  arrow.classList.remove('lit');
+  cfg.reqFields.forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('show'); });
+  cfg.resFields.forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('show'); });
+  // animate req fields
+  cfg.reqFields.forEach(function(id, i){
+    setTimeout(function(){ var el=document.getElementById(id); if(el) el.classList.add('show'); }, 300 + i*200);
+  });
+  // arrow lights up
+  setTimeout(function(){ arrow.classList.add('lit'); }, 300 + cfg.reqFields.length*200 + 100);
+  // response box appears
+  setTimeout(function(){ res.classList.add('show'); status.classList.add('show'); }, 300 + cfg.reqFields.length*200 + 500);
+  // res fields type in
+  cfg.resFields.forEach(function(id, i){
+    setTimeout(function(){ var el=document.getElementById(id); if(el) el.classList.add('show'); }, 300 + cfg.reqFields.length*200 + 700 + i*220);
+  });
+}
+
+// A-ah! connector
+document.getElementById('replay-caah').addEventListener('click', function(){
+  runApiAnim({arrowId:'caah-arrow',resId:'caah-res',statusId:'caah-status',
+    reqFields:['caah-f1','caah-f2'], resFields:['caah-r1','caah-r2','caah-r3','caah-r4','caah-r5']});
+});
+
+// Jira connector
+document.getElementById('replay-cjira').addEventListener('click', function(){
+  runApiAnim({arrowId:'jira-arrow',resId:'jira-res',statusId:'jira-status',
+    reqFields:['jira-f1','jira-f2'], resFields:['jira-r1','jira-r2','jira-r3','jira-r4']});
+});
+
+// Auto-run on modal open
+var origOpenModal = openModal;
+openModal = function(id) {
+  origOpenModal(id);
+  setTimeout(function(){
+    if (id === 'c-aah') runApiAnim({arrowId:'caah-arrow',resId:'caah-res',statusId:'caah-status',
+      reqFields:['caah-f1','caah-f2'], resFields:['caah-r1','caah-r2','caah-r3','caah-r4','caah-r5']});
+    if (id === 'c-jira') runApiAnim({arrowId:'jira-arrow',resId:'jira-res',statusId:'jira-status',
+      reqFields:['jira-f1','jira-f2'], resFields:['jira-r1','jira-r2','jira-r3','jira-r4']});
+    if (id === 'c-teams') runIngestAnim('ts', 5);
+    if (id === 'c-sp') runIngestAnim('sp', 5);
+  }, 400);
+};
+
+// ── INGEST ANIMATION HELPER ───────────────────────────
+function runIngestAnim(prefix, count) {
+  for (var i=1; i<=count; i++) {
+    var el = document.getElementById(prefix+i);
+    if (el) { el.classList.remove('show'); }
+  }
+  for (var j=1; j<=count; j++) {
+    (function(idx){
+      setTimeout(function(){
+        var el = document.getElementById(prefix+idx);
+        if (el) el.classList.add('show');
+      }, idx * 420);
+    })(j);
+  }
+}
+
+document.getElementById('replay-cteams').addEventListener('click', function(){ runIngestAnim('ts',5); });
+document.getElementById('replay-csp').addEventListener('click',   function(){ runIngestAnim('sp',5); });
+
+
+// Context builder animation
+document.getElementById('replay-ctx').addEventListener('click', function(){ runIngestAnim('ctx-s',5); });
+// Synth animation
+document.getElementById('replay-synth').addEventListener('click', function(){ runIngestAnim('syn-s',5); });
+
+// Extend openModal for new modals
+var _openModal2 = openModal;
+openModal = function(id) {
+  _openModal2(id);
+  setTimeout(function(){
+    if (id === 'ctx')   runIngestAnim('ctx-s',5);
+    if (id === 'synth') runIngestAnim('syn-s',5);
+  }, 400);
+};
+
+
+// Vector DB search animation
+function runVecAnim() {
+  var items = ['v1','v2','v3','v4','v5'];
+  var scanning = document.getElementById('vec-scanning');
+  items.forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('show','top','match'); });
+  if(scanning) { scanning.classList.remove('show'); scanning.textContent='Scanning vector space…'; }
+  if(scanning) setTimeout(function(){ scanning.classList.add('show'); }, 200);
+  items.forEach(function(id, i){
+    setTimeout(function(){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.classList.add('show');
+      if(i<2) el.classList.add('top');
+      else if(i<4) el.classList.add('match');
+    }, 600 + i*300);
+  });
+  setTimeout(function(){
+    if(scanning) scanning.textContent='Top 4 chunks retrieved ✔';
+  }, 600 + 4*300 + 200);
+}
+document.getElementById('replay-vec').addEventListener('click', runVecAnim);
+
+// Pipeline animation
+function runPipeAnim() {
+  for(var i=1; i<=5; i++){
+    var src=document.getElementById('pipe-src'+i);
+    var arr=document.getElementById('pipe-a'+i);
+    var step=document.getElementById('pipe-p'+i);
+    if(src) { src.classList.remove('show'); src.style.opacity='0'; src.style.transform='scale(0.9)'; }
+    if(arr) arr.classList.remove('show');
+    if(step) { step.classList.remove('show'); step.style.opacity='0'; step.style.transform='translateY(4px)'; }
+  }
+  for(var j=1; j<=5; j++){
+    (function(idx){
+      var delay = (idx-1)*480;
+      setTimeout(function(){
+        var src=document.getElementById('pipe-src'+idx);
+        var arr=document.getElementById('pipe-a'+idx);
+        var step=document.getElementById('pipe-p'+idx);
+        if(src){ src.style.opacity='1'; src.style.transform='none'; }
+        setTimeout(function(){ if(arr) arr.classList.add('show'); }, 180);
+        setTimeout(function(){ if(step){ step.style.opacity='1'; step.style.transform='none'; } }, 320);
+      }, delay);
+    })(j);
+  }
+}
+document.getElementById('replay-pipe').addEventListener('click', runPipeAnim);
+
+// Access control animation
+function runAccessAnim() {
+  for(var i=1; i<=4; i++){
+    var el=document.getElementById('acc-r'+i);
+    if(el) el.classList.remove('show');
+  }
+  for(var j=1; j<=4; j++){
+    (function(idx){
+      setTimeout(function(){
+        var el=document.getElementById('acc-r'+idx);
+        if(el) el.classList.add('show');
+      }, idx*350);
+    })(j);
+  }
+}
+document.getElementById('replay-access').addEventListener('click', runAccessAnim);
+
+// Extend openModal for knowledge store modals
+var _openModal3 = openModal;
+openModal = function(id) {
+  _openModal3(id);
+  setTimeout(function(){
+    if(id==='ks-vec')    runVecAnim();
+    if(id==='ks-index')  runPipeAnim();
+    if(id==='ks-access') runAccessAnim();
+  }, 420);
+};
+
+
+// Generic consumer chat animation
+function runChatAnim(cfg) {
+  cfg.ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.classList.remove('show');
+  });
+  cfg.ids.forEach(function(id, i){
+    setTimeout(function(){
+      var el = document.getElementById(id);
+      if(el) el.classList.add('show');
+    }, 300 + i * 700);
+  });
+}
+
+var consumerAnims = {
+  'cons-exec': function(){ runChatAnim({ids:['ex-q1','ex-a1','ex-q2','ex-a2']}); },
+  'cons-dm':   function(){ runChatAnim({ids:['dm-q1','dm-a1','dm-q2','dm-a2']}); },
+  'cons-dev':  function(){ runChatAnim({ids:['dev-q1','dev-a1','dev-q2','dev-a2']}); },
+  'cons-biz':  function(){ runChatAnim({ids:['biz-q1','biz-a1','biz-q2','biz-a2']}); }
+};
+
+document.getElementById('replay-exec').addEventListener('click', consumerAnims['cons-exec']);
+document.getElementById('replay-dm').addEventListener('click',   consumerAnims['cons-dm']);
+document.getElementById('replay-dev').addEventListener('click',  consumerAnims['cons-dev']);
+document.getElementById('replay-biz').addEventListener('click',  consumerAnims['cons-biz']);
+
+// Extend openModal for consumer modals
+var _openModal4 = openModal;
+openModal = function(id) {
+  _openModal4(id);
+  if(consumerAnims[id]) {
+    setTimeout(consumerAnims[id], 420);
+  }
+};
+
+
+// Roadmap milestone detail
+var milestoneData = {"p1-m1": {"title": "M1 — API assessment & connectivity (Weeks 1–3)", "deliverables": ["A-ah! REST API documentation reviewed and access token obtained", "Microsoft Graph API app registration created with correct permissions", "Jira REST API credentials validated and connectivity confirmed", "Connectivity test scripts passing for all 4 source systems"], "decisions": ["Confirm A-ah! API exists and supports the required fields — most critical decision", "Confirm IT admin can create the Graph API app registration", "Identify who owns Jira API credentials in your organisation", "Define the service account that all connectors will use"], "risk": "If A-ah! has no REST API, the entire indexing approach must be redesigned (CSV export, direct DB read, or vendor engagement). This risk must be resolved in Week 1 — all other milestones depend on it."}, "p1-m2": {"title": "M2 — Knowledge store setup (Weeks 4–7)", "deliverables": ["Vector DB instance deployed and accessible (Azure AI Search / Pinecone / Weaviate)", "Metadata cache (Redis or PostgreSQL) running with demand schema", "Embedding pipeline processing test documents correctly", "Initial bulk load of all A-ah! demands completed", "SharePoint document archive indexed (last 12 months minimum)"], "decisions": ["Vector DB platform: Azure AI Search vs Pinecone vs Weaviate", "Embedding model: text-embedding-3-small (English) or multilingual-e5", "Chunk size: 512 tokens default — validate with real A-ah! requirement texts", "Historical data scope: how far back to index documents and meeting minutes?"], "risk": "Bulk indexing time depends on data volume. Plan for an off-hours run and budget for embedding API costs. Estimate: ~$0.02 per 1M tokens for text-embedding-3-small."}, "p1-m3": {"title": "M3 — Connector development (Weeks 6–10)", "deliverables": ["A-ah! connector: full field read, incremental sync, webhook listener", "Teams connector: Graph API fetch of Copilot minutes, structured parsing of decisions and actions", "SharePoint connector: file discovery, text extraction (PDF/DOCX/PPTX), chunking", "Jira connector: JQL-based issue fetch, sprint board sync", "All connectors tested with real data — not mocks"], "decisions": ["A-ah! webhook support confirmed? If not, define polling interval", "Teams meeting scope: which channels and meeting types to include?", "SharePoint root path convention: how are demand folders named?", "Jira linking convention: custom field, label, or epic hierarchy?"], "risk": "Copilot transcript availability via Graph API depends on Teams tenant configuration. Requires IT admin to enable and test before this milestone can complete."}, "p1-m4": {"title": "M4 — Agent core & RAG engine (Weeks 8–12)", "deliverables": ["LLM API integration (Azure OpenAI GPT-4o or Claude API)", "RAG pipeline: hybrid search, re-ranking, top-k retrieval with source tagging", "Intent router classifying all query types correctly (target: >90% on test set)", "Context builder resolving roles from Azure AD", "System prompt tuned with full demand lifecycle vocabulary and status definitions"], "decisions": ["LLM provider: Azure OpenAI vs Claude API — cost, data residency, compliance", "Confidence threshold for no-answer responses: start at 0.70, calibrate on real data", "Stateful sessions: recommend 3-turn memory for Phase 1", "Escalation path when confidence is low: Teams alert to demand manager?"], "risk": "RAG quality depends on knowledge store data quality. Poor A-ah! requirement text or inconsistent SharePoint naming will degrade answer quality. Plan a data quality review before this milestone."}, "p1-m5": {"title": "M5 — Access control & SSO (Weeks 10–13)", "deliverables": ["Azure AD SSO integrated — all users authenticated via existing credentials", "Role matrix implemented: 4 roles mapped to AD groups", "Per-chunk allowed_roles metadata set correctly at index time", "Audit log running: query, caller, role, chunks retrieved, response", "GDPR review completed for query log retention policy"], "decisions": ["Are 4 roles sufficient or are sub-roles needed (Architect, Business Analyst)?", "Document-level permissions: some files restricted beyond role level?", "Audit log retention period — align with your GDPR and data policy", "Anonymous access: not recommended for Phase 1"], "risk": "If SharePoint documents have individual-level permissions (not role-level), the connector must respect those. This requires additional mapping work that may extend the timeline."}, "p1-m6": {"title": "M6 — Pilot & go-live (Weeks 13–16)", "deliverables": ["Internal pilot with 3-5 demand managers and 2-3 business stakeholders for 2 weeks", "Feedback log reviewed and top issues resolved", "Score threshold tuned based on real query patterns", "Teams bot deployed to pilot group", "Go/no-go decision meeting with stakeholders and full organisation rollout"], "decisions": ["Pilot group composition: who are the best early adopters?", "Feedback collection: Teams survey, direct interview, or usage analytics?", "Go-live criteria: minimum answer accuracy threshold before broader rollout", "Support model: who handles user questions about the agent in Month 1?"], "risk": "User adoption is the biggest risk — not technical. A dedicated internal communication campaign and visible executive sponsorship are critical. Without them the pilot generates insufficient feedback."}, "p2-m1": {"title": "M7 — Proactive alerts (Month 5–6)", "deliverables": ["Monitoring job scanning demand portfolio daily for anomalies", "Teams alerts sent for: stalled demands (>30 days same stage), approaching deadlines, open unowned action items", "Alert templates reviewed and approved by demand managers", "Alert frequency configurable per user preference"], "decisions": ["What constitutes a stalled demand: 30 days? 45 days? Configurable per stage?", "Which roles receive which alert types?", "Alert channel: Teams DM, Teams channel, or email?", "Opt-out mechanism: users must be able to mute specific alert types"], "risk": "Alert fatigue is a real risk. Start with a narrow set of high-value alerts and expand based on feedback. Do not launch with more than 3 alert types simultaneously."}, "p2-m2": {"title": "M8 — Status update automation (Month 6–7)", "deliverables": ["Weekly draft summary generated automatically for each active demand", "Draft delivered to demand manager via Teams for review", "One-click approve, edit, or reject flow implemented", "Approved summary posted to Teams channel (not written to A-ah! yet)", "Audit trail of all drafts, edits, and approvals"], "decisions": ["Draft format: bullet list, narrative paragraph, or structured table?", "Approval flow: individual manager approval or team lead sign-off?", "What triggers generation: fixed day of week or demand manager request?", "Scope: all demands or only active phases (Design and Implementation)?"], "risk": "Managers may resist if they feel automation reduces control. Position drafts as time-savers, not replacements. The human always has the final word before anything is shared externally."}, "p2-m3": {"title": "M9 — Meeting intelligence (Month 7–8)", "deliverables": ["Post-meeting: action items auto-extracted and sent to owners via Teams", "Suggested Jira ticket updates proposed (not auto-created)", "Decisions flagged that require sign-off from a named stakeholder", "Meeting summary automatically linked to the relevant A-ah! demand", "Weekly digest of all open actions across all demands"], "decisions": ["Who receives suggested Jira updates: developer, PM, or demand manager?", "Confidence threshold for action item extraction: when to skip rather than guess?", "Should the agent suggest Jira ticket creation or only flag it for human action?"], "risk": "Action item extraction accuracy depends on Copilot summary quality. If Copilot minutes are inconsistent in format across meeting types, extraction quality will vary significantly."}, "p2-m4": {"title": "M10 — Write-back to A-ah! (Month 8–9)", "deliverables": ["Write-back API integration with A-ah! for status and stage updates only", "Human-in-the-loop approval flow: agent proposes, manager confirms via Teams button", "Full audit trail: who approved, what was changed, when, and based on what source", "DPIA completed and signed off by DPO or compliance team", "Rollback mechanism: every write-back reversible within 24 hours"], "decisions": ["Which fields can the agent update? Recommend: status and stage only in Phase 2", "Approval flow: in-Teams confirmation button or dedicated review UI?", "Maximum write-backs per day before additional review is triggered?", "DPIA scope: does your organisation require DPO sign-off before this goes live?"], "risk": "Highest-risk milestone. An incorrect write-back could corrupt the system of record. Extensive testing in a staging environment is mandatory. Do not skip the DPIA even if it seems like overhead."}, "p2-m5": {"title": "M11 — Analytics dashboard (Month 9–10)", "deliverables": ["Usage dashboard: queries per day, per role, per demand", "Most-queried demands and topics identified", "Unanswered and low-confidence query log reviewed weekly", "Knowledge gap report: questions the agent cannot answer (signals missing content)", "Monthly accuracy report shared with demand management team"], "decisions": ["Dashboard tool: Power BI (likely already available), Grafana, or custom?", "Who reviews the knowledge gap report: demand managers or a dedicated knowledge owner?", "How are knowledge gaps addressed: manual content creation or connector enhancement?"], "risk": "Low usage in early months may look like failure when it is actually a change management challenge. Frame metrics around query quality and user satisfaction, not just volume."}, "p2-m6": {"title": "M12 — Organisation-wide rollout (Month 10–12)", "deliverables": ["All 4 consumer profiles onboarded with role-appropriate access", "Onboarding materials: 1-page quick-start guide and 3-minute video per role", "Governance model defined: who owns the agent and who handles escalations?", "SLA defined: agent availability (uptime) and freshness guarantee per source", "Quarterly review cadence established for continuous improvement"], "decisions": ["Agent name and branding: give it a name that feels natural for your organisation", "Communication campaign: how do you announce it to the full organisation?", "Support model: dedicated Teams channel for agent feedback and issues?", "Long-term ownership: IT team, demand management team, or shared responsibility?"], "risk": "Sustainable adoption requires formal ongoing ownership. If no one is responsible for maintaining the knowledge store and tuning the agent, quality will degrade over time. Define ownership before go-live."}};
+
+function showMilestone(id) {
+  var d = milestoneData[id];
+  if(!d) return;
+  // Populate title and week tag
+  document.getElementById('ms-title').textContent = d.title;
+  document.getElementById('ms-week').textContent = d.week || '';
+  // Populate deliverables
+  var dl = document.getElementById('ms-deliverables-list');
+  dl.innerHTML = '';
+  d.deliverables.forEach(function(x){
+    var li = document.createElement('li');
+    li.innerHTML = '<div class="d-num" style="background:var(--green)"><i class="ti ti-check" style="font-size:10px;"></i></div><div class="d-text">'+x+'</div>';
+    dl.appendChild(li);
+  });
+  // Populate decisions
+  var dcl = document.getElementById('ms-decisions-list');
+  dcl.innerHTML = '';
+  d.decisions.forEach(function(x){
+    var li = document.createElement('li');
+    li.innerHTML = '<div class="d-num" style="background:#EF9F27;color:#fff;font-size:11px;">?</div><div class="d-text">'+x+'</div>';
+    dcl.appendChild(li);
+  });
+  // Populate risk — hide tab if no risk
+  var riskTab = document.getElementById('ms-risk-tab');
+  var riskContent = document.getElementById('ms-risk-content');
+  if(d.risk) {
+    riskContent.innerHTML = '<strong style="display:block;margin-bottom:5px;">&#9888; Risk assessment</strong>'+d.risk;
+    riskTab.style.display = '';
+  } else {
+    riskTab.style.display = 'none';
+  }
+  // Reset tabs to first tab
+  var box = document.getElementById('modal-milestone');
+  box.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  box.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+  box.querySelector('[data-tab="ms-deliverables"]').classList.add('active');
+  document.getElementById('milestone-ms-deliverables').classList.add('active');
+  // Open modal
+  openModal('milestone');
+}
+
+document.querySelectorAll('.milestone[data-milestone]').forEach(function(el){
+  el.addEventListener('click', function(){ showMilestone(el.dataset.milestone); });
+});
+
+
+// Checklist logic
+var ckState = {};
+var ckGroups = {
+  infra: ['i1','i2','i3','i4','i5'],
+  api:   ['a1','a2','a3','a4','a5','a6','a7'],
+  agent: ['ag1','ag2','ag3','ag4','ag5'],
+  access:['ac1','ac2','ac3','ac4','ac5'],
+  data:  ['d1','d2','d3','d4','d5'],
+  gov:   ['g1','g2','g3','g4','g5']
+};
+var ckTotal = 32;
+
+function ckUpdateProgress() {
+  var resolved = Object.values(ckState).filter(Boolean).length;
+  var prog = document.getElementById('ck-progress');
+  if(prog) prog.textContent = resolved + ' / ' + ckTotal + ' resolved';
+  // Update group badges
+  Object.keys(ckGroups).forEach(function(group) {
+    var ids = ckGroups[group];
+    var done = ids.filter(function(id){ return ckState[id]; }).length;
+    var badge = document.getElementById('badge-'+group);
+    if(badge) {
+      badge.textContent = done + '/' + ids.length;
+      badge.classList.toggle('done', done === ids.length);
+    }
+  });
+}
+
+document.querySelectorAll('.ck-item').forEach(function(item) {
+  var id = item.dataset.id;
+  var btn = item.querySelector('.ck-check');
+  if(!btn) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    ckState[id] = !ckState[id];
+    item.classList.toggle('resolved', ckState[id]);
+    btn.innerHTML = ckState[id] ? '<i class="ti ti-check"></i>' : '<i class="ti ti-circle"></i>';
+    ckUpdateProgress();
+  });
+});
+
+document.getElementById('ck-reset').addEventListener('click', function() {
+  ckState = {};
+  document.querySelectorAll('.ck-item').forEach(function(item) {
+    item.classList.remove('resolved');
+    var btn = item.querySelector('.ck-check');
+    if(btn) btn.innerHTML = '<i class="ti ti-circle"></i>';
+  });
+  ckUpdateProgress();
+});
+
+document.getElementById('ck-export').addEventListener('click', function() {
+  var lines = ['OPEN DECISIONS — AI Demand Management Assistant', 'Generated: ' + new Date().toLocaleDateString('en-GB'), ''];
+  var groupNames = {infra:'Infrastructure & Platform', api:'Source System APIs', agent:'Agent Design', access:'Access Control & Security', data:'Data & Knowledge Store', gov:'Governance & Rollout'};
+  Object.keys(ckGroups).forEach(function(group) {
+    var open = ckGroups[group].filter(function(id){ return !ckState[id]; });
+    if(!open.length) return;
+    lines.push('== ' + groupNames[group] + ' ==');
+    open.forEach(function(id) {
+      var el = document.querySelector('[data-id="'+id+'"] .ck-item-q');
+      if(el) lines.push('[ ] ' + el.textContent.trim());
+    });
+    lines.push('');
+  });
+  var blob = new Blob([lines.join('\n')], {type:'text/plain'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'open-decisions-demand-agent.txt';
+  a.click();
+});
+
+ckUpdateProgress();
+
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
