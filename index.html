@@ -240,6 +240,23 @@
     .access-scope{font-size:10px;color:#6A8A9A;flex:1;}
     .access-badge{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
  
+ 
+    /* CONSUMER CHAT SIMULATION */
+    .anim-chat{background:#0A0E1A;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:220px;}
+    .chat-exchange{display:flex;flex-direction:column;gap:8px;}
+    .cx-bubble{max-width:88%;padding:9px 13px;border-radius:10px;font-size:11.5px;line-height:1.6;opacity:0;transition:opacity .35s,transform .35s;transform:translateY(6px);}
+    .cx-bubble.show{opacity:1;transform:none;}
+    .cx-bubble.q{background:#1C3557;color:#A8C8F0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .cx-bubble.a{background:#0D2E22;color:#6FCFAA;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .cx-bubble.q2{background:#1C2A50;color:#9AB8E0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .cx-bubble.a2{background:#0A2818;color:#5DBFA0;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .cx-cite{font-size:9.5px;color:#3A6A54;margin-top:4px;display:block;}
+    .cx-role-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px;}
+    /* QUERY EXAMPLES LIST */
+    .query-list{display:flex;flex-direction:column;gap:7px;}
+    .query-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r-md);border-left:2px solid var(--green);font-size:12.5px;color:var(--text2);line-height:1.5;}
+    .query-item i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px;}
+ 
     footer{text-align:center;padding:20px 40px;font-size:11px;color:var(--text3);border-top:.5px solid var(--border);background:var(--bg2);}
     footer strong{color:var(--text2);}
   </style>
@@ -272,12 +289,12 @@
   </div>
  
   <div class="layer l-consumer">
-    <div class="layer-label">Consumers — any stakeholder, any time</div>
+    <div class="layer-label">Consumers — any stakeholder, any time <span style="color:var(--green)">&#10022;</span></div>
     <div class="node-row">
-      <button class="node" data-simple="exec"><i class="ti ti-building-skyscraper n-icon"></i><div class="n-title">Executives</div><div class="n-sub">Portfolio overview, status</div></button>
-      <button class="node" data-simple="dm"><i class="ti ti-layout-dashboard n-icon"></i><div class="n-title">Demand managers</div><div class="n-sub">Your team — demand details</div></button>
-      <button class="node" data-simple="dev"><i class="ti ti-code n-icon"></i><div class="n-title">Developers &amp; PMs</div><div class="n-sub">Sprint context, blockers</div></button>
-      <button class="node" data-simple="biz"><i class="ti ti-briefcase n-icon"></i><div class="n-title">Business stakeholders</div><div class="n-sub">Their demand status &amp; docs</div></button>
+      <button class="node has-dive" data-modal="cons-exec"><i class="ti ti-building-skyscraper n-icon"></i><div class="n-title">Executives</div><div class="n-sub">Portfolio overview, status</div></button>
+      <button class="node has-dive" data-modal="cons-dm"><i class="ti ti-layout-dashboard n-icon"></i><div class="n-title">Demand managers</div><div class="n-sub">Your team — demand details</div></button>
+      <button class="node has-dive" data-modal="cons-dev"><i class="ti ti-code n-icon"></i><div class="n-title">Developers &amp; PMs</div><div class="n-sub">Sprint context, blockers</div></button>
+      <button class="node has-dive" data-modal="cons-biz"><i class="ti ti-briefcase n-icon"></i><div class="n-title">Business stakeholders</div><div class="n-sub">Their demand status &amp; docs</div></button>
     </div>
   </div>
  
@@ -1181,6 +1198,191 @@
   </div>
 </div>
  
+ 
+<!-- MODAL: EXECUTIVES -->
+<div class="modal-overlay" id="modal-cons-exec">
+  <div class="modal-box" id="modal-cons-exec-box">
+    <div class="modal-header">
+      <div><h2>Executives</h2><p>Portfolio-level visibility without coordination overhead. Real-time answers on demand status, risks, and priorities.</p></div>
+      <button class="modal-close" data-close="cons-exec"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-exec" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-exec" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-exec" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-exec-demo">
+        <div class="anim-chat" id="anim-exec">
+          <div class="cx-role-label" style="color:#378ADD">&#128100; Executive &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="ex-q1">How many demands are currently in the Design phase, and which ones are high priority?</div>
+            <div class="cx-bubble a" id="ex-a1">There are <strong>4 demands</strong> currently in Design phase. Of these, <strong>2 are high priority</strong>: DM-044 (Data Platform Migration) and DM-038 (Customer Portal Redesign). The remaining two are medium priority.<span class="cx-cite">Source: A-ah! &middot; updated today</span></div>
+            <div class="cx-bubble q2" id="ex-q2">What is blocking DM-044?</div>
+            <div class="cx-bubble a2" id="ex-a2">DM-044 has <strong>1 open blocker</strong> in Jira (DM044-02 &mdash; API layer, assigned to L. Bianchi). The design review was completed on 10 May per the Teams meeting minutes. No decision is pending from your side.<span class="cx-cite">Source: Jira &middot; Teams minutes 10 May</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-exec"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-exec-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-chart-pie"></i>&ldquo;Give me a summary of all demands by lifecycle stage.&rdquo;</div>
+          <div class="query-item"><i class="ti ti-alert-triangle"></i>&ldquo;Which demands are at risk of missing their roll-out date?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-flag"></i>&ldquo;What are the top 3 critical demands this quarter?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-clock"></i>&ldquo;Which demands have been in the same stage for more than 30 days?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-users"></i>&ldquo;What decisions are pending my approval across all demands?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-trending-up"></i>&ldquo;How many demands moved to Roll-out this month?&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-exec-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#378ADD">&#10003;</div><div class="d-text"><strong>No more status meetings just to get an update.</strong> Executives get portfolio visibility on demand, in seconds, without scheduling a call with the demand management team.</div></li>
+          <li><div class="d-num" style="background:#378ADD">&#10003;</div><div class="d-text"><strong>Cross-system intelligence in one answer.</strong> A single query combines A-ah! status, Jira blockers, and Teams meeting decisions &mdash; no switching between tools or waiting for someone to compile a report.</div></li>
+          <li><div class="d-num" style="background:#378ADD">&#10003;</div><div class="d-text"><strong>Always current, always cited.</strong> Every answer includes the source system and timestamp. Executives know exactly how fresh the information is and where it comes from.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: DEMAND MANAGERS -->
+<div class="modal-overlay" id="modal-cons-dm">
+  <div class="modal-box" id="modal-cons-dm-box">
+    <div class="modal-header">
+      <div><h2>Demand Managers</h2><p>The agent handles repetitive information requests so your team can focus on decisions, governance, and stakeholder relationships.</p></div>
+      <button class="modal-close" data-close="cons-dm"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-dm" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-dm" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-dm" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-dm-demo">
+        <div class="anim-chat" id="anim-dm">
+          <div class="cx-role-label" style="color:#1D9E75">&#128101; Demand Manager &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="dm-q1">What action items from last week&rsquo;s DM-044 meeting are still open?</div>
+            <div class="cx-bubble a" id="dm-a1">From the Teams meeting on <strong>10 May</strong>, 2 action items remain open: (1) L. Bianchi to complete API layer design by 17 May &mdash; <em>in progress</em>; (2) M. Rossi to share updated mission brief with sponsor &mdash; <em>not started</em>.<span class="cx-cite">Source: Teams Copilot minutes &middot; 10 May</span></div>
+            <div class="cx-bubble q2" id="dm-q2">Show me the latest mission brief for DM-044.</div>
+            <div class="cx-bubble a2" id="dm-a2">The latest approved document is <strong>DM-044 Mission Brief v2.1</strong>, uploaded to SharePoint on 8 May 2025. <u>Open document &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-044/</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-dm"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-dm-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-checklist"></i>&ldquo;What are all open action items across my demands this week?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-file-description"></i>&ldquo;Show me the latest deliverable for DM-031.&rdquo;</div>
+          <div class="query-item"><i class="ti ti-calendar-event"></i>&ldquo;What was decided in the last steering meeting for DM-038?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-user-check"></i>&ldquo;Who is the business requestor for demand DM-019?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-history"></i>&ldquo;When did DM-044 move from HLA to Design, and why?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-report"></i>&ldquo;Summarize the current status of all my demands for a weekly report.&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-dm-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#1D9E75">&#10003;</div><div class="d-text"><strong>Eliminate repetitive status requests.</strong> The agent absorbs the constant stream of &ldquo;what&rsquo;s the status of X?&rdquo; messages from colleagues, freeing your team from being a human information relay.</div></li>
+          <li><div class="d-num" style="background:#1D9E75">&#10003;</div><div class="d-text"><strong>Meeting memory at your fingertips.</strong> Action items, decisions, and risk flags from every Copilot-recorded meeting are instantly retrievable &mdash; no more digging through chat history or email threads.</div></li>
+          <li><div class="d-num" style="background:#1D9E75">&#10003;</div><div class="d-text"><strong>Document retrieval without navigation.</strong> The latest version of any mission brief, deliverable, or spec is one query away &mdash; no more SharePoint folder archaeology.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: DEVELOPERS & PMs -->
+<div class="modal-overlay" id="modal-cons-dev">
+  <div class="modal-box" id="modal-cons-dev-box">
+    <div class="modal-header">
+      <div><h2>Developers &amp; Project Managers</h2><p>Technical context and sprint clarity without waiting for a sync meeting or navigating between Jira and A-ah!.</p></div>
+      <button class="modal-close" data-close="cons-dev"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-dev" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-dev" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-dev" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-dev-demo">
+        <div class="anim-chat" id="anim-dev">
+          <div class="cx-role-label" style="color:#EF9F27">&#128187; Developer &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="dev-q1">What are the business requirements for DM-044 that I need to implement in the API layer?</div>
+            <div class="cx-bubble a" id="dev-a1">DM-044 requires the API to expose <strong>3 core endpoints</strong>: demand status retrieval, owner lookup, and requirements export. Full spec is in the mission brief v2.1 (SharePoint). The key constraint is read-only access &mdash; no write operations in Phase 1.<span class="cx-cite">Source: A-ah! requirements &middot; SharePoint DM-044/</span></div>
+            <div class="cx-bubble q2" id="dev-q2">Which of my Jira tickets for DM-044 are still open in this sprint?</div>
+            <div class="cx-bubble a2" id="dev-a2">Sprint 14 has <strong>2 open tickets</strong> assigned to you for DM-044: DM044-02 (API layer &mdash; In Progress) and DM044-05 (Unit tests &mdash; To Do). Sprint ends <strong>23 May</strong>.<span class="cx-cite">Source: Jira &middot; Sprint 14</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-dev"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-dev-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-code"></i>&ldquo;What are the technical requirements for DM-044?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-bug"></i>&ldquo;Which Jira tickets linked to DM-038 are currently blocked?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-calendar"></i>&ldquo;When is the expected roll-out date for DM-031?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-users"></i>&ldquo;Who is the demand manager I should contact for DM-019?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-git-branch"></i>&ldquo;Has the scope of DM-044 changed since the last sprint?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-checkbox"></i>&ldquo;What acceptance criteria were agreed in the last DM-044 design meeting?&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-dev-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#EF9F27">&#10003;</div><div class="d-text"><strong>Business context without interrupting the team.</strong> Developers get the &ldquo;why&rdquo; behind their tickets directly from A-ah! requirements &mdash; without pinging the demand manager on Teams.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">&#10003;</div><div class="d-text"><strong>Sprint clarity in one query.</strong> Open tickets, blockers, and deadlines across all their assigned demands in a single answer &mdash; no Jira board navigation required.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">&#10003;</div><div class="d-text"><strong>Meeting decisions made accessible.</strong> Acceptance criteria, scope changes, and design decisions from Teams meetings are searchable &mdash; no more &ldquo;where was that agreed?&rdquo; moments.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL: BUSINESS STAKEHOLDERS -->
+<div class="modal-overlay" id="modal-cons-biz">
+  <div class="modal-box" id="modal-cons-biz-box">
+    <div class="modal-header">
+      <div><h2>Business Stakeholders</h2><p>Self-service visibility on their own demands &mdash; status, documents, and next steps &mdash; without needing to contact the demand team.</p></div>
+      <button class="modal-close" data-close="cons-biz"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-modal="cons-biz" data-tab="demo">Live query demo</button>
+        <button class="tab-btn" data-modal="cons-biz" data-tab="queries">Typical queries</button>
+        <button class="tab-btn" data-modal="cons-biz" data-tab="value">Value delivered</button>
+      </div>
+      <div class="tab-pane active" id="cons-biz-demo">
+        <div class="anim-chat" id="anim-biz">
+          <div class="cx-role-label" style="color:#D85A30">&#127970; Business Stakeholder &mdash; querying the agent</div>
+          <div class="chat-exchange">
+            <div class="cx-bubble q" id="biz-q1">What is the current status of my demand for the Customer Portal redesign?</div>
+            <div class="cx-bubble a" id="biz-a1">Your demand <strong>DM-038</strong> (Customer Portal Redesign) is currently in the <strong>Design phase</strong>. The demand manager is F. Marino. Expected roll-out: Q3 2025. No decisions are pending from your side at this stage.<span class="cx-cite">Source: A-ah! &middot; updated 13 May 2025</span></div>
+            <div class="cx-bubble q2" id="biz-q2">Is there a presentation I can share with my team about DM-038?</div>
+            <div class="cx-bubble a2" id="biz-a2">Yes &mdash; the <strong>DM-038 Mission Brief v1.3</strong> (PPTX) was last updated on 2 May 2025 and is available in SharePoint. <u>Open file &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-038/</span></div>
+          </div>
+        </div>
+        <button class="replay-btn" id="replay-biz"><i class="ti ti-refresh"></i> Replay</button>
+      </div>
+      <div class="tab-pane" id="cons-biz-queries">
+        <div class="query-list">
+          <div class="query-item"><i class="ti ti-progress"></i>&ldquo;What is the status of my demand DM-038?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-calendar-due"></i>&ldquo;When is my demand expected to go live?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-file-text"></i>&ldquo;Can you show me the latest mission brief for my demand?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-user"></i>&ldquo;Who is the demand manager responsible for DM-038?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-message-question"></i>&ldquo;What were the last decisions made about my demand?&rdquo;</div>
+          <div class="query-item"><i class="ti ti-checklist"></i>&ldquo;What do I need to provide or approve for the demand to progress?&rdquo;</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="cons-biz-value">
+        <ul class="decisions-list">
+          <li><div class="d-num" style="background:#D85A30">&#10003;</div><div class="d-text"><strong>No more chasing the demand team for updates.</strong> Stakeholders get self-service visibility on their own demands at any time &mdash; weekends, evenings, before a board meeting &mdash; without waiting for a response.</div></li>
+          <li><div class="d-num" style="background:#D85A30">&#10003;</div><div class="d-text"><strong>Scoped to what they can see.</strong> The access control layer ensures stakeholders only see their own demands and public documents. No risk of exposure to other business units&rsquo; data.</div></li>
+          <li><div class="d-num" style="background:#D85A30">&#10003;</div><div class="d-text"><strong>Reduces parallel communication significantly.</strong> This persona generates the highest volume of repetitive queries today. The agent absorbs them entirely, freeing the demand team from being an information bottleneck.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
 <script>
 // ── DATA ──────────────────────────────────────────────
 var simpleDetails = {
@@ -1556,6 +1758,42 @@ openModal = function(id) {
     if(id==='ks-index')  runPipeAnim();
     if(id==='ks-access') runAccessAnim();
   }, 420);
+};
+ 
+ 
+// Generic consumer chat animation
+function runChatAnim(cfg) {
+  cfg.ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.classList.remove('show');
+  });
+  cfg.ids.forEach(function(id, i){
+    setTimeout(function(){
+      var el = document.getElementById(id);
+      if(el) el.classList.add('show');
+    }, 300 + i * 700);
+  });
+}
+ 
+var consumerAnims = {
+  'cons-exec': function(){ runChatAnim({ids:['ex-q1','ex-a1','ex-q2','ex-a2']}); },
+  'cons-dm':   function(){ runChatAnim({ids:['dm-q1','dm-a1','dm-q2','dm-a2']}); },
+  'cons-dev':  function(){ runChatAnim({ids:['dev-q1','dev-a1','dev-q2','dev-a2']}); },
+  'cons-biz':  function(){ runChatAnim({ids:['biz-q1','biz-a1','biz-q2','biz-a2']}); }
+};
+ 
+document.getElementById('replay-exec').addEventListener('click', consumerAnims['cons-exec']);
+document.getElementById('replay-dm').addEventListener('click',   consumerAnims['cons-dm']);
+document.getElementById('replay-dev').addEventListener('click',  consumerAnims['cons-dev']);
+document.getElementById('replay-biz').addEventListener('click',  consumerAnims['cons-biz']);
+ 
+// Extend openModal for consumer modals
+var _openModal4 = openModal;
+openModal = function(id) {
+  _openModal4(id);
+  if(consumerAnims[id]) {
+    setTimeout(consumerAnims[id], 420);
+  }
 };
  
 </script>
