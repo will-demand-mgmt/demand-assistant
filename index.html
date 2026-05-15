@@ -257,6 +257,51 @@
     .query-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r-md);border-left:2px solid var(--green);font-size:12.5px;color:var(--text2);line-height:1.5;}
     .query-item i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px;}
  
+    /* ROADMAP SECTION */
+    .roadmap-section{max-width:860px;margin:32px auto 0;padding:0 20px 60px;}
+    .roadmap-header{margin-bottom:22px;}
+    .roadmap-header h2{font-size:17px;font-weight:600;color:var(--text);margin-bottom:4px;}
+    .roadmap-header p{font-size:13px;color:var(--text2);line-height:1.6;}
+    .roadmap-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:640px){.roadmap-grid{grid-template-columns:1fr;}}
+    .phase-card{border-radius:var(--r-xl);border:.5px solid var(--border2);background:var(--bg2);overflow:hidden;}
+    .phase-card-header{padding:18px 20px 14px;}
+    .phase-pill-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:12px;margin-bottom:10px;}
+    .phase-card-header h3{font-size:15px;font-weight:600;line-height:1.25;margin-bottom:4px;}
+    .phase-card-header p{font-size:12.5px;color:var(--text2);line-height:1.55;}
+    .phase-timeline{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--text3);}
+    .phase-timeline i{font-size:13px;}
+    .phase-body{padding:0 20px 18px;}
+    .phase-divider{height:.5px;background:var(--border);margin:0 0 14px;}
+    .milestone-list{display:flex;flex-direction:column;gap:0;}
+    .milestone{display:flex;gap:12px;padding:9px 4px;border-bottom:.5px solid var(--border);cursor:pointer;transition:background .12s;border-radius:4px;}
+    .milestone:last-child{border-bottom:none;}
+    .milestone:hover{background:var(--bg3);}
+    .m-dot-col{display:flex;flex-direction:column;align-items:center;padding-top:3px;}
+    .m-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .m-line{width:1px;flex:1;margin-top:3px;min-height:14px;}
+    .milestone:last-child .m-line{display:none;}
+    .m-content{flex:1;}
+    .m-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;}
+    .m-sub{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4;}
+    .m-week{font-size:10px;font-weight:500;margin-top:3px;}
+    .dep-bar{margin-top:14px;padding:10px 13px;border-radius:var(--r-md);font-size:12px;line-height:1.6;}
+    .dep-bar strong{display:block;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;}
+    .phase-connector{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 0;font-size:11px;color:var(--text3);}
+    .phase-connector i{font-size:20px;color:var(--green);}
+    #roadmap-detail{margin-top:14px;border:.5px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;background:var(--bg3);font-size:13px;color:var(--text);line-height:1.65;display:none;position:relative;}
+    #roadmap-detail.visible{display:block;}
+    #roadmap-detail .rd-close{position:absolute;top:9px;right:11px;cursor:pointer;color:var(--text3);font-size:17px;background:none;border:none;padding:4px;border-radius:4px;}
+    .rd-title{font-weight:600;font-size:14px;margin-bottom:8px;}
+    .rd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media(max-width:500px){.rd-grid{grid-template-columns:1fr;}}
+    .rd-box{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-md);padding:10px 12px;}
+    .rd-box-label{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;}
+    .rd-box ul{list-style:disc;padding-left:14px;display:flex;flex-direction:column;gap:4px;}
+    .rd-box ul li{font-size:12px;color:var(--text2);line-height:1.45;}
+    .query-list{display:flex;flex-direction:column;gap:7px;}
+    .query-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r-md);border-left:2px solid var(--green);font-size:12.5px;color:var(--text2);line-height:1.5;}
+    .query-item i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px;}
     footer{text-align:center;padding:20px 40px;font-size:11px;color:var(--text3);border-top:.5px solid var(--border);background:var(--bg2);}
     footer strong{color:var(--text2);}
   </style>
@@ -364,6 +409,112 @@
     <div id="dp-content"></div>
   </div>
 </main>
+ 
+ 
+<section class="roadmap-section">
+  <div class="roadmap-header">
+    <h2>Implementation Roadmap</h2>
+    <p>A phased approach from foundation to full intelligence. Each phase delivers standalone value while preparing the ground for the next. Click any milestone for detail.</p>
+  </div>
+  <div class="roadmap-grid">
+ 
+    <!-- PHASE 1 -->
+    <div class="phase-card">
+      <div class="phase-card-header" style="background:linear-gradient(135deg,#E0F5EE 0%,#F5F4F0 100%);">
+        <span class="phase-pill-tag" style="background:#1D9E75;color:#fff;"><i class="ti ti-rocket"></i> Phase 1</span>
+        <h3>Foundation &amp; Read-only Agent</h3>
+        <p>Connect existing systems, build the knowledge store, and deploy a read-only conversational agent. Zero disruption to current tools.</p>
+        <div class="phase-timeline"><i class="ti ti-calendar"></i> Estimated duration: <strong style="color:var(--text);margin-left:3px;">3&ndash;4 months</strong></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-divider"></div>
+        <div class="milestone-list">
+          <div class="milestone" data-milestone="p1-m1">
+            <div class="m-dot-col"><div class="m-dot" style="background:#378ADD;"></div><div class="m-line" style="background:#E6F1FB;"></div></div>
+            <div class="m-content"><div class="m-title">M1 &mdash; API assessment &amp; connectivity</div><div class="m-sub">Validate A-ah! REST API, Graph API permissions, Jira REST API access and service account setup</div><div class="m-week" style="color:#378ADD;">Weeks 1&ndash;3</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m2">
+            <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
+            <div class="m-content"><div class="m-title">M2 &mdash; Knowledge store setup</div><div class="m-sub">Deploy vector DB and metadata cache. Initial bulk indexing of all historical demands, documents, and meeting minutes</div><div class="m-week" style="color:#7F77DD;">Weeks 4&ndash;7</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m3">
+            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
+            <div class="m-content"><div class="m-title">M3 &mdash; Connector development</div><div class="m-sub">Build and test all 4 connectors: A-ah!, Teams/Copilot, SharePoint, Jira. Implement incremental sync and event triggers</div><div class="m-week" style="color:#EF9F27;">Weeks 6&ndash;10</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m4">
+            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
+            <div class="m-content"><div class="m-title">M4 &mdash; Agent core &amp; RAG engine</div><div class="m-sub">Deploy LLM integration, RAG pipeline, intent router, context builder. System prompt tuned for demand vocabulary</div><div class="m-week" style="color:#1D9E75;">Weeks 8&ndash;12</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m5">
+            <div class="m-dot-col"><div class="m-dot" style="background:#D85A30;"></div><div class="m-line" style="background:#FAECE7;"></div></div>
+            <div class="m-content"><div class="m-title">M5 &mdash; Access control &amp; SSO</div><div class="m-sub">Integrate Azure AD, implement role matrix, per-chunk access metadata, audit logging, GDPR review</div><div class="m-week" style="color:#D85A30;">Weeks 10&ndash;13</div></div>
+          </div>
+          <div class="milestone" data-milestone="p1-m6">
+            <div class="m-dot-col"><div class="m-dot" style="background:#888780;"></div><div class="m-line" style="display:none;"></div></div>
+            <div class="m-content"><div class="m-title">M6 &mdash; Pilot &amp; go-live</div><div class="m-sub">Internal pilot with demand managers and selected stakeholders. Feedback, threshold tuning, Teams bot deployment and rollout</div><div class="m-week" style="color:#888780;">Weeks 13&ndash;16</div></div>
+          </div>
+        </div>
+        <div class="dep-bar" style="background:#E6F1FB;border:.5px solid #B5D4F4;">
+          <strong style="color:#185FA5;">&#128204; Critical dependency</strong>
+          <span style="color:#0C447C;">A-ah! REST API availability must be confirmed in Week 1. All subsequent milestones depend on it.</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- PHASE 2 -->
+    <div class="phase-card">
+      <div class="phase-card-header" style="background:linear-gradient(135deg,#EEEDFE 0%,#F5F4F0 100%);">
+        <span class="phase-pill-tag" style="background:#534AB7;color:#fff;"><i class="ti ti-stars"></i> Phase 2</span>
+        <h3>Intelligence &amp; Write Capabilities</h3>
+        <p>Expand from read-only to proactive intelligence. The agent suggests, alerts, and where authorized acts on behalf of the demand manager.</p>
+        <div class="phase-timeline"><i class="ti ti-calendar"></i> Estimated start: <strong style="color:var(--text);margin-left:3px;">Month 5 onwards</strong></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-divider"></div>
+        <div class="milestone-list">
+          <div class="milestone" data-milestone="p2-m1">
+            <div class="m-dot-col"><div class="m-dot" style="background:#534AB7;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
+            <div class="m-content"><div class="m-title">M7 &mdash; Proactive alerts</div><div class="m-sub">Agent monitors demand portfolio and sends Teams alerts: stalled demands, approaching deadlines, open action items</div><div class="m-week" style="color:#534AB7;">Month 5&ndash;6</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m2">
+            <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
+            <div class="m-content"><div class="m-title">M8 &mdash; Status update automation</div><div class="m-sub">Agent drafts weekly status summaries per demand. Manager reviews and approves before any update is shared</div><div class="m-week" style="color:#7F77DD;">Month 6&ndash;7</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m3">
+            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
+            <div class="m-content"><div class="m-title">M9 &mdash; Meeting intelligence</div><div class="m-sub">Post-meeting: agent extracts action items from Copilot minutes, suggests Jira updates, flags decisions needing sign-off</div><div class="m-week" style="color:#1D9E75;">Month 7&ndash;8</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m4">
+            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
+            <div class="m-content"><div class="m-title">M10 &mdash; Write-back to A-ah!</div><div class="m-sub">With explicit manager approval, agent updates demand status in A-ah!. Full audit trail. Human-in-the-loop always required</div><div class="m-week" style="color:#EF9F27;">Month 8&ndash;9</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m5">
+            <div class="m-dot-col"><div class="m-dot" style="background:#D85A30;"></div><div class="m-line" style="background:#FAECE7;"></div></div>
+            <div class="m-content"><div class="m-title">M11 &mdash; Analytics dashboard</div><div class="m-sub">Usage analytics: most queried demands, unanswered questions, knowledge gaps. Drives continuous improvement</div><div class="m-week" style="color:#D85A30;">Month 9&ndash;10</div></div>
+          </div>
+          <div class="milestone" data-milestone="p2-m6">
+            <div class="m-dot-col"><div class="m-dot" style="background:#888780;"></div><div class="m-line" style="display:none;"></div></div>
+            <div class="m-content"><div class="m-title">M12 &mdash; Organisation-wide rollout</div><div class="m-sub">Full deployment to all profiles. Onboarding materials, governance model, SLA definition, long-term ownership assigned</div><div class="m-week" style="color:#888780;">Month 10&ndash;12</div></div>
+          </div>
+        </div>
+        <div class="dep-bar" style="background:#EEEDFE;border:.5px solid #CECBF6;">
+          <strong style="color:#3C3489;">&#128204; Phase 2 prerequisite</strong>
+          <span style="color:#534AB7;">Phase 1 must be stable for at least 4 weeks. Write-back capabilities (M10) require formal governance approval and a DPIA.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="phase-connector">
+    <i class="ti ti-arrow-right"></i>
+    <span>Phase 1 delivers standalone value &mdash; Phase 2 begins only when Phase 1 is stable</span>
+  </div>
+ 
+  <div id="roadmap-detail">
+    <button class="rd-close" id="rd-close-btn"><i class="ti ti-x"></i></button>
+    <div id="rd-content"></div>
+  </div>
+</section>
  
 <footer><strong>AI-Driven Demand Management Assistant</strong> · Solution Architecture Draft v1.0 · Phase 1: Read-only</footer>
  
@@ -1795,6 +1946,37 @@ openModal = function(id) {
     setTimeout(consumerAnims[id], 420);
   }
 };
+ 
+ 
+// Roadmap milestone detail
+var milestoneData = {"p1-m1": {"title": "M1 — API assessment & connectivity (Weeks 1–3)", "deliverables": ["A-ah! REST API documentation reviewed and access token obtained", "Microsoft Graph API app registration created with correct permissions", "Jira REST API credentials validated and connectivity confirmed", "Connectivity test scripts passing for all 4 source systems"], "decisions": ["Confirm A-ah! API exists and supports the required fields — most critical decision", "Confirm IT admin can create the Graph API app registration", "Identify who owns Jira API credentials in your organisation", "Define the service account that all connectors will use"], "risk": "If A-ah! has no REST API, the entire indexing approach must be redesigned (CSV export, direct DB read, or vendor engagement). This risk must be resolved in Week 1 — all other milestones depend on it."}, "p1-m2": {"title": "M2 — Knowledge store setup (Weeks 4–7)", "deliverables": ["Vector DB instance deployed and accessible (Azure AI Search / Pinecone / Weaviate)", "Metadata cache (Redis or PostgreSQL) running with demand schema", "Embedding pipeline processing test documents correctly", "Initial bulk load of all A-ah! demands completed", "SharePoint document archive indexed (last 12 months minimum)"], "decisions": ["Vector DB platform: Azure AI Search vs Pinecone vs Weaviate", "Embedding model: text-embedding-3-small (English) or multilingual-e5", "Chunk size: 512 tokens default — validate with real A-ah! requirement texts", "Historical data scope: how far back to index documents and meeting minutes?"], "risk": "Bulk indexing time depends on data volume. Plan for an off-hours run and budget for embedding API costs. Estimate: ~$0.02 per 1M tokens for text-embedding-3-small."}, "p1-m3": {"title": "M3 — Connector development (Weeks 6–10)", "deliverables": ["A-ah! connector: full field read, incremental sync, webhook listener", "Teams connector: Graph API fetch of Copilot minutes, structured parsing of decisions and actions", "SharePoint connector: file discovery, text extraction (PDF/DOCX/PPTX), chunking", "Jira connector: JQL-based issue fetch, sprint board sync", "All connectors tested with real data — not mocks"], "decisions": ["A-ah! webhook support confirmed? If not, define polling interval", "Teams meeting scope: which channels and meeting types to include?", "SharePoint root path convention: how are demand folders named?", "Jira linking convention: custom field, label, or epic hierarchy?"], "risk": "Copilot transcript availability via Graph API depends on Teams tenant configuration. Requires IT admin to enable and test before this milestone can complete."}, "p1-m4": {"title": "M4 — Agent core & RAG engine (Weeks 8–12)", "deliverables": ["LLM API integration (Azure OpenAI GPT-4o or Claude API)", "RAG pipeline: hybrid search, re-ranking, top-k retrieval with source tagging", "Intent router classifying all query types correctly (target: >90% on test set)", "Context builder resolving roles from Azure AD", "System prompt tuned with full demand lifecycle vocabulary and status definitions"], "decisions": ["LLM provider: Azure OpenAI vs Claude API — cost, data residency, compliance", "Confidence threshold for no-answer responses: start at 0.70, calibrate on real data", "Stateful sessions: recommend 3-turn memory for Phase 1", "Escalation path when confidence is low: Teams alert to demand manager?"], "risk": "RAG quality depends on knowledge store data quality. Poor A-ah! requirement text or inconsistent SharePoint naming will degrade answer quality. Plan a data quality review before this milestone."}, "p1-m5": {"title": "M5 — Access control & SSO (Weeks 10–13)", "deliverables": ["Azure AD SSO integrated — all users authenticated via existing credentials", "Role matrix implemented: 4 roles mapped to AD groups", "Per-chunk allowed_roles metadata set correctly at index time", "Audit log running: query, caller, role, chunks retrieved, response", "GDPR review completed for query log retention policy"], "decisions": ["Are 4 roles sufficient or are sub-roles needed (Architect, Business Analyst)?", "Document-level permissions: some files restricted beyond role level?", "Audit log retention period — align with your GDPR and data policy", "Anonymous access: not recommended for Phase 1"], "risk": "If SharePoint documents have individual-level permissions (not role-level), the connector must respect those. This requires additional mapping work that may extend the timeline."}, "p1-m6": {"title": "M6 — Pilot & go-live (Weeks 13–16)", "deliverables": ["Internal pilot with 3-5 demand managers and 2-3 business stakeholders for 2 weeks", "Feedback log reviewed and top issues resolved", "Score threshold tuned based on real query patterns", "Teams bot deployed to pilot group", "Go/no-go decision meeting with stakeholders and full organisation rollout"], "decisions": ["Pilot group composition: who are the best early adopters?", "Feedback collection: Teams survey, direct interview, or usage analytics?", "Go-live criteria: minimum answer accuracy threshold before broader rollout", "Support model: who handles user questions about the agent in Month 1?"], "risk": "User adoption is the biggest risk — not technical. A dedicated internal communication campaign and visible executive sponsorship are critical. Without them the pilot generates insufficient feedback."}, "p2-m1": {"title": "M7 — Proactive alerts (Month 5–6)", "deliverables": ["Monitoring job scanning demand portfolio daily for anomalies", "Teams alerts sent for: stalled demands (>30 days same stage), approaching deadlines, open unowned action items", "Alert templates reviewed and approved by demand managers", "Alert frequency configurable per user preference"], "decisions": ["What constitutes a stalled demand: 30 days? 45 days? Configurable per stage?", "Which roles receive which alert types?", "Alert channel: Teams DM, Teams channel, or email?", "Opt-out mechanism: users must be able to mute specific alert types"], "risk": "Alert fatigue is a real risk. Start with a narrow set of high-value alerts and expand based on feedback. Do not launch with more than 3 alert types simultaneously."}, "p2-m2": {"title": "M8 — Status update automation (Month 6–7)", "deliverables": ["Weekly draft summary generated automatically for each active demand", "Draft delivered to demand manager via Teams for review", "One-click approve, edit, or reject flow implemented", "Approved summary posted to Teams channel (not written to A-ah! yet)", "Audit trail of all drafts, edits, and approvals"], "decisions": ["Draft format: bullet list, narrative paragraph, or structured table?", "Approval flow: individual manager approval or team lead sign-off?", "What triggers generation: fixed day of week or demand manager request?", "Scope: all demands or only active phases (Design and Implementation)?"], "risk": "Managers may resist if they feel automation reduces control. Position drafts as time-savers, not replacements. The human always has the final word before anything is shared externally."}, "p2-m3": {"title": "M9 — Meeting intelligence (Month 7–8)", "deliverables": ["Post-meeting: action items auto-extracted and sent to owners via Teams", "Suggested Jira ticket updates proposed (not auto-created)", "Decisions flagged that require sign-off from a named stakeholder", "Meeting summary automatically linked to the relevant A-ah! demand", "Weekly digest of all open actions across all demands"], "decisions": ["Who receives suggested Jira updates: developer, PM, or demand manager?", "Confidence threshold for action item extraction: when to skip rather than guess?", "Should the agent suggest Jira ticket creation or only flag it for human action?"], "risk": "Action item extraction accuracy depends on Copilot summary quality. If Copilot minutes are inconsistent in format across meeting types, extraction quality will vary significantly."}, "p2-m4": {"title": "M10 — Write-back to A-ah! (Month 8–9)", "deliverables": ["Write-back API integration with A-ah! for status and stage updates only", "Human-in-the-loop approval flow: agent proposes, manager confirms via Teams button", "Full audit trail: who approved, what was changed, when, and based on what source", "DPIA completed and signed off by DPO or compliance team", "Rollback mechanism: every write-back reversible within 24 hours"], "decisions": ["Which fields can the agent update? Recommend: status and stage only in Phase 2", "Approval flow: in-Teams confirmation button or dedicated review UI?", "Maximum write-backs per day before additional review is triggered?", "DPIA scope: does your organisation require DPO sign-off before this goes live?"], "risk": "Highest-risk milestone. An incorrect write-back could corrupt the system of record. Extensive testing in a staging environment is mandatory. Do not skip the DPIA even if it seems like overhead."}, "p2-m5": {"title": "M11 — Analytics dashboard (Month 9–10)", "deliverables": ["Usage dashboard: queries per day, per role, per demand", "Most-queried demands and topics identified", "Unanswered and low-confidence query log reviewed weekly", "Knowledge gap report: questions the agent cannot answer (signals missing content)", "Monthly accuracy report shared with demand management team"], "decisions": ["Dashboard tool: Power BI (likely already available), Grafana, or custom?", "Who reviews the knowledge gap report: demand managers or a dedicated knowledge owner?", "How are knowledge gaps addressed: manual content creation or connector enhancement?"], "risk": "Low usage in early months may look like failure when it is actually a change management challenge. Frame metrics around query quality and user satisfaction, not just volume."}, "p2-m6": {"title": "M12 — Organisation-wide rollout (Month 10–12)", "deliverables": ["All 4 consumer profiles onboarded with role-appropriate access", "Onboarding materials: 1-page quick-start guide and 3-minute video per role", "Governance model defined: who owns the agent and who handles escalations?", "SLA defined: agent availability (uptime) and freshness guarantee per source", "Quarterly review cadence established for continuous improvement"], "decisions": ["Agent name and branding: give it a name that feels natural for your organisation", "Communication campaign: how do you announce it to the full organisation?", "Support model: dedicated Teams channel for agent feedback and issues?", "Long-term ownership: IT team, demand management team, or shared responsibility?"], "risk": "Sustainable adoption requires formal ongoing ownership. If no one is responsible for maintaining the knowledge store and tuning the agent, quality will degrade over time. Define ownership before go-live."}};
+ 
+function showMilestone(id) {
+  var d = milestoneData[id];
+  if(!d) return;
+  var out = '<div class="rd-title">'+d.title+'</div>';
+  out += '<div class="rd-grid">';
+  out += '<div class="rd-box"><div class="rd-box-label">Deliverables</div><ul>';
+  d.deliverables.forEach(function(x){ out += '<li>'+x+'</li>'; });
+  out += '</ul></div>';
+  out += '<div class="rd-box"><div class="rd-box-label">Key decisions needed</div><ul>';
+  d.decisions.forEach(function(x){ out += '<li>'+x+'</li>'; });
+  out += '</ul></div>';
+  out += '</div>';
+  if(d.risk) out += '<div style="margin-top:10px;padding:9px 12px;background:#FAECE7;border-radius:var(--r-md);font-size:12px;color:#4A1B0C;border:.5px solid #F5C4B3;line-height:1.55;"><strong>Risk: </strong>'+d.risk+'</div>';
+  document.getElementById('rd-content').innerHTML = out;
+  var p = document.getElementById('roadmap-detail');
+  p.classList.add('visible');
+  setTimeout(function(){ p.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 50);
+}
+ 
+document.querySelectorAll('.milestone[data-milestone]').forEach(function(el){
+  el.addEventListener('click', function(){ showMilestone(el.dataset.milestone); });
+});
+ 
+document.getElementById('rd-close-btn').addEventListener('click', function(){
+  document.getElementById('roadmap-detail').classList.remove('visible');
+});
  
 </script>
  
