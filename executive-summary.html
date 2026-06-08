@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demand Intelligence — Executive Summary</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green:#1A9E75; --green-dk:#085041; --green-bg:#E0F5EE;
+      --blue:#2A6FD4; --blue-bg:#E6EEFA;
+      --purple:#534AB7; --purple-bg:#EEEDFE;
+      --orange:#EF9F27; --orange-bg:#FAEEDA;
+      --bg:#F5F4F0; --bg2:#FFFFFF; --bg3:#EEECEA;
+      --text:#18181A; --text2:#5A5A5E; --text3:#9A9A9E;
+      --border:rgba(0,0,0,0.10); --border2:rgba(0,0,0,0.18);
+      --font:'DM Sans',sans-serif;
+      --r-md:8px; --r-lg:12px; --r-xl:18px; --r-2xl:24px;
+    }
+    @media(prefers-color-scheme:dark){
+      :root{--bg:#0F0F0F;--bg2:#1A1A1A;--bg3:#222222;--text:#E8E6DF;--text2:#A8A6A0;--text3:#585654;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--green-bg:#042C24;--blue-bg:#0D1F3C;--purple-bg:#26215C;--orange-bg:#412402;}
+    }
+    @media print {
+      body{background:#fff;color:#000;}
+      nav,.no-print{display:none!important;}
+      .page{max-width:100%;padding:20px;}
+      .card{break-inside:avoid;}
+      a{color:inherit;text-decoration:none;}
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:15px;}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+
+    /* NAV */
+    nav{background:var(--bg2);border-bottom:.5px solid var(--border);padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+    .nav-logo{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text);}
+    .nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+    .nav-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .btn-nav{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;text-decoration:none;transition:opacity .15s;border:none;cursor:pointer;font-family:var(--font);}
+    .btn-nav.secondary{background:var(--bg3);color:var(--text2);border:.5px solid var(--border2);}
+    .btn-nav.primary{background:var(--green);color:#fff;}
+    .btn-nav:hover{opacity:.85;}
+
+    /* PAGE */
+    .page{max-width:860px;margin:0 auto;padding:40px 24px 60px;}
+
+    /* HEADER CARD */
+    .header-card{background:linear-gradient(135deg,#085041 0%,#0F6E56 60%,#26215C 100%);border-radius:var(--r-2xl);padding:36px 40px;margin-bottom:24px;position:relative;overflow:hidden;}
+    .header-card::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,0.04);top:-200px;right:-100px;}
+    .header-eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:10px;}
+    .header-card h1{font-size:clamp(22px,3vw,32px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:8px;position:relative;}
+    .header-card .tagline{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.6;max-width:560px;position:relative;margin-bottom:20px;}
+    .header-meta{display:flex;gap:24px;flex-wrap:wrap;position:relative;}
+    .header-meta-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.6);}
+    .header-meta-item strong{color:#fff;}
+    .raw-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;background:rgba(239,159,39,0.25);color:#FAC775;border:.5px solid rgba(239,159,39,0.4);margin-left:8px;vertical-align:middle;}
+
+    /* SECTION */
+    .section-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+    .section-label::after{content:'';flex:1;height:.5px;background:var(--border);}
+
+    /* GRID */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+    @media(max-width:640px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+    @media(max-width:800px){.grid-3{grid-template-columns:1fr 1fr;}.grid-4{grid-template-columns:1fr 1fr;}}
+
+    /* CARDS */
+    .card{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);padding:20px;margin-bottom:0;}
+    .card h3{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;}
+    .card p{font-size:13px;color:var(--text2);line-height:1.65;}
+
+    /* STAT CARDS */
+    .stat-card{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-lg);padding:16px;text-align:center;}
+    .stat-num{font-size:28px;font-weight:700;line-height:1;margin-bottom:4px;}
+    .stat-label{font-size:11px;color:var(--text2);line-height:1.4;}
+
+    /* PROBLEM / SOLUTION */
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
+    @media(max-width:600px){.split{grid-template-columns:1fr;}}
+    .split-card{border-radius:var(--r-xl);padding:20px;border:.5px solid var(--border);}
+    .split-card.problem{background:var(--bg2);}
+    .split-card.solution{background:linear-gradient(135deg,#085041,#0F6E56);color:#fff;}
+    .split-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;}
+    .split-card.problem .split-label{color:var(--text3);}
+    .split-card.solution .split-label{color:rgba(255,255,255,0.6);}
+    .split-item{display:flex;gap:8px;margin-bottom:10px;font-size:13px;line-height:1.55;}
+    .split-item:last-child{margin-bottom:0;}
+    .split-card.problem .split-item{color:var(--text2);}
+    .split-card.solution .split-item{color:rgba(255,255,255,0.88);}
+    .split-icon{flex-shrink:0;font-size:14px;margin-top:2px;}
+    .split-card.problem .split-icon{color:var(--text3);}
+    .split-card.solution .split-icon{color:rgba(255,255,255,0.6);}
+
+    /* FLOW */
+    .flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 20px;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);margin-bottom:24px;}
+    .flow-item{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:var(--r-md);font-size:12px;font-weight:500;}
+    .flow-arrow{color:var(--text3);font-size:18px;flex-shrink:0;}
+    .flow-item.sources{background:var(--orange-bg);color:#633806;border:.5px solid #FAC775;}
+    .flow-item.agent{background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);font-weight:600;}
+    .flow-item.users{background:var(--blue-bg);color:#0C447C;border:.5px solid #B5D4F4;}
+
+    /* INVESTMENT TABLE */
+    .inv-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px;}
+    .inv-table th{text-align:left;padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:.5px solid var(--border);}
+    .inv-table td{padding:9px 12px;border-bottom:.5px solid var(--border);color:var(--text2);vertical-align:top;}
+    .inv-table tr:last-child td{border:none;}
+    .inv-table .td-label{color:var(--text);font-weight:500;}
+    .inv-table .td-value{color:var(--green);font-weight:600;}
+    .inv-table .td-note{font-size:11px;font-style:italic;color:var(--text3);}
+    .raw-disclaimer{font-size:11px;color:var(--orange);background:var(--orange-bg);border:.5px solid #FAC775;border-radius:var(--r-md);padding:8px 12px;margin-top:10px;display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
+    @media(prefers-color-scheme:dark){.raw-disclaimer{background:#412402;border-color:#854F0B;}}
+
+    /* ASK CARDS */
+    .ask-card{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);margin-bottom:10px;}
+    .ask-card:last-child{margin-bottom:0;}
+    .ask-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
+    .ask-body h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+    .ask-body p{font-size:12.5px;color:var(--text2);line-height:1.55;}
+
+    /* PROOF POINTS */
+    .proof-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+    @media(max-width:600px){.proof-grid{grid-template-columns:1fr;}}
+    .proof-item{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-lg);}
+    .proof-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+    .proof-body{font-size:12.5px;color:var(--text2);line-height:1.5;}
+    .proof-body strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px;}
+
+    /* FOOTER */
+    footer{text-align:center;padding:24px 40px;border-top:.5px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+    .footer-author{display:flex;align-items:center;gap:10px;}
+    .footer-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#085041,#1A9E75);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0;}
+    .footer-name{font-size:12px;font-weight:600;color:var(--text);}
+    .footer-role{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:1px;}
+    .footer-email{font-size:11px;color:var(--green);text-decoration:none;}
+    .footer-meta{font-size:11px;color:var(--text3);text-align:right;}
+    .footer-meta strong{color:var(--text2);}
+  </style>
+</head>
+<body>
+
+<nav class="no-print">
+  <div class="nav-logo"><div class="nav-logo-dot"></div>Demand Intelligence</div>
+  <div class="nav-actions">
+    <a href="https://demand-agent-ui.fastwilll.workers.dev" target="_blank" class="btn-nav secondary"><i class="ti ti-robot"></i> Open prototype</a>
+    <a href="https://demand-intelligence.fastwilll.workers.dev" target="_blank" class="btn-nav secondary"><i class="ti ti-layout-dashboard"></i> View architecture</a>
+    <button onclick="window.print()" class="btn-nav primary"><i class="ti ti-printer"></i> Print / Save PDF</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <div class="header-eyebrow">Executive Summary — Confidential Draft</div>
+    <h1>AI-Driven Demand Management Assistant</h1>
+    <p class="tagline">A conversational AI layer that connects A-ah!, Microsoft Teams, SharePoint, and Jira into a single intelligent interface — making demand knowledge instantly accessible to every stakeholder, at any time.</p>
+    <div class="header-meta">
+      <div class="header-meta-item"><i class="ti ti-calendar" style="font-size:13px;"></i> Prepared: June 2025</div>
+      <div class="header-meta-item"><i class="ti ti-user" style="font-size:13px;"></i> <strong>Alberto Pavani</strong></div>
+      <div class="header-meta-item"><i class="ti ti-flag" style="font-size:13px;"></i> Status: <strong>Prototype ready — Phase 1 approval requested</strong></div>
+    </div>
+  </div>
+
+  <!-- THE PROBLEM -->
+  <div class="section-label">The problem we are solving</div>
+  <div class="split" style="margin-bottom:24px;">
+    <div class="split-card problem">
+      <div class="split-label">Today — fragmented</div>
+      <div class="split-item"><i class="ti ti-x split-icon"></i><span>Demand status lives in A-ah!, decisions in Teams, documents in SharePoint, progress in Jira — no single view exists</span></div>
+      <div class="split-item"><i class="ti ti-x split-icon"></i><span>Every status question interrupts the demand management team, creating a communication bottleneck</span></div>
+      <div class="split-item"><i class="ti ti-x split-icon"></i><span>Meeting decisions disappear into chat history within days of each session</span></div>
+      <div class="split-item"><i class="ti ti-x split-icon"></i><span>Stakeholders wait for responses that depend on individual availability and working hours</span></div>
+    </div>
+    <div class="split-card solution">
+      <div class="split-label">With the AI Assistant</div>
+      <div class="split-item"><i class="ti ti-check split-icon"></i><span>One conversational interface surfaces information from all four systems in a single cited answer</span></div>
+      <div class="split-item"><i class="ti ti-check split-icon"></i><span>Repetitive status queries answered instantly — demand managers focus on decisions, not information relay</span></div>
+      <div class="split-item"><i class="ti ti-check split-icon"></i><span>Copilot meeting minutes indexed and searchable within minutes of every meeting ending</span></div>
+      <div class="split-item"><i class="ti ti-check split-icon"></i><span>Available 24/7 to all authorised stakeholders — no dependency on individual availability</span></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section-label">How it works — in one sentence</div>
+  <div class="flow">
+    <div class="flow-item sources"><i class="ti ti-apps"></i> A-ah! · Teams · SharePoint · Jira</div>
+    <i class="ti ti-arrow-right flow-arrow"></i>
+    <div class="flow-item agent"><i class="ti ti-robot"></i> AI Agent — natural language interface</div>
+    <i class="ti ti-arrow-right flow-arrow"></i>
+    <div class="flow-item users"><i class="ti ti-users"></i> Executives · Managers · Developers · Stakeholders</div>
+  </div>
+
+  <!-- PROOF POINTS -->
+  <div class="section-label">What exists today</div>
+  <div class="proof-grid">
+    <div class="proof-item">
+      <i class="ti ti-robot proof-icon" style="color:var(--green);"></i>
+      <div class="proof-body"><strong>Working prototype</strong>Conversational AI agent running on simulated satellite/telecom demand portfolio — accessible now at demand-agent-ui.fastwilll.workers.dev</div>
+    </div>
+    <div class="proof-item">
+      <i class="ti ti-layout-dashboard proof-icon" style="color:var(--blue);"></i>
+      <div class="proof-body"><strong>Full architecture documented</strong>6-layer interactive architecture with deep-dive animations for every component — published and accessible</div>
+    </div>
+    <div class="proof-item">
+      <i class="ti ti-map proof-icon" style="color:var(--purple);"></i>
+      <div class="proof-body"><strong>12-milestone roadmap</strong>Phase 1 (read-only agent, 3–4 months) and Phase 2 (proactive intelligence) fully detailed with deliverables and risks</div>
+    </div>
+    <div class="proof-item">
+      <i class="ti ti-checklist proof-icon" style="color:var(--orange);"></i>
+      <div class="proof-body"><strong>32 open decisions tracked</strong>Every unresolved architectural and governance decision catalogued with owner, priority, and source reference</div>
+    </div>
+  </div>
+
+  <!-- INVESTMENT -->
+  <div class="section-label">Investment & timeline <span class="raw-badge"><i class="ti ti-alert-triangle" style="font-size:10px;"></i> Raw estimation</span></div>
+  <div class="card" style="margin-bottom:8px;">
+    <table class="inv-table">
+      <thead><tr><th>Item</th><th>Phase 1 estimate</th><th>Phase 2 estimate</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">Development effort</td>
+          <td class="td-value">60–90 person-days</td>
+          <td class="td-value">40–60 person-days</td>
+          <td class="td-note">Connectors, RAG engine, agent core, SSO integration</td>
+        </tr>
+        <tr>
+          <td class="td-label">Cloud infrastructure</td>
+          <td class="td-value">€0–50 / month</td>
+          <td class="td-value">€50–150 / month</td>
+          <td class="td-note">Cloudflare Workers, vector DB free tier (Azure AI Search or Pinecone)</td>
+        </tr>
+        <tr>
+          <td class="td-label">LLM API cost</td>
+          <td class="td-value">€50–200 / month</td>
+          <td class="td-value">€100–400 / month</td>
+          <td class="td-note">Depends on query volume; Azure OpenAI or Claude API; Groq free tier for prototype</td>
+        </tr>
+        <tr>
+          <td class="td-label">Duration</td>
+          <td class="td-value">3–4 months</td>
+          <td class="td-value">+4–6 months</td>
+          <td class="td-note">Phase 2 starts only after Phase 1 is stable (min. 4 weeks)</td>
+        </tr>
+        <tr>
+          <td class="td-label">Critical dependency</td>
+          <td class="td-value" colspan="2" style="color:var(--orange);">A-ah! REST API availability — must be confirmed before Phase 1 can begin</td>
+          <td class="td-note">All timelines contingent on this</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="raw-disclaimer">
+    <i class="ti ti-alert-triangle" style="font-size:14px;color:var(--orange);flex-shrink:0;margin-top:1px;"></i>
+    <span><strong style="color:var(--orange);">Raw estimation disclaimer:</strong> All figures above are preliminary rough estimates produced without a formal scoping exercise. They are intended to provide an order-of-magnitude reference only. Actual costs and timelines will be determined during the Phase 1 scoping phase, following confirmation of the A-ah! API availability and a formal technical assessment.</span>
+  </div>
+
+  <!-- THREE ASKS -->
+  <div class="section-label" style="margin-top:24px;">Three asks for this meeting</div>
+  <div style="margin-bottom:24px;">
+    <div class="ask-card">
+      <div class="ask-num" style="background:var(--green);">1</div>
+      <div class="ask-body">
+        <h4>Confirm A-ah! API availability</h4>
+        <p>This is the single most critical dependency. Can someone confirm whether A-ah! exposes a REST API and identify the right vendor contact? Without this, Phase 1 cannot begin. All other milestones depend on it.</p>
+      </div>
+    </div>
+    <div class="ask-card">
+      <div class="ask-num" style="background:var(--blue);">2</div>
+      <div class="ask-body">
+        <h4>Approve Phase 1 scoping</h4>
+        <p>Authorise a formal scoping exercise (2–3 weeks) to validate the architecture, confirm API access for all four source systems, and produce a detailed project plan and cost estimate before committing to full development.</p>
+      </div>
+    </div>
+    <div class="ask-card">
+      <div class="ask-num" style="background:var(--purple);">3</div>
+      <div class="ask-body">
+        <h4>Designate an executive sponsor</h4>
+        <p>The initiative requires a named executive sponsor to facilitate cross-functional decisions — particularly around data access, IT security approval, and the GDPR/DPIA assessment required before indexing internal documents.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="background:linear-gradient(135deg,#085041,#0F6E56 50%,#26215C 100%);border-radius:var(--r-2xl);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;">Explore the prototype and full architecture</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.65);">Everything referenced in this document is live and accessible today</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="https://demand-agent-ui.fastwilll.workers.dev" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:10px 18px;border-radius:20px;background:#fff;color:#085041;text-decoration:none;"><i class="ti ti-robot"></i> Open prototype</a>
+      <a href="https://demand-intelligence.fastwilll.workers.dev" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:10px 18px;border-radius:20px;background:rgba(255,255,255,0.15);color:#fff;text-decoration:none;border:.5px solid rgba(255,255,255,0.3);"><i class="ti ti-layout-dashboard"></i> View architecture</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-author">
+    <div class="footer-avatar">AP</div>
+    <div>
+      <div class="footer-name">Alberto Pavani</div>
+      <div class="footer-role">Senior Product &amp; Solution Delivery Engineer</div>
+      <a href="mailto:albpavani@gmail.com" class="footer-email">albpavani@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <strong>Demand Intelligence — Executive Summary</strong>
+    <div style="margin-top:2px;">Confidential Draft &nbsp;·&nbsp; June 2025 &nbsp;·&nbsp; For internal use only</div>
+  </div>
+</footer>
+
+</body>
+</html>
