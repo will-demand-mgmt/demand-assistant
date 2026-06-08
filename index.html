@@ -366,6 +366,19 @@
 </head>
 <body>
 
+<nav style="position:sticky;top:0;z-index:200;background:var(--bg2);border-bottom:.5px solid var(--border);padding:10px 40px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(10px);">
+  <div style="display:flex;align-items:center;gap:7px;">
+    <div style="width:7px;height:7px;border-radius:50%;background:var(--green);"></div>
+    <span style="font-size:13px;font-weight:600;color:var(--text);">Demand Intelligence</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <a href="https://demand-intelligence.fastwilll.workers.dev/preview" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-arrow-left" style="font-size:12px;"></i> Overview</a>
+    <a href="https://requirements-assistant.fastwilll.workers.dev/preview" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:#1A2E52;color:#7AAAE8;border:.5px solid #2A4F8A;text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-file-description" style="font-size:12px;"></i> Requirements Assistant</a>
+    <a href="https://demand-agent-ui.fastwilll.workers.dev" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-robot" style="font-size:12px;"></i> Demand Agent &#9675;</a>
+    <div style="width:.5px;height:16px;background:var(--border);margin:0 2px;"></div>
+    <a href="/login" id="logout-btn" onclick="sessionStorage.removeItem('di_auth')" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;color:var(--text3);border:.5px solid var(--border);text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'"><i class="ti ti-logout" style="font-size:12px;"></i> Sign out</a>
+  </div>
+</nav>
 <header>
   <div>
     <div class="h-eyebrow">Solution Architecture — Draft v1.0</div>
@@ -377,10 +390,6 @@
     <span class="phase-pill">Phase 1 — Read-only</span>
     <span>Click any node to explore</span>
     <span style="font-size:10px;margin-top:4px;color:var(--green)">&#10022; animated deep dives available</span>
-    <a href="https://demand-intelligence.fastwilll.workers.dev/preview" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;margin-top:4px;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-arrow-left" style="font-size:12px;"></i> Back to overview</a>
-    <a href="https://requirements-assistant.fastwilll.workers.dev/preview" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:#1A2E52;color:#7AAAE8;border:.5px solid #2A4F8A;text-decoration:none;margin-top:4px;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-file-description" style="font-size:12px;"></i> Requirements Assistant</a>
-    <a href="https://demand-agent-ui.fastwilll.workers.dev" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;margin-top:4px;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-robot" style="font-size:12px;"></i> Demand Agent &#9675;</a>
-    <a href="/login" id="logout-btn" onclick="sessionStorage.removeItem('di_auth')" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;color:var(--text3);border:.5px solid var(--border);text-decoration:none;margin-top:4px;transition:opacity .15s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'"><i class="ti ti-logout" style="font-size:12px;"></i> Sign out</a>
   </div>
 </header>
 
