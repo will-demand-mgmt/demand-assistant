@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solution Detail v1.2</title>
+  <script>
+(function(){
+  var AUTH_KEY = 'di_auth';
+  if (sessionStorage.getItem(AUTH_KEY) !== 'true') {
+    var next = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.replace('/login?next=' + next);
+  }
+})();
+</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#F5F4F0; --bg2:#FFFFFF; --bg3:#EEECEA;
+      --text:#18181A; --text2:#5A5A5E; --text3:#9A9A9E;
+      --border:rgba(0,0,0,0.10); --border2:rgba(0,0,0,0.20);
+      --green:#1A9E75; --green-bg:#E0F5EE; --green-dk:#085041;
+      --font:'DM Sans',sans-serif; --mono:'DM Mono',monospace;
+      --r-md:8px; --r-lg:12px; --r-xl:18px;
+    }
+    @media(prefers-color-scheme:dark){
+      :root{--bg:#141414;--bg2:#1E1E1E;--bg3:#252525;--text:#E8E6DF;--text2:#A8A6A0;--text3:#666460;--border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.18);--green-bg:#042C24;--green-dk:#9FE1CB;}
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:15px;scroll-behavior:smooth;}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+
+    header{background:var(--bg2);border-bottom:.5px solid var(--border);padding:22px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+    .h-eyebrow{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:5px;}
+    header h1{font-size:21px;font-weight:600;line-height:1.25;}
+    header p{font-size:13px;color:var(--text2);margin-top:5px;line-height:1.6;max-width:540px;}
+    .h-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:4px 11px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);margin-top:10px;}
+    .h-meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:11px;color:var(--text3);padding-top:2px;}
+    .phase-pill{font-size:10px;font-weight:600;padding:4px 11px;border-radius:20px;background:#FAEEDA;color:#633806;border:.5px solid #FAC775;}
+    @media(prefers-color-scheme:dark){.phase-pill{background:#412402;color:#FAC775;border-color:#854F0B;}}
+
+    main{max-width:860px;margin:0 auto;padding:28px 20px 60px;}
+
+    .legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;padding:12px 14px;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-lg);}
+    .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
+    .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+
+    .layer{margin-bottom:9px;}
+    .layer-label{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;padding-left:1px;}
+    .node-row{display:flex;gap:7px;flex-wrap:wrap;}
+
+    .node{flex:1;min-width:115px;border:.5px solid var(--border);border-radius:var(--r-md);padding:10px 11px;cursor:pointer;text-align:left;background:var(--bg2);transition:transform .13s,border-color .13s,background .13s;}
+    .node:hover{transform:translateY(-2px);}
+    .node .n-icon{font-size:17px;margin-bottom:4px;}
+    .node .n-title{font-size:11.5px;font-weight:600;line-height:1.3;}
+    .node .n-sub{font-size:10.5px;color:var(--text2);margin-top:2px;line-height:1.35;}
+    .node.has-dive::after{content:"deep dive \2197";display:block;margin-top:6px;font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--green);opacity:.7;}
+    .node.has-dive:hover::after{opacity:1;}
+
+    .l-agent .node-single{border:1.5px solid var(--green);border-radius:var(--r-lg);background:var(--green-bg);padding:15px 20px;cursor:pointer;text-align:left;width:100%;transition:background .14s,transform .13s;}
+    .l-agent .node-single:hover{background:#c5edd9;transform:translateY(-2px);}
+    .l-agent .node-single .n-title{font-size:14px;font-weight:600;color:var(--green-dk);}
+    .l-agent .node-single .n-sub{font-size:12.5px;color:#0F6E56;margin-top:4px;line-height:1.5;}
+    .l-agent .node-single .n-icon{font-size:22px;color:var(--green);margin-bottom:6px;}
+    .agent-badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--green);color:#fff;margin-top:7px;letter-spacing:.05em;}
+    .l-agent .node-single .deep-hint{display:block;margin-top:8px;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--green);opacity:.8;}
+    @media(prefers-color-scheme:dark){.l-agent .node-single{background:#04342C;}.l-agent .node-single:hover{background:#085041;}.l-agent .node-single .n-title{color:#9FE1CB;}.l-agent .node-single .n-sub{color:#5DCAA5;}.l-agent .node-single .n-icon{color:#5DCAA5;}}
+
+    .l-consumer .node{border-color:#B5D4F4;background:#E6F1FB;}.l-consumer .node:hover{background:#d5e9f7;}
+    .l-consumer .node .n-title{color:#0C447C;}.l-consumer .node .n-sub{color:#185FA5;}.l-consumer .node .n-icon{color:#185FA5;}
+    .l-core .node{border-color:#CECBF6;background:#EEEDFE;}.l-core .node:hover{background:#dcdafc;}
+    .l-core .node .n-title{color:#3C3489;}.l-core .node .n-sub{color:#534AB7;}.l-core .node .n-icon{color:#534AB7;}
+    .l-connector .node{border-color:#FAC775;background:#FAEEDA;}.l-connector .node:hover{background:#f5e2bd;}
+    .l-connector .node .n-title{color:#633806;}.l-connector .node .n-sub{color:#854F0B;}.l-connector .node .n-icon{color:#BA7517;}
+    .l-source .node{border-color:#F5C4B3;background:#FAECE7;}.l-source .node:hover{background:#f5d9cc;}
+    .l-source .node .n-title{color:#4A1B0C;}.l-source .node .n-sub{color:#993C1D;}.l-source .node .n-icon{color:#D85A30;}
+    .l-store .node{border-color:#D3D1C7;background:#F1EFE8;}.l-store .node:hover{background:#e5e3d9;}
+    .l-store .node .n-title{color:#2C2C2A;}.l-store .node .n-sub{color:#5F5E5A;}.l-store .node .n-icon{color:#888780;}
+    @media(prefers-color-scheme:dark){
+      .l-consumer .node{border-color:#0C447C;background:#042C53;}.l-consumer .node:hover{background:#083d72;}
+      .l-consumer .node .n-title{color:#B5D4F4;}.l-consumer .node .n-sub{color:#85B7EB;}.l-consumer .node .n-icon{color:#85B7EB;}
+      .l-core .node{border-color:#3C3489;background:#26215C;}.l-core .node:hover{background:#342d72;}
+      .l-core .node .n-title{color:#CECBF6;}.l-core .node .n-sub{color:#AFA9EC;}.l-core .node .n-icon{color:#AFA9EC;}
+      .l-connector .node{border-color:#854F0B;background:#412402;}.l-connector .node:hover{background:#5a3408;}
+      .l-connector .node .n-title{color:#FAC775;}.l-connector .node .n-sub{color:#EF9F27;}.l-connector .node .n-icon{color:#EF9F27;}
+      .l-source .node{border-color:#993C1D;background:#4A1B0C;}.l-source .node:hover{background:#622511;}
+      .l-source .node .n-title{color:#F5C4B3;}.l-source .node .n-sub{color:#F0997B;}.l-source .node .n-icon{color:#F0997B;}
+      .l-store .node{border-color:#444441;background:#2C2C2A;}.l-store .node:hover{background:#3a3a37;}
+      .l-store .node .n-title{color:#D3D1C7;}.l-store .node .n-sub{color:#B4B2A9;}.l-store .node .n-icon{color:#888780;}
+    }
+
+    .layer-arrow{display:flex;align-items:center;justify-content:center;gap:7px;margin:2px 0;color:var(--text3);font-size:11px;}
+    .layer-arrow i{font-size:14px;}
+
+    #detail-panel{margin-top:14px;border:.5px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;background:var(--bg3);font-size:13px;color:var(--text);line-height:1.65;display:none;position:relative;}
+    #detail-panel.visible{display:block;}
+    #detail-panel .dp-close{position:absolute;top:9px;right:11px;cursor:pointer;color:var(--text3);font-size:17px;background:none;border:none;padding:4px;border-radius:4px;}
+    .dp-title{font-weight:600;font-size:14px;margin-bottom:5px;}
+    .dp-body{color:var(--text2);}
+
+    /* MODAL - clean architecture, no inline onclick on overlay */
+    .modal-overlay{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal-box{background:var(--bg2);border-radius:var(--r-xl);border:.5px solid var(--border2);width:100%;max-width:720px;max-height:90vh;overflow-y:auto;transform:translateY(18px) scale(.97);transition:transform .22s,opacity .22s;opacity:0;pointer-events:none;box-shadow:0 24px 60px rgba(0,0,0,.25);}
+    .modal-overlay.open .modal-box{transform:none;opacity:1;pointer-events:all;}
+    .modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 22px 0;}
+    .modal-header h2{font-size:18px;font-weight:600;line-height:1.2;}
+    .modal-header p{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.55;}
+    .modal-close{flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--text3);font-size:20px;padding:6px;border-radius:6px;transition:background .12s,color .12s;line-height:1;}
+    .modal-close:hover{background:var(--bg3);color:var(--text);}
+    .modal-body{padding:16px 22px 22px;}
+
+    .tab-bar{display:flex;gap:4px;margin-bottom:16px;border-bottom:.5px solid var(--border);}
+    .tab-btn{font-family:var(--font);font-size:12px;font-weight:500;padding:7px 14px;cursor:pointer;border:none;background:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;border-radius:4px 4px 0 0;transition:color .12s;}
+    .tab-btn.active{color:var(--text);border-bottom-color:var(--green);}
+    .tab-btn:hover:not(.active){color:var(--text2);background:var(--bg3);}
+    .tab-pane{display:none;}.tab-pane.active{display:block;}
+
+    .decisions-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+    .decisions-list li{display:flex;gap:10px;align-items:flex-start;background:var(--bg3);border-radius:var(--r-md);padding:10px 13px;font-size:13px;line-height:1.55;}
+    .d-num{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+    .d-text{color:var(--text2);}
+    .d-text strong{color:var(--text);font-weight:600;}
+
+    /* AGENT ANIM */
+    .anim-agent{background:#0A0E1A;border-radius:var(--r-lg);padding:18px;min-height:240px;font-family:var(--mono);}
+    .chat-window{display:flex;flex-direction:column;gap:10px;}
+    .chat-bubble{max-width:85%;padding:9px 13px;border-radius:10px;font-size:12px;line-height:1.55;opacity:0;animation:bubbleIn .4s forwards;}
+    .chat-bubble.user{background:#1C3557;color:#A8C8F0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .chat-bubble.agent{background:#0D2E22;color:#6FCFAA;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .chat-bubble.typing{background:#0D2E22;color:#3A7A5A;font-style:italic;}
+    @keyframes bubbleIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .flow-trace{margin-top:14px;display:flex;flex-direction:column;gap:4px;}
+    .trace-step{display:flex;align-items:center;gap:8px;font-size:10.5px;color:#4A8A6A;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;}
+    .trace-step.show{opacity:1;transform:none;}
+    .trace-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75;flex-shrink:0;box-shadow:0 0 6px #1D9E75;}
+    .trace-step.done .trace-dot{background:#6FCFAA;box-shadow:none;}
+    .trace-label{color:#6FCFAA;}
+    .trace-src{color:#3A6A54;font-size:10px;margin-left:2px;}
+
+    /* RAG ANIM */
+    .anim-rag{background:#0D0A1E;border-radius:var(--r-lg);padding:18px;min-height:280px;font-family:var(--mono);}
+    .rag-stage{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr;align-items:start;}
+    .rag-col{display:flex;flex-direction:column;gap:5px;}
+    .rag-col-title{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#534AB7;margin-bottom:6px;}
+    .rag-arrow-col{display:flex;align-items:center;justify-content:center;padding-top:28px;color:#3A3060;font-size:18px;}
+    .rag-arrow-col.lit{color:#7F77DD;}
+    .chunk{background:#1A1535;border:.5px solid #2E2858;border-radius:5px;padding:6px 8px;font-size:10px;color:#7A70C0;line-height:1.45;opacity:0;transform:scale(.94);transition:opacity .3s,transform .3s,border-color .3s,background .3s;}
+    .chunk.show{opacity:1;transform:none;}
+    .chunk.selected{border-color:#7F77DD;background:#221E40;color:#CECBF6;}
+    .chunk-score{font-size:9px;color:#534AB7;margin-top:3px;}
+    .chunk.selected .chunk-score{color:#7F77DD;}
+    .rag-query-box{background:#1C3557;border-radius:var(--r-md);padding:9px 12px;font-size:11px;color:#A8C8F0;margin-bottom:14px;}
+    .rag-query-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#378ADD;margin-bottom:3px;}
+    .synth-box{background:#0D2010;border:.5px solid #1D5030;border-radius:var(--r-md);padding:10px 12px;font-size:11px;line-height:1.55;min-height:60px;margin-top:12px;opacity:0;transition:opacity .4s;}
+    .synth-box.show{opacity:1;}
+    .synth-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1D9E75;margin-bottom:5px;}
+    .synth-text{color:#6FCFAA;}
+    .synth-cite{color:#3A6A54;font-size:10px;margin-top:4px;}
+
+    .replay-btn{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:11px;font-weight:500;padding:6px 14px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text2);cursor:pointer;font-family:var(--font);transition:background .13s;}
+    .replay-btn:hover{background:var(--bg3);}
+
+
+    /* API CALL ANIMATION (connectors) */
+    .anim-api{background:#0A1020;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .api-row{display:flex;align-items:stretch;gap:10px;margin-bottom:10px;}
+    .api-box{flex:1;border-radius:6px;padding:10px 12px;font-size:10.5px;line-height:1.5;}
+    .api-box.req{background:#0D2035;border:.5px solid #1D4070;color:#A8C8F0;}
+    .api-box.res{background:#0D2520;border:.5px solid #1D5040;color:#6FCFAA;opacity:0;transition:opacity .4s;}
+    .api-box.res.show{opacity:1;}
+    .api-box-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;}
+    .api-box.req .api-box-label{color:#378ADD;}
+    .api-box.res .api-box-label{color:#1D9E75;}
+    .api-arrow{display:flex;align-items:center;color:#2A4060;font-size:20px;transition:color .3s;}
+    .api-arrow.lit{color:#378ADD;}
+    .api-field{display:flex;justify-content:space-between;gap:8px;padding:2px 0;border-bottom:.5px solid rgba(255,255,255,0.05);}
+    .api-field:last-child{border:none;}
+    .api-field .fk{color:#6A9AC0;font-size:10px;}
+    .api-field .fv{color:#A8C8F0;font-size:10px;font-weight:500;opacity:0;transition:opacity .3s;}
+    .api-field .fv.show{opacity:1;}
+    .api-field.res-field .fk{color:#5A9A7A;}
+    .api-field.res-field .fv{color:#6FCFAA;}
+    .api-status{font-size:10px;padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:6px;opacity:0;transition:opacity .3s;}
+    .api-status.show{opacity:1;}
+    .api-status.ok{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .api-status.pending{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    /* INGESTION PIPELINE ANIMATION (teams) */
+    .anim-ingest{background:#0A0E1A;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .ingest-step{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;margin-bottom:6px;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s;}
+    .ingest-step.show{opacity:1;transform:none;}
+    .ingest-icon{font-size:16px;width:28px;text-align:center;flex-shrink:0;}
+    .ingest-label{font-size:11px;color:#A8C8F0;flex:1;}
+    .ingest-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;white-space:nowrap;}
+    .tag-done{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .tag-proc{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    .tag-idx{background:#1A2A10;color:#639922;border:.5px solid #3B6D11;}
+    /* DATA MODEL TABLE (source systems) */
+    .data-model{width:100%;border-collapse:collapse;font-size:12px;font-family:var(--mono);}
+    .data-model th{text-align:left;padding:6px 10px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:.5px solid var(--border);}
+    .data-model td{padding:6px 10px;border-bottom:.5px solid var(--border);color:var(--text2);vertical-align:top;}
+    .data-model tr:last-child td{border:none;}
+    .data-model .field-name{color:var(--text);font-weight:500;}
+    .data-model .field-type{color:#7F77DD;font-size:10px;}
+    .data-model .field-note{font-size:11px;font-style:italic;}
+    .data-model tr:hover td{background:var(--bg3);}
+
+
+    /* VECTOR SEARCH ANIMATION */
+    .anim-vector{background:#08060F;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:220px;position:relative;overflow:hidden;}
+    .vec-query{background:#1C1535;border:.5px solid #3A2A70;border-radius:6px;padding:8px 12px;font-size:11px;color:#AFA9EC;margin-bottom:12px;}
+    .vec-query-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#534AB7;margin-bottom:3px;}
+    .vec-grid{display:flex;flex-direction:column;gap:5px;}
+    .vec-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:5px;background:#100D20;border:.5px solid #1E1840;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s,border-color .3s,background .3s;}
+    .vec-item.show{opacity:1;transform:none;}
+    .vec-item.match{border-color:#7F77DD;background:#1A1535;}
+    .vec-item.top{border-color:#1D9E75;background:#0A2018;}
+    .vec-score{font-size:10px;font-weight:600;min-width:36px;text-align:right;color:#3A3060;}
+    .vec-item.match .vec-score{color:#7F77DD;}
+    .vec-item.top .vec-score{color:#1D9E75;}
+    .vec-label{font-size:10px;color:#5A5080;flex:1;}
+    .vec-item.match .vec-label{color:#AFA9EC;}
+    .vec-item.top .vec-label{color:#6FCFAA;}
+    .vec-tag{font-size:9px;padding:2px 6px;border-radius:4px;white-space:nowrap;}
+    .vec-item.top .vec-tag{background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;}
+    .vec-item.match .vec-tag{background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;}
+    .vec-item:not(.match):not(.top) .vec-tag{background:#100D20;color:#3A3060;border:.5px solid #1E1840;}
+    .vec-result-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1D9E75;margin:10px 0 5px;opacity:0;transition:opacity .3s;}
+    .vec-result-label.show{opacity:1;}
+    /* INDEX PIPELINE ANIMATION */
+    .anim-pipeline{background:#080C10;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .pipe-row{display:flex;align-items:center;gap:0;margin-bottom:8px;}
+    .pipe-source{border-radius:6px;padding:7px 10px;font-size:10px;font-weight:500;min-width:80px;text-align:center;opacity:0;transition:opacity .35s,transform .35s;transform:scale(.9);}
+    .pipe-source.show{opacity:1;transform:none;}
+    .pipe-arrow{color:#2A3A4A;font-size:16px;margin:0 4px;opacity:0;transition:opacity .3s;}
+    .pipe-arrow.show{opacity:1;color:#378ADD;}
+    .pipe-step{flex:1;border-radius:5px;padding:6px 8px;font-size:10px;line-height:1.4;opacity:0;transition:opacity .35s,transform .35s;transform:translateY(4px);}
+    .pipe-step.show{opacity:1;transform:none;}
+    .pipe-badge{font-size:9px;font-weight:600;padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle;}
+    /* ACCESS CONTROL ANIMATION */
+    .anim-access{background:#080810;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:200px;}
+    .access-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;margin-bottom:6px;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s;}
+    .access-row.show{opacity:1;transform:none;}
+    .access-role{font-size:10px;font-weight:600;min-width:130px;padding:4px 8px;border-radius:4px;text-align:center;}
+    .access-arrow{color:#2A3A4A;font-size:14px;flex-shrink:0;}
+    .access-row.show .access-arrow{color:#378ADD;}
+    .access-scope{font-size:10px;color:#6A8A9A;flex:1;}
+    .access-badge{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+
+
+    /* CONSUMER CHAT SIMULATION */
+    .anim-chat{background:#0A0E1A;border-radius:var(--r-lg);padding:16px;font-family:var(--mono);min-height:220px;}
+    .chat-exchange{display:flex;flex-direction:column;gap:8px;}
+    .cx-bubble{max-width:88%;padding:9px 13px;border-radius:10px;font-size:11.5px;line-height:1.6;opacity:0;transition:opacity .35s,transform .35s;transform:translateY(6px);}
+    .cx-bubble.show{opacity:1;transform:none;}
+    .cx-bubble.q{background:#1C3557;color:#A8C8F0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .cx-bubble.a{background:#0D2E22;color:#6FCFAA;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .cx-bubble.q2{background:#1C2A50;color:#9AB8E0;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+    .cx-bubble.a2{background:#0A2818;color:#5DBFA0;align-self:flex-start;border-radius:10px 10px 10px 2px;}
+    .cx-cite{font-size:9.5px;color:#3A6A54;margin-top:4px;display:block;}
+    .cx-role-label{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px;}
+    /* QUERY EXAMPLES LIST */
+    .query-list{display:flex;flex-direction:column;gap:7px;}
+    .query-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r-md);border-left:2px solid var(--green);font-size:12.5px;color:var(--text2);line-height:1.5;}
+    .query-item i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px;}
+
+    /* ROADMAP SECTION */
+    .roadmap-section{max-width:860px;margin:32px auto 0;padding:0 20px 60px;}
+    .roadmap-header{margin-bottom:22px;}
+    .roadmap-header h2{font-size:17px;font-weight:600;color:var(--text);margin-bottom:4px;}
+    .roadmap-header p{font-size:13px;color:var(--text2);line-height:1.6;}
+    .roadmap-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:640px){.roadmap-grid{grid-template-columns:1fr;}}
+    .phase-card{border-radius:var(--r-xl);border:.5px solid var(--border2);background:var(--bg2);overflow:hidden;}
+    .phase-card-header{padding:18px 20px 14px;}
+    .phase-pill-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:12px;margin-bottom:10px;}
+    .phase-card-header h3{font-size:15px;font-weight:600;line-height:1.25;margin-bottom:4px;}
+    .phase-card-header p{font-size:12.5px;color:var(--text2);line-height:1.55;}
+    .phase-timeline{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--text3);}
+    .phase-timeline i{font-size:13px;}
+    .phase-body{padding:0 20px 18px;}
+    .phase-divider{height:.5px;background:var(--border);margin:0 0 14px;}
+    .milestone-list{display:flex;flex-direction:column;gap:0;}
+    .milestone{display:flex;gap:12px;padding:9px 4px;border-bottom:.5px solid var(--border);cursor:pointer;transition:background .12s;border-radius:4px;}
+    .milestone:last-child{border-bottom:none;}
+    .milestone:hover{background:var(--bg3);}
+    .m-dot-col{display:flex;flex-direction:column;align-items:center;padding-top:3px;}
+    .m-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .m-line{width:1px;flex:1;margin-top:3px;min-height:14px;}
+    .milestone:last-child .m-line{display:none;}
+    .m-content{flex:1;}
+    .m-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;}
+    .m-sub{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4;}
+    .m-week{font-size:10px;font-weight:500;margin-top:3px;}
+    .dep-bar{margin-top:14px;padding:10px 13px;border-radius:var(--r-md);font-size:12px;line-height:1.6;}
+    .dep-bar strong{display:block;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;}
+    .phase-connector{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 0;font-size:11px;color:var(--text3);}
+    .phase-connector i{font-size:20px;color:var(--green);}
+    #roadmap-detail{margin-top:14px;border:.5px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;background:var(--bg3);font-size:13px;color:var(--text);line-height:1.65;display:none;position:relative;}
+    #roadmap-detail.visible{display:block;}
+    #roadmap-detail .rd-close{position:absolute;top:9px;right:11px;cursor:pointer;color:var(--text3);font-size:17px;background:none;border:none;padding:4px;border-radius:4px;}
+    .rd-title{font-weight:600;font-size:14px;margin-bottom:8px;}
+    .rd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media(max-width:500px){.rd-grid{grid-template-columns:1fr;}}
+    .rd-box{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-md);padding:10px 12px;}
+    .rd-box-label{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;}
+    .rd-box ul{list-style:disc;padding-left:14px;display:flex;flex-direction:column;gap:4px;}
+    .rd-box ul li{font-size:12px;color:var(--text2);line-height:1.45;}
+    .query-list{display:flex;flex-direction:column;gap:7px;}
+    .query-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg3);border-radius:var(--r-md);border-left:2px solid var(--green);font-size:12.5px;color:var(--text2);line-height:1.5;}
+    .query-item i{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px;}
+
+    .ms-week-tag{font-size:11px;color:var(--text3);margin-top:3px;}
+
+
+    /* CHECKLIST */
+    .ck-group{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;}
+    .ck-group-header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:.5px solid var(--border);background:var(--bg3);}
+    .ck-group-icon{width:34px;height:34px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+    .ck-group-title{font-size:13px;font-weight:600;color:var(--text);}
+    .ck-group-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+    .ck-group-badge{margin-left:auto;font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px;background:var(--bg);color:var(--text3);border:.5px solid var(--border);white-space:nowrap;flex-shrink:0;}
+    .ck-group-badge.done{background:#E0F5EE;color:#085041;border-color:#9FE1CB;}
+    .ck-items{display:flex;flex-direction:column;}
+    .ck-item{display:flex;align-items:flex-start;gap:12px;padding:11px 18px;border-bottom:.5px solid var(--border);transition:background .12s;}
+    .ck-item:last-child{border-bottom:none;}
+    .ck-item:hover{background:var(--bg3);}
+    .ck-item.resolved{opacity:.45;}
+    .ck-item.resolved .ck-item-q{text-decoration:line-through;color:var(--text3);}
+    .ck-check{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px;transition:all .15s;margin-top:1px;padding:0;}
+    .ck-check:hover{border-color:var(--green);color:var(--green);}
+    .ck-item.resolved .ck-check{background:var(--green);border-color:var(--green);color:#fff;}
+    .ck-item-body{flex:1;}
+    .ck-item-q{font-size:12.5px;color:var(--text);line-height:1.5;}
+    .ck-item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap;}
+    .ck-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;}
+    .tag-it{background:#E6F1FB;color:#185FA5;}
+    .tag-dm{background:#E0F5EE;color:#085041;}
+    .tag-exec{background:#EEEDFE;color:#3C3489;}
+    .tag-legal{background:#FAECE7;color:#993C1D;}
+    .tag-vendor{background:#F1EFE8;color:#5F5E5A;}
+    .ck-source{font-size:10px;color:var(--text3);font-style:italic;}
+    .ck-priority{flex-shrink:0;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;align-self:flex-start;margin-top:1px;}
+    .p-critical{background:#FCEBEB;color:#A32D2D;border:.5px solid #F09595;}
+    .p-high{background:#FAEEDA;color:#633806;border:.5px solid #FAC775;}
+    .p-medium{background:#EEEDFE;color:#3C3489;border:.5px solid #CECBF6;}
+    .p-low{background:#F1EFE8;color:#5F5E5A;border:.5px solid #D3D1C7;}
+    @media(prefers-color-scheme:dark){
+      .tag-it{background:#042C53;color:#85B7EB;}
+      .tag-dm{background:#04342C;color:#9FE1CB;}
+      .tag-exec{background:#26215C;color:#CECBF6;}
+      .tag-legal{background:#4A1B0C;color:#F0997B;}
+      .tag-vendor{background:#2C2C2A;color:#B4B2A9;}
+      .p-critical{background:#501313;color:#F09595;border-color:#A32D2D;}
+      .p-high{background:#412402;color:#FAC775;border-color:#854F0B;}
+      .p-medium{background:#26215C;color:#CECBF6;border-color:#3C3489;}
+      .p-low{background:#2C2C2A;color:#B4B2A9;border-color:#444441;}
+      .ck-group-badge.done{background:#04342C;color:#9FE1CB;border-color:#1D9E75;}
+    }
+
+    footer{text-align:center;padding:20px 40px;font-size:11px;color:var(--text3);border-top:.5px solid var(--border);background:var(--bg2);}
+    footer strong{color:var(--text2);}
+
+    /* ===== v1.2 — recommended design section ===== */
+    .v12-section{max-width:860px;margin:0 auto;padding:28px 20px 8px;}
+    .v12-eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+    .v12-section h2{font-size:19px;font-weight:600;line-height:1.3;margin-bottom:6px;}
+    .v12-lead{font-size:13px;color:var(--text2);line-height:1.65;max-width:700px;margin-bottom:16px;}
+    .v12-callout{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;background:var(--bg2);border:.5px solid var(--border);border-left:3px solid var(--green);border-radius:var(--r-md);font-size:12.5px;line-height:1.6;color:var(--text2);margin-bottom:18px;}
+    .v12-callout strong{color:var(--text);}
+    .v12-diagram{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);padding:14px;margin-bottom:6px;overflow-x:auto;}
+    .v12-diagram svg{width:100%;min-width:620px;height:auto;display:block;}
+    .v12-svg .tx{fill:var(--text);}
+    .v12-svg .tq{fill:var(--text2);}
+    .v12-svg .bx{fill:none;stroke:var(--border2);stroke-width:1.25;}
+    .v12-svg .bx-main{fill:var(--green-bg);stroke:var(--green);stroke-width:2;}
+    .v12-svg .cn{fill:none;stroke:var(--text3);stroke-width:1.25;}
+    .v12-svg .mk{fill:var(--text3);}
+    .v12-svg .dot{fill:#EF9F27;}
+    .v12-caption{font-size:11.5px;color:var(--text3);line-height:1.5;margin-bottom:22px;}
+    .v12-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;}
+    @media(max-width:700px){.v12-grid{grid-template-columns:1fr;}}
+    .v12-card{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);padding:16px 18px;}
+    .v12-card h3{font-size:13.5px;font-weight:600;margin-bottom:6px;}
+    .v12-card p{font-size:12.5px;color:var(--text2);line-height:1.6;margin-top:6px;}
+    .v12-card p:first-of-type{margin-top:0;}
+    .v12-card ul,.v12-card ol{margin:8px 0 0 18px;font-size:12.5px;color:var(--text2);line-height:1.6;}
+    .v12-card li{margin-bottom:3px;}
+    .v12-h3{font-size:14px;font-weight:600;margin:6px 0 4px;}
+    .v12-sub{font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
+    .v12-table-wrap{overflow-x:auto;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r-xl);margin-bottom:22px;}
+    .v12-table{width:100%;border-collapse:collapse;font-size:12px;min-width:680px;}
+    .v12-table th{text-align:left;padding:9px 12px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:.5px solid var(--border);}
+    .v12-table td{padding:9px 12px;border-bottom:.5px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5;}
+    .v12-table tr:last-child td{border-bottom:none;}
+    .v12-table td.t{color:var(--text);font-weight:500;}
+    .v12-pill{display:inline-block;font-size:10px;font-weight:600;padding:3px 9px;border-radius:12px;white-space:nowrap;}
+    .v12-p-verify{background:#FAEEDA;color:#633806;}
+    .v12-p-assume{background:#E6F1FB;color:#0C447C;}
+    .v12-p-ok{background:var(--green-bg);color:var(--green-dk);}
+    .v12-p-open{background:#EEEDFE;color:#3C3489;}
+    @media(prefers-color-scheme:dark){.v12-p-verify{background:#412402;color:#FAC775;}.v12-p-assume{background:#0D1F3C;color:#85B7EB;}.v12-p-open{background:#26215C;color:#AFA9EC;}}
+    .v12-alt{margin-bottom:22px;padding:14px 16px;background:var(--bg2);border:.5px dashed var(--border2);border-radius:var(--r-lg);}
+    .v12-alt strong{display:block;font-size:13px;margin-bottom:3px;}
+    .v12-alt span{font-size:12.5px;color:var(--text2);line-height:1.6;}
+  </style>
+</head>
+<body>
+
+<nav style="position:sticky;top:0;z-index:200;background:var(--bg2);border-bottom:.5px solid var(--border);padding:10px 40px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(10px);">
+  <div style="display:flex;align-items:center;gap:7px;">
+    <div style="width:7px;height:7px;border-radius:50%;background:var(--green);"></div>
+    <span style="font-size:13px;font-weight:600;color:var(--text);">Demand Intelligence</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <a href="/" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;"><i class="ti ti-arrow-left" style="font-size:12px;"></i> Architecture</a>
+    <div style="width:.5px;height:16px;background:var(--border);margin:0 2px;"></div>
+    <a href="/login" id="logout-btn" onclick="sessionStorage.removeItem('di_auth')" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;color:var(--text3);border:.5px solid var(--border);text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'"><i class="ti ti-logout" style="font-size:12px;"></i> Sign out</a>
+  </div>
+</nav>
+
+<section class="v12-section" id="recommended">
+  <div class="v12-eyebrow">Solution detail &mdash; v1.2</div>
+  <h2>Preferred build: a Copilot Studio agent</h2>
+  <p class="v12-lead">This page details the preferred way to realise the intelligence core and agent layers of the architecture. One read-only agent, built in Microsoft Copilot Studio, answers questions about demands and drafts the executive review pack. It stays inside the Microsoft perimeter and reads three sources: A-ah! data through Snowflake, an HLA outcomes record, and SharePoint and Teams content.</p>
+
+  <div class="v12-callout"><i class="ti ti-circle-check" style="font-size:16px;color:var(--green);flex-shrink:0;margin-top:1px;"></i><div><strong>Verified so far:</strong> Copilot Studio opens with the corporate account, an agent can be created, and the Snowflake connector is in the tool catalogue with three actions. <strong>Not yet verified:</strong> connection and authentication, policies, licences, the Snowflake schema and its refresh frequency.</div></div>
+
+  <div class="v12-diagram">
+    <svg class="v12-svg" viewBox="0 0 760 366" role="img" aria-label="The agent reads three sources and drafts; the demand manager decides" font-family="DM Sans, sans-serif" font-size="13">
+      <defs><marker id="v12-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="mk"/></marker></defs>
+      <text x="24" y="30" font-size="15" font-weight="600" class="tx">The agent reads three sources and drafts; the demand manager decides</text>
+      <g class="cn">
+        <path d="M156 190H216" marker-start="url(#v12-arrow)" marker-end="url(#v12-arrow)"/>
+        <path d="M470 90H448V160H426" marker-end="url(#v12-arrow)"/>
+        <path d="M470 190H426" marker-end="url(#v12-arrow)"/>
+        <path d="M470 290H448V220H426" marker-end="url(#v12-arrow)"/>
+        <path d="M321 265V285" marker-end="url(#v12-arrow)"/>
+      </g>
+      <rect class="bx" x="24" y="158" width="132" height="64" rx="8"/>
+      <text class="tx" x="36" y="184" font-weight="600">Demand manager</text>
+      <text class="tq" x="36" y="202" font-size="11.5">in Teams</text>
+
+      <rect class="bx-main" x="216" y="115" width="210" height="150" rx="8"/>
+      <text class="tx" x="228" y="139" font-weight="600">Copilot Studio agent</text>
+      <text class="tx" x="228" y="157" font-size="11.5">Instructions and guardrails</text>
+      <text class="tx" x="228" y="173" font-size="11.5">Web search off, citations on</text>
+      <text class="tx" x="228" y="189" font-size="11.5">Read-only tools, no write</text>
+      <text class="tx" x="228" y="205" font-size="11.5">Users sign in with Microsoft</text>
+      <circle class="dot" cx="234" cy="243" r="4"/>
+      <text class="tx" x="244" y="247" font-size="11.5">Attention: 5, 10, 14, 15</text>
+
+      <rect class="bx" x="470" y="48" width="266" height="84" rx="8"/>
+      <text class="tx" x="482" y="72" font-weight="600">Snowflake views (A-ah! data)</text>
+      <text class="tx" x="482" y="90" font-size="11.5">Rank, stage, status, dates, owner</text>
+      <text class="tx" x="482" y="106" font-size="11.5">Read through connector and flows</text>
+      <circle class="dot" cx="488" cy="120" r="4"/>
+      <text class="tx" x="498" y="124" font-size="11.5">Attention: 1, 2, 3, 4, 6, 7</text>
+
+      <rect class="bx" x="470" y="148" width="266" height="84" rx="8"/>
+      <text class="tx" x="482" y="172" font-weight="600">HLA outcomes record</text>
+      <text class="tx" x="482" y="190" font-size="11.5">SharePoint list, one row per demand</text>
+      <text class="tx" x="482" y="206" font-size="11.5">Seven agreed outcomes as columns</text>
+      <circle class="dot" cx="488" cy="220" r="4"/>
+      <text class="tx" x="498" y="224" font-size="11.5">Attention: 8</text>
+
+      <rect class="bx" x="470" y="248" width="266" height="84" rx="8"/>
+      <text class="tx" x="482" y="272" font-weight="600">SharePoint and Teams</text>
+      <text class="tx" x="482" y="290" font-size="11.5">BRD, HLA and HLD documents</text>
+      <text class="tx" x="482" y="306" font-size="11.5">Meeting minutes and open actions</text>
+      <circle class="dot" cx="488" cy="320" r="4"/>
+      <text class="tx" x="498" y="324" font-size="11.5">Attention: 9</text>
+
+      <rect class="bx" x="24" y="285" width="402" height="56" rx="8"/>
+      <text class="tx" x="36" y="309" font-weight="600">Cited answers and Executive Pack drafts</text>
+      <circle class="dot" cx="42" cy="323" r="4"/>
+      <text class="tx" x="52" y="327" font-size="11.5">Attention: 11, 12</text>
+    </svg>
+  </div>
+  <p class="v12-caption">Each number beside an amber dot refers to the attention points table below. The agent reaches Snowflake through the Power Platform connector and fixed flows, and writes nothing back.</p>
+
+  <div class="v12-grid">
+    <div class="v12-card">
+      <h3>Use case 1 &mdash; Q&amp;A on any demand</h3>
+      <p>Twelve questions cover the day-to-day needs of a demand manager.</p>
+      <ul>
+        <li>Status, stage and owner of a demand, and which demands I own</li>
+        <li>Which demands sit too long in a stage, and which wait for IT, Engineering or Operations</li>
+        <li>Priority, rank and target dates; counts per stage and priority</li>
+        <li>Decisions and open action items from the latest meetings</li>
+        <li>The latest BRD, HLA or HLD, and a summary of the requirements</li>
+        <li>What changed on a demand in the last 7 days</li>
+      </ul>
+      <p>Questions on change history, team assignment and requirements text depend on what Snowflake holds (attention point 1).</p>
+    </div>
+    <div class="v12-card">
+      <h3>Use case 2 &mdash; Executive Pack</h3>
+      <p>On request, every two weeks or monthly, the agent drafts one card for each of the top 3 or 4 active demands by A-ah! rank, lowest number first.</p>
+      <ol>
+        <li>The demand manager asks for the pack (on request, not scheduled)</li>
+        <li>A flow reads the active demands by rank and keeps the first 3 or 4</li>
+        <li>The agent combines status, HLA record, latest minutes and open actions</li>
+        <li>It drafts each card in English and flags missing HLA outcomes</li>
+        <li>The demand manager edits the decision text and builds the slides</li>
+      </ol>
+      <p>Each card: rank, name and stage, short status, HLA or HLD result, decision to submit. Schedule changes are decided by people (attention point 11).</p>
+    </div>
+    <div class="v12-card">
+      <h3>HLA outcomes record</h3>
+      <p>One row per demand in a SharePoint list, filled by the demand manager when an HLA arrives.</p>
+      <ul>
+        <li>Feasibility; high-level solution definition</li>
+        <li>Effort t-shirt size, per team and overall</li>
+        <li>Cost estimate; requirements coverage %</li>
+        <li>Target design and delivery timeframes</li>
+      </ul>
+      <p>An empty cell shows a missing outcome, and the agent reports it (attention point 8).</p>
+    </div>
+    <div class="v12-card">
+      <h3>Identity and guardrails</h3>
+      <p>Target: end-user credentials, so each person acts with their own permissions. Maker credentials only if IT allows them for the pilot.</p>
+      <ul>
+        <li>Web search off; ungrounded answers off</li>
+        <li>Citation in every answer, and a data-as-of line for Snowflake figures</li>
+        <li>Read-only; fixed flows on curated views, no free-form SQL</li>
+        <li>The agent stays unpublished until IT is involved</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="v12-h3">Attention points</div>
+  <p class="v12-sub">Fifteen points are tracked: two are verified, two are assumptions, and the rest need a check or a decision from IT, Snowflake or the demand manager.</p>
+  <div class="v12-table-wrap">
+    <table class="v12-table">
+      <thead><tr><th>#</th><th>Topic</th><th>Why it matters</th><th>How to resolve</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="t">Snowflake coverage</td><td>Q&amp;A and the pack need change history, team assignment, requirements text and rank</td><td>Inspect the real schema before building views</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>2</td><td class="t">Snowflake connection</td><td>OAuth with Microsoft Entra ID must be set up on the Snowflake side</td><td>Snowflake administrator, with IT</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>3</td><td class="t">Credential mode</td><td>End-user credentials keep per-person permissions; maker credentials can be blocked by an administrator</td><td>Agree the mode for the pilot with IT</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>4</td><td class="t">Policies and licences</td><td>Data policies can block the connector, and it may need a premium licence</td><td>Check with IT before the pilot</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>5</td><td class="t">Environment</td><td>The test agent sits in the Default environment shared by the tenant; IT may ask for a dedicated one</td><td>Expect a move; keep the agent unpublished</td><td><span class="v12-pill v12-p-assume">Assumption</span></td></tr>
+        <tr><td>6</td><td class="t">Data freshness</td><td>Status answers are only as fresh as the Snowflake load</td><td>Get the refresh frequency; keep the data-as-of line</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>7</td><td class="t">Rank governance</td><td>The pack depends on rank being current, unique and maintained</td><td>Confirm who sets it, how often, and how ties are handled</td><td><span class="v12-pill v12-p-assume">Assumption</span></td></tr>
+        <tr><td>8</td><td class="t">HLA record upkeep</td><td>The record depends on manual entry by one person</td><td>Fill it when an HLA arrives; the agent reports empty outcomes</td><td><span class="v12-pill v12-p-open">Open design point</span></td></tr>
+        <tr><td>9</td><td class="t">SharePoint limits</td><td>Generative mode accepts 25 SharePoint URLs, so one URL per demand does not scale</td><td>Use one common root and a folder naming convention</td><td><span class="v12-pill v12-p-ok">Verified</span></td></tr>
+        <tr><td>10</td><td class="t">Flow and tool cost</td><td>Generative answers in Teams are not charged for Microsoft 365 Copilot users; the billing page does not say the same for flows</td><td>Check consumption with IT and the usage estimator</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>11</td><td class="t">Dependencies and capacity</td><td>Schedule decisions depend on links between demands and on team capacity, which are not fields</td><td>Decide whether to record dependencies in a structured way</td><td><span class="v12-pill v12-p-open">Open design point</span></td></tr>
+        <tr><td>12</td><td class="t">Deck generation</td><td>A file of slides may not be producible in the tenant</td><td>Start with text cards; test file output later</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>13</td><td class="t">Baseline effort</td><td>The proposal needs the time spent today on one pack</td><td>Measure it on the next review</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
+        <tr><td>14</td><td class="t">Accuracy testing</td><td>Answers must be checked against known cases before people rely on them</td><td>Build a test set with the evaluation feature, whose details are still unread</td><td><span class="v12-pill v12-p-open">Open design point</span></td></tr>
+        <tr><td>15</td><td class="t">On-demand trigger</td><td>Scheduled runs fail when maker credentials are blocked, so the pack starts on request</td><td>Keep on-demand for the pilot</td><td><span class="v12-pill v12-p-ok">Verified</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="v12-h3">Pilot path</div>
+  <div class="v12-card" style="margin-bottom:22px;">
+    <ol style="margin-top:0;">
+      <li>Measure the time spent preparing the last executive pack</li>
+      <li>Rank the twelve questions by how often they are asked, and add the real ones</li>
+      <li>Prototype the Executive Pack in Copilot Studio with three fictitious demands and a fictitious HLA record in SharePoint</li>
+      <li>Prepare the questions for IT and the Snowflake owner (attention points 1 to 4 and 6)</li>
+    </ol>
+    <p>Gate: no real data is connected until IT has confirmed connection, policies and licences.</p>
+  </div>
+</section>
+<footer style="max-width:860px;margin:0 auto;padding:12px 20px 48px;font-size:11px;color:var(--text3);">Solution detail, draft v1.2. The architecture itself is on the <a href="/" style="color:var(--green-dk);">main page</a>.</footer>
+</body>
+</html>
