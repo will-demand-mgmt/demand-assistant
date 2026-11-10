@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI-Driven Demand Management Assistant — Architecture</title>
   <script>
@@ -381,9 +382,9 @@
 </nav>
 <header>
   <div>
-    <div class="h-eyebrow">Solution Architecture — Draft v1.0</div>
+    <div class="h-eyebrow">Solution Architecture — Draft v1.1</div>
     <h1>AI-Driven Demand Management Assistant</h1>
-    <p>From fragmented knowledge to real-time decision intelligence. A unified AI layer connecting A-ah!, Microsoft Teams, SharePoint, and Jira into a single conversational interface.</p>
+    <p>From fragmented knowledge to real-time decision intelligence. A unified AI layer connecting A-ah! (via Snowflake), Microsoft Teams, SharePoint, and Jira into a single conversational interface.</p>
     <span class="h-badge"><i class="ti ti-sparkles"></i> Any demand · Any time · Instant answers</span>
   </div>
   <div class="h-meta">
@@ -444,19 +445,19 @@
   <div class="layer l-connector">
     <div class="layer-label">Integration &amp; connector layer <span style="color:var(--green)">&#10022;</span></div>
     <div class="node-row">
-      <button class="node has-dive" data-modal="c-aah"><i class="ti ti-list-check n-icon"></i><div class="n-title">A-ah! connector</div><div class="n-sub">Demands, status, requirements</div></button>
+      <button class="node has-dive" data-modal="c-aah"><i class="ti ti-list-check n-icon"></i><div class="n-title">Snowflake connector</div><div class="n-sub">A-ah! demands, status, requirements</div></button>
       <button class="node has-dive" data-modal="c-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams connector</div><div class="n-sub">Meeting minutes via Copilot</div></button>
       <button class="node has-dive" data-modal="c-sp"><i class="ti ti-files n-icon"></i><div class="n-title">SharePoint connector</div><div class="n-sub">Docs, deliverables, briefs</div></button>
       <button class="node has-dive" data-modal="c-jira"><i class="ti ti-bug n-icon"></i><div class="n-title">Jira connector</div><div class="n-sub">Dev tracking, dashboards</div></button>
     </div>
   </div>
 
-  <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>API / webhook sync (scheduled + event-triggered)</span></div>
+  <div class="layer-arrow"><i class="ti ti-arrow-down"></i><span>Snowflake (A-ah! data) · Graph API · Jira API — scheduled + event-triggered sync</span></div>
 
   <div class="layer l-source">
     <div class="layer-label">Source systems — existing tools (unchanged) <span style="color:var(--green)">&#10022;</span></div>
     <div class="node-row">
-      <button class="node has-dive" data-modal="s-aah"><i class="ti ti-clipboard-list n-icon"></i><div class="n-title">A-ah!</div><div class="n-sub">Demands, statuses, requirements</div></button>
+      <button class="node has-dive" data-modal="s-aah"><i class="ti ti-clipboard-list n-icon"></i><div class="n-title">A-ah!</div><div class="n-sub">Demands, statuses, requirements (replicated in Snowflake)</div></button>
       <button class="node has-dive" data-modal="s-teams"><i class="ti ti-messages n-icon"></i><div class="n-title">Teams + Copilot</div><div class="n-sub">Meetings, minutes, comms</div></button>
       <button class="node has-dive" data-modal="s-sp"><i class="ti ti-folder-open n-icon"></i><div class="n-title">SharePoint</div><div class="n-sub">Deliverables, briefs, decks</div></button>
       <button class="node has-dive" data-modal="s-jira"><i class="ti ti-chart-bar n-icon"></i><div class="n-title">Jira</div><div class="n-sub">Dev dashboards, sprints</div></button>
@@ -502,7 +503,7 @@
         <div class="milestone-list">
           <div class="milestone" data-milestone="p1-m1">
             <div class="m-dot-col"><div class="m-dot" style="background:#378ADD;"></div><div class="m-line" style="background:#E6F1FB;"></div></div>
-            <div class="m-content"><div class="m-title">M1 &mdash; API assessment &amp; connectivity</div><div class="m-sub">Validate A-ah! REST API, Graph API permissions, Jira REST API access and service account setup</div><div class="m-week" style="color:#378ADD;">Weeks 1&ndash;3</div></div>
+            <div class="m-content"><div class="m-title">M1 &mdash; Data access &amp; connectivity assessment</div><div class="m-sub">Validate Snowflake coverage, freshness and read-only access for A-ah! data; Graph API permissions; Jira API access and service accounts</div><div class="m-week" style="color:#378ADD;">Weeks 1&ndash;3</div></div>
           </div>
           <div class="milestone" data-milestone="p1-m2">
             <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
@@ -510,7 +511,7 @@
           </div>
           <div class="milestone" data-milestone="p1-m3">
             <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
-            <div class="m-content"><div class="m-title">M3 &mdash; Connector development</div><div class="m-sub">Build and test all 4 connectors: A-ah!, Teams/Copilot, SharePoint, Jira. Implement incremental sync and event triggers</div><div class="m-week" style="color:#EF9F27;">Weeks 6&ndash;10</div></div>
+            <div class="m-content"><div class="m-title">M3 &mdash; Connector development</div><div class="m-sub">Build and test all 4 connectors: Snowflake (A-ah! data), Teams/Copilot, SharePoint, Jira. Implement incremental sync and event triggers</div><div class="m-week" style="color:#EF9F27;">Weeks 6&ndash;10</div></div>
           </div>
           <div class="milestone" data-milestone="p1-m4">
             <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
@@ -527,7 +528,7 @@
         </div>
         <div class="dep-bar" style="background:#E6F1FB;border:.5px solid #B5D4F4;">
           <strong style="color:#185FA5;">&#128204; Critical dependency</strong>
-          <span style="color:#0C447C;">A-ah! REST API availability must be confirmed in Week 1. All subsequent milestones depend on it.</span>
+          <span style="color:#0C447C;">Snowflake coverage and read-only access to A-ah! data must be confirmed in Week 1. All subsequent milestones depend on it.</span>
         </div>
       </div>
     </div>
@@ -557,7 +558,7 @@
           </div>
           <div class="milestone" data-milestone="p2-m4">
             <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
-            <div class="m-content"><div class="m-title">M10 &mdash; Write-back to A-ah!</div><div class="m-sub">With explicit manager approval, agent updates demand status in A-ah!. Full audit trail. Human-in-the-loop always required</div><div class="m-week" style="color:#EF9F27;">Month 8&ndash;9</div></div>
+            <div class="m-content"><div class="m-title">M10 &mdash; Write-back to A-ah!</div><div class="m-sub">With explicit manager approval, agent updates demand status in A-ah!. Full audit trail. Human-in-the-loop always required. Needs an A-ah! write path (Snowflake is read-only)</div><div class="m-week" style="color:#EF9F27;">Month 8&ndash;9</div></div>
           </div>
           <div class="milestone" data-milestone="p2-m5">
             <div class="m-dot-col"><div class="m-dot" style="background:#D85A30;"></div><div class="m-line" style="background:#FAECE7;"></div></div>
@@ -591,7 +592,7 @@
       <p>All unresolved decisions aggregated from every architecture layer and roadmap milestone. Bring this to your next steering meeting.</p>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 32 resolved</span>
+      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 35 resolved</span>
       <button id="ck-reset" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text3);cursor:pointer;font-family:var(--font);">Reset all</button>
       <button id="ck-export" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green);border:none;color:#fff;cursor:pointer;font-family:var(--font);">&#8681; Export open</button>
     </div>
@@ -607,7 +608,7 @@
           <div class="ck-group-title">Infrastructure &amp; Platform</div>
           <div class="ck-group-sub">Cloud environment, vector DB, LLM provider</div>
         </div>
-        <span class="ck-group-badge" id="badge-infra">0/5</span>
+        <span class="ck-group-badge" id="badge-infra">0/6</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="infra" data-id="i1">
@@ -629,7 +630,7 @@
         <div class="ck-item" data-group="infra" data-id="i3">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Which LLM provider: Azure OpenAI (GPT-4o) or Anthropic Claude API?</div>
+            <div class="ck-item-q">Which LLM platform, within the Microsoft perimeter: Azure OpenAI (GPT-4o) or a Copilot-based agent?</div>
             <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent core · M4</span></div>
           </div>
           <span class="ck-priority p-high">High</span>
@@ -637,7 +638,7 @@
         <div class="ck-item" data-group="infra" data-id="i4">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">What is the metadata cache technology: Redis, PostgreSQL, or Azure Table Storage?</div>
+            <div class="ck-item-q">What is the structured tier: a separate cache (Redis, PostgreSQL, Azure Table Storage) or Snowflake views?</div>
             <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Metadata cache</span></div>
           </div>
           <span class="ck-priority p-medium">Medium</span>
@@ -650,6 +651,14 @@
           </div>
           <span class="ck-priority p-critical">Critical</span>
         </div>
+        <div class="ck-item" data-group="infra" data-id="i6">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Is the use of Snowflake Cortex (Analyst / Search) on internal demand data approved by IT and Legal, given the Microsoft-only policy for AI tools?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Metadata cache · Vector DB</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
       </div>
     </div>
 
@@ -658,25 +667,25 @@
       <div class="ck-group-header">
         <span class="ck-group-icon" style="background:#FAEEDA;color:#854F0B;"><i class="ti ti-plug"></i></span>
         <div>
-          <div class="ck-group-title">Source System APIs</div>
-          <div class="ck-group-sub">A-ah!, Teams/Copilot, SharePoint, Jira connectivity</div>
+          <div class="ck-group-title">Source Systems &amp; APIs</div>
+          <div class="ck-group-sub">Snowflake (A-ah! data), Teams/Copilot, SharePoint, Jira connectivity</div>
         </div>
-        <span class="ck-group-badge" id="badge-api">0/7</span>
+        <span class="ck-group-badge" id="badge-api">0/9</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="api" data-id="a1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Does A-ah! expose a REST API? This is the single most critical dependency — all other milestones depend on it.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-vendor">Vendor</span><span class="ck-source">A-ah! connector · M1</span></div>
+            <div class="ck-item-q">Does Snowflake hold the A-ah! data the agent needs — demands and statuses, business requirements text, custom fields, Jira links and status-change history? This is the single most critical dependency — all other milestones depend on it.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Snowflake connector · M1</span></div>
           </div>
           <span class="ck-priority p-critical">Critical</span>
         </div>
         <div class="ck-item" data-group="api" data-id="a2">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Does A-ah! support webhooks on status change, or is polling required?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-vendor">Vendor</span><span class="ck-source">A-ah! connector · Indexing pipeline</span></div>
+            <div class="ck-item-q">What is the refresh frequency and latency between a change in A-ah! and its availability in Snowflake, and how are deleted or duplicate records handled?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Snowflake connector · Indexing pipeline</span></div>
           </div>
           <span class="ck-priority p-high">High</span>
         </div>
@@ -719,6 +728,22 @@
             <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint connector</span></div>
           </div>
           <span class="ck-priority p-medium">Medium</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a8">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Who owns the A-ah! data in Snowflake, and what is the process to obtain read-only access (dedicated role or service account, row-level restrictions by role)?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Snowflake connector · Access control · M1</span></div>
+          </div>
+          <span class="ck-priority p-critical">Critical</span>
+        </div>
+        <div class="ck-item" data-group="api" data-id="a9">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which integration paths from the Microsoft ecosystem to Snowflake are supported and approved (e.g. Power Platform / Azure connectors), and are there security constraints on exposing Snowflake to an agent?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Snowflake connector · Agent core · M1</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
         </div>
       </div>
     </div>
@@ -948,12 +973,12 @@
     <div>
       <div style="font-size:12px;font-weight:600;color:var(--text);">Alberto Pavani</div>
       <div style="font-size:10px;color:var(--text3);letter-spacing:.04em;text-transform:uppercase;margin-top:1px;">Senior Product &amp; Solution Delivery Engineer</div>
-      <a href="mailto:albpavani@gmail.com" style="font-size:10px;color:var(--green);text-decoration:none;display:inline-flex;align-items:center;gap:3px;margin-top:2px;"><i class="ti ti-mail" style="font-size:11px;"></i>albpavani@gmail.com</a>
+      
     </div>
   </div>
   <div style="font-size:11px;color:var(--text3);text-align:right;">
     <strong style="color:var(--text2);">AI-Driven Demand Management Assistant</strong>
-    <div style="margin-top:2px;">Solution Architecture &nbsp;&middot;&nbsp; Phase 1: Read-only &nbsp;&middot;&nbsp; <span style="font-size:10px;font-weight:500;color:var(--text3,#9A9A9E);letter-spacing:.04em;opacity:.7;">v1.0</span></div>
+    <div style="margin-top:2px;">Solution Architecture &nbsp;&middot;&nbsp; Phase 1: Read-only &nbsp;&middot;&nbsp; <span style="font-size:10px;font-weight:500;color:var(--text3,#9A9A9E);letter-spacing:.04em;opacity:.7;">v1.1</span></div>
   </div>
 </footer>
 
@@ -980,7 +1005,7 @@
       <div class="tab-pane" id="agent-arch">
         <ul class="decisions-list">
           <li><div class="d-num">1</div><div class="d-text"><strong>Deployment channel:</strong> Microsoft Teams bot (via Azure Bot Service) is the recommended primary channel. A web widget serves as secondary for external stakeholders.</div></li>
-          <li><div class="d-num">2</div><div class="d-text"><strong>LLM model:</strong> Azure OpenAI (GPT-4o) if on Azure, or Claude API. The system prompt is injected with demand vocabulary and status lifecycle definitions.</div></li>
+          <li><div class="d-num">2</div><div class="d-text"><strong>LLM model:</strong> Azure OpenAI (GPT-4o), kept within the Microsoft perimeter in line with company policy. The system prompt is injected with demand vocabulary and status lifecycle definitions.</div></li>
           <li><div class="d-num">3</div><div class="d-text"><strong>Identity &amp; SSO:</strong> The agent authenticates via Azure AD. Role is inferred from AD group membership — no separate user management required.</div></li>
           <li><div class="d-num">4</div><div class="d-text"><strong>Response format:</strong> Structured answers with summary, source citation, and follow-up suggestion. Teams adaptive cards for rich formatting; plain text fallback otherwise.</div></li>
         </ul>
@@ -1019,7 +1044,7 @@
               <div class="chunk" id="c1"><div>A-ah! #DM-044</div><div>Data Platform Migration</div><div class="chunk-score">score: —</div></div>
               <div class="chunk" id="c2"><div>A-ah! #DM-044</div><div>Status: Design phase</div><div class="chunk-score">score: —</div></div>
               <div class="chunk" id="c3"><div>SharePoint brief</div><div>Data Platform v2 mission</div><div class="chunk-score">score: —</div></div>
-              <div class="chunk" id="c4"><div>Teams minutes 08/05</div><div>Owner: M. Rossi</div><div class="chunk-score">score: —</div></div>
+              <div class="chunk" id="c4"><div>Teams minutes 28/10</div><div>Owner: M. Rossi</div><div class="chunk-score">score: —</div></div>
             </div>
             <div class="rag-arrow-col" id="rarrow1"><i class="ti ti-arrow-right"></i></div>
             <div class="rag-col">
@@ -1077,7 +1102,7 @@
       </div>
       <div class="tab-pane active" id="router-arch">
         <ul class="decisions-list">
-          <li><div class="d-num">1</div><div class="d-text"><strong>Status query → A-ah! connector.</strong> Keywords: demand ID (DM-###), "status", "stage", "phase", "shaping", "design", "roll-out".</div></li>
+          <li><div class="d-num">1</div><div class="d-text"><strong>Status query → Snowflake connector (A-ah! data).</strong> Keywords: demand ID (DM-###), "status", "stage", "phase", "shaping", "design", "roll-out".</div></li>
           <li><div class="d-num">2</div><div class="d-text"><strong>Document query → SharePoint connector.</strong> Keywords: "document", "brief", "deliverable", "presentation", "PDF", "latest version".</div></li>
           <li><div class="d-num">3</div><div class="d-text"><strong>Meeting query → Teams connector.</strong> Keywords: "meeting", "minutes", "decision", "discussed", "action item", date references.</div></li>
           <li><div class="d-num">4</div><div class="d-text"><strong>Dev query → Jira connector.</strong> Keywords: "ticket", "sprint", "blocker", "developer", "progress", "release".</div></li>
@@ -1099,12 +1124,12 @@
 <div class="modal-overlay" id="modal-c-aah">
   <div class="modal-box" id="modal-c-aah-box">
     <div class="modal-header">
-      <div><h2>A-ah! Connector</h2><p>Live API simulation — how the connector fetches demand data and maps it to the agent knowledge store.</p></div>
+      <div><h2>Snowflake Connector (A-ah! data)</h2><p>Read-only SQL access to the A-ah! data already replicated in Snowflake — how the connector fetches demand data and maps it to the agent knowledge store.</p></div>
       <button class="modal-close" data-close="c-aah"><i class="ti ti-x"></i></button>
     </div>
     <div class="modal-body">
       <div class="tab-bar">
-        <button class="tab-btn active" data-modal="c-aah" data-tab="flow">API call simulation</button>
+        <button class="tab-btn active" data-modal="c-aah" data-tab="flow">Query simulation</button>
         <button class="tab-btn" data-modal="c-aah" data-tab="fields">Fields read</button>
         <button class="tab-btn" data-modal="c-aah" data-tab="decisions">Open decisions</button>
       </div>
@@ -1112,14 +1137,14 @@
         <div class="anim-api" id="anim-caah">
           <div class="api-row">
             <div class="api-box req">
-              <div class="api-box-label">GET /api/demands/DM-044</div>
-              <div class="api-field"><span class="fk">Authorization</span><span class="fv show">Bearer {token}</span></div>
-              <div class="api-field"><span class="fk">fields</span><span class="fv" id="caah-f1">id,title,status,owner,stage</span></div>
-              <div class="api-field"><span class="fk">updated_since</span><span class="fv" id="caah-f2">2025-05-13</span></div>
+              <div class="api-box-label">SQL · AAH.DEMANDS · DM-044</div>
+              <div class="api-field"><span class="fk">Role</span><span class="fv show">DEMAND_AGENT_RO</span></div>
+              <div class="api-field"><span class="fk">columns</span><span class="fv" id="caah-f1">id,title,status,owner,stage</span></div>
+              <div class="api-field"><span class="fk">updated_since</span><span class="fv" id="caah-f2">2026-11-03</span></div>
             </div>
             <div class="api-arrow" id="caah-arrow"><i class="ti ti-arrow-right"></i></div>
             <div class="api-box res" id="caah-res">
-              <div class="api-status ok" id="caah-status">200 OK</div>
+              <div class="api-status ok" id="caah-status">Query OK — 1 row</div>
               <div class="api-box-label">Response</div>
               <div class="api-field res-field"><span class="fk">id</span><span class="fv" id="caah-r1">DM-044</span></div>
               <div class="api-field res-field"><span class="fk">title</span><span class="fv" id="caah-r2">Data Platform Migration</span></div>
@@ -1137,21 +1162,23 @@
           <tbody>
             <tr><td class="field-name">demand_id</td><td class="field-type">string</td><td class="field-note">Primary identifier — referenced in all agent answers</td></tr>
             <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-note">Natural language name of the demand</td></tr>
-            <tr><td class="field-name">status / stage</td><td class="field-type">enum</td><td class="field-note">Shaping, HLA, Design, Implementation, Testing, Roll-out, Closure</td></tr>
+            <tr><td class="field-name">status / stage</td><td class="field-type">enum</td><td class="field-note">Shaping, High Level Assessment, Design, Implementation &amp; Testing, Roll-out, Closure</td></tr>
             <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">Demand manager responsible — cited in responses</td></tr>
             <tr><td class="field-name">business_requirements</td><td class="field-type">text</td><td class="field-note">Full text — chunked and vectorized for semantic search</td></tr>
             <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Critical / High / Medium / Low — used for portfolio summaries</td></tr>
             <tr><td class="field-name">updated_at</td><td class="field-type">datetime</td><td class="field-note">Drives incremental sync — only changed records re-indexed</td></tr>
             <tr><td class="field-name">linked_jira</td><td class="field-type">string[]</td><td class="field-note">Jira issue keys linked to this demand</td></tr>
+            <tr><td class="field-name">last_refresh</td><td class="field-type">datetime</td><td class="field-note">Snowflake load timestamp — shown in every answer as “data as of …”</td></tr>
           </tbody>
         </table>
       </div>
       <div class="tab-pane" id="c-aah-decisions">
         <ul class="decisions-list">
-          <li><div class="d-num">?</div><div class="d-text"><strong>API availability:</strong> Does A-ah! expose a REST API with authentication tokens? This is the most critical dependency — needs validation before any build starts.</div></li>
-          <li><div class="d-num">?</div><div class="d-text"><strong>Webhook support:</strong> Does A-ah! support webhooks on status change? If yes, the indexing pipeline can react in real time. If not, polling every 15 minutes is the fallback.</div></li>
-          <li><div class="d-num">?</div><div class="d-text"><strong>Rate limits:</strong> What are the API rate limits? This affects the initial bulk indexing strategy for all historical demands.</div></li>
-          <li><div class="d-num">?</div><div class="d-text"><strong>Field mapping:</strong> Are the field names above accurate for your A-ah! instance, or do they differ? The connector mapping must match your actual schema.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Coverage:</strong> Which A-ah! objects and fields are replicated in Snowflake? In particular the full business requirements text, custom fields, Jira links and status-change history.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Freshness:</strong> What is the refresh frequency and latency? Every answer shows a “data as of” timestamp; if staleness is too high for status questions, a fallback to the A-ah! API for those fields may be needed.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Access:</strong> Who owns the data and grants read-only access — dedicated role or service account, row-level restrictions by role?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Field mapping:</strong> Are the column names above accurate for the Snowflake schema, or do they differ? The connector mapping must match the actual views.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Write-back:</strong> Snowflake is read-only. Phase 2 write-back to A-ah! (M10) still needs a supported A-ah! write path.</div></li>
         </ul>
       </div>
     </div>
@@ -1185,7 +1212,7 @@
         <table class="data-model">
           <thead><tr><th>Data extracted</th><th>Type</th><th>Used for</th></tr></thead>
           <tbody>
-            <tr><td class="field-name">Meeting title / date</td><td class="field-type">string</td><td class="field-note">Metadata for citation — "Per Teams meeting 08/05"</td></tr>
+            <tr><td class="field-name">Meeting title / date</td><td class="field-type">string</td><td class="field-note">Metadata for citation — "Per Teams meeting 28/10"</td></tr>
             <tr><td class="field-name">Participants</td><td class="field-type">string[]</td><td class="field-note">Linked to demand owners for context enrichment</td></tr>
             <tr><td class="field-name">Decisions made</td><td class="field-type">text</td><td class="field-note">Key output — vectorized for "what was decided about X?" queries</td></tr>
             <tr><td class="field-name">Action items</td><td class="field-type">text[]</td><td class="field-note">Owner + deadline — surfaced on "what are the open actions?" queries</td></tr>
@@ -1279,10 +1306,10 @@
             <div class="api-box res" id="jira-res">
               <div class="api-status ok" id="jira-status">200 OK — 3 issues</div>
               <div class="api-box-label">Issues returned</div>
-              <div class="api-field res-field"><span class="fk">DM-044-01</span><span class="fv" id="jira-r1">DB schema design — Done</span></div>
-              <div class="api-field res-field"><span class="fk">DM-044-02</span><span class="fv" id="jira-r2">API layer — In Progress</span></div>
-              <div class="api-field res-field"><span class="fk">DM-044-03</span><span class="fv" id="jira-r3">Frontend — To Do</span></div>
-              <div class="api-field res-field"><span class="fk">Sprint</span><span class="fv" id="jira-r4">Sprint 14 — ends 23 May</span></div>
+              <div class="api-field res-field"><span class="fk">DM044-01</span><span class="fv" id="jira-r1">DB schema design — Done</span></div>
+              <div class="api-field res-field"><span class="fk">DM044-02</span><span class="fv" id="jira-r2">API layer — In Progress</span></div>
+              <div class="api-field res-field"><span class="fk">DM044-03</span><span class="fv" id="jira-r3">Frontend — To Do</span></div>
+              <div class="api-field res-field"><span class="fk">Sprint</span><span class="fv" id="jira-r4">Sprint 14 — ends 13 Nov</span></div>
             </div>
           </div>
         </div>
@@ -1342,8 +1369,8 @@
         </div>
         <ul class="decisions-list">
           <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">Nothing changes in A-ah!. The connector reads data — it never writes. Your team continues using A-ah! exactly as today.</div></li>
-          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">Status transitions in A-ah! trigger re-indexing within minutes, keeping the agent always current with the system of record.</div></li>
-          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">The agent cites A-ah! in every status answer: "Per A-ah!, DM-044 moved to Design on 13 May 2025."</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">Status transitions in A-ah! reach the agent after the next Snowflake refresh; every answer shows a “data as of” timestamp so freshness is always visible.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text">The agent cites A-ah! in every status answer: "Per A-ah!, DM-044 moved to Design on 3 Nov 2026."</div></li>
         </ul>
       </div>
       <div class="tab-pane" id="s-aah-data">
@@ -1492,7 +1519,7 @@
       <div class="tab-pane active" id="ctx-how">
         <div class="anim-ingest" id="anim-ctx">
           <div class="ingest-step" id="ctx-s1"><span class="ingest-icon" style="color:#378ADD"><i class="ti ti-user"></i></span><span class="ingest-label">Caller identified via Azure AD SSO token</span><span class="ingest-tag tag-done">identity</span></div>
-          <div class="ingest-step" id="ctx-s2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-shield"></i></span><span class="ingest-label">Role resolved from AD group: Demand Manager / Executive / Developer</span><span class="ingest-tag tag-proc">role</span></div>
+          <div class="ingest-step" id="ctx-s2"><span class="ingest-icon" style="color:#7F77DD"><i class="ti ti-shield"></i></span><span class="ingest-label">Role resolved from AD group: Executive / Demand Manager / Developer-PM / Business Stakeholder</span><span class="ingest-tag tag-proc">role</span></div>
           <div class="ingest-step" id="ctx-s3"><span class="ingest-icon" style="color:#EF9F27"><i class="ti ti-list-check"></i></span><span class="ingest-label">Demand portfolio loaded: demands owned by or relevant to this user</span><span class="ingest-tag tag-proc">scope</span></div>
           <div class="ingest-step" id="ctx-s4"><span class="ingest-icon" style="color:#D85A30"><i class="ti ti-history"></i></span><span class="ingest-label">Session history appended: last 3 turns of conversation</span><span class="ingest-tag tag-proc">memory</span></div>
           <div class="ingest-step" id="ctx-s5"><span class="ingest-icon" style="color:#1D9E75"><i class="ti ti-package"></i></span><span class="ingest-label">Enriched context injected into LLM system prompt before retrieval</span><span class="ingest-tag tag-done">ready</span></div>
@@ -1514,7 +1541,7 @@
       <div class="tab-pane" id="ctx-decisions">
         <ul class="decisions-list">
           <li><div class="d-num">?</div><div class="d-text"><strong>Session statefulness:</strong> How many previous turns should the agent remember? More history = better follow-ups, but larger context window = higher cost per query.</div></li>
-          <li><div class="d-num">?</div><div class="d-text"><strong>Role granularity:</strong> Are the three roles (Executive, Demand Manager, Developer) sufficient, or do you need sub-roles (e.g. Business Analyst, Architect) with different data access?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Role granularity:</strong> Are the four roles (Executive, Demand Manager, Developer/PM, Business Stakeholder) sufficient, or do you need sub-roles (e.g. Business Analyst, Architect) with different data access?</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Anonymous queries:</strong> Should the agent work without authentication (anonymous mode, no role context)? If yes, it defaults to the most restricted access scope.</div></li>
         </ul>
       </div>
@@ -1592,7 +1619,7 @@
           <div class="vec-grid">
             <div class="vec-item" id="v1"><span class="vec-label">DM-044 &mdash; Data Platform Migration (business_requirements chunk)</span><span class="vec-score" id="v1s">0.91</span><span class="vec-tag">top match</span></div>
             <div class="vec-item" id="v2"><span class="vec-label">DM-031 &mdash; Data Quality Framework (mission brief)</span><span class="vec-score" id="v2s">0.87</span><span class="vec-tag">top match</span></div>
-            <div class="vec-item" id="v3"><span class="vec-label">Teams minutes 02/04 &mdash; governance discussion action items</span><span class="vec-score" id="v3s">0.83</span><span class="vec-tag">match</span></div>
+            <div class="vec-item" id="v3"><span class="vec-label">Teams minutes 15/09 &mdash; governance discussion action items</span><span class="vec-score" id="v3s">0.83</span><span class="vec-tag">match</span></div>
             <div class="vec-item" id="v4"><span class="vec-label">DM-019 &mdash; GDPR Compliance Demand (SharePoint brief)</span><span class="vec-score" id="v4s">0.79</span><span class="vec-tag">match</span></div>
             <div class="vec-item" id="v5"><span class="vec-label">DM-007 &mdash; Legacy System Decommission</span><span class="vec-score" id="v5s">0.44</span><span class="vec-tag">below threshold</span></div>
           </div>
@@ -1640,7 +1667,7 @@
             <tr><td class="field-name">stage</td><td class="field-type">enum</td><td class="field-note">Factual queries: &quot;is DM-044 in design?&quot; — no embedding needed</td></tr>
             <tr><td class="field-name">owner</td><td class="field-type">string</td><td class="field-note">&quot;Who owns DM-044?&quot; — answered from cache in &lt;10ms</td></tr>
             <tr><td class="field-name">priority</td><td class="field-type">enum</td><td class="field-note">Portfolio filters: &quot;show all Critical demands&quot;</td></tr>
-            <tr><td class="field-name">updated_at</td><td class="field-type">datetime</td><td class="field-note">Citation timestamp — &quot;Per A-ah! as of 14 May 2025&quot;</td></tr>
+            <tr><td class="field-name">updated_at</td><td class="field-type">datetime</td><td class="field-note">Citation timestamp — &quot;Per A-ah! as of 4 Nov 2026&quot;</td></tr>
             <tr><td class="field-name">linked_jira[]</td><td class="field-type">string[]</td><td class="field-note">Cross-system join without re-querying Jira API</td></tr>
             <tr><td class="field-name">doc_refs[]</td><td class="field-type">object[]</td><td class="field-note">SharePoint document links per demand — instant document retrieval</td></tr>
           </tbody>
@@ -1648,11 +1675,18 @@
         <div style="margin-top:12px;padding:10px 13px;background:var(--bg3);border-radius:var(--r-md);font-size:12px;color:var(--text2);line-height:1.6;">
           <strong style="color:var(--text)">Two-tier retrieval strategy:</strong> the agent always checks the metadata cache first for structured lookups (&lt;10ms). Only if the query requires semantic understanding does it hit the vector DB (~80&ndash;150ms). This keeps simple factual queries fast and cheap.
         </div>
+        <div style="margin-top:12px;padding:10px 13px;background:var(--bg3);border-radius:var(--r-md);font-size:12px;color:var(--text2);line-height:1.6;">
+          <strong style="color:var(--text)">Structured tier — open variants (v1.1):</strong><br>
+          <strong style="color:var(--text)">A. Separate cache</strong> (Redis / PostgreSQL / Azure Table Storage) fed from Snowflake: fastest (&lt;10ms), independent of Snowflake latency and credit cost, one more component to run.<br>
+          <strong style="color:var(--text)">B. Snowflake views as the structured tier:</strong> fewer components, single source and existing governance; latency and credits per query to be measured in M1.<br>
+          <strong style="color:var(--text)">C. Snowflake Cortex (optional, needs IT/Legal approval):</strong> Cortex Analyst with a semantic model for portfolio queries (stalled demands, aggregates) and Cortex Search for requirements text. Not part of the base design: AI features outside the Microsoft perimeter are subject to company policy.
+        </div>
+
       </div>
       <div class="tab-pane" id="ks-meta-decisions">
         <ul class="decisions-list">
-          <li><div class="d-num">?</div><div class="d-text"><strong>Cache technology:</strong> Redis (fastest, in-memory) for hot data, PostgreSQL for structured relational queries, or Azure Table Storage if already on Azure. Choice depends on query patterns and existing infra.</div></li>
-          <li><div class="d-num">?</div><div class="d-text"><strong>Cache TTL:</strong> How stale can the metadata be? 15-minute TTL is a safe default. If A-ah! supports webhooks, the cache updates on every status change instead of on a schedule.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Structured tier:</strong> separate cache (Redis, PostgreSQL, Azure Table Storage) or Snowflake views? Decide after M1, based on measured Snowflake latency, cost per query and the refresh frequency.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Cache TTL:</strong> How stale can the metadata be? 15-minute TTL is a safe default. If Snowflake exposes a last-refresh timestamp, the cache can be refreshed on each Snowflake load instead of on a fixed TTL.</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Portfolio queries:</strong> Should the cache support aggregate queries like &quot;how many demands are in Design phase?&quot; — or is that always delegated to the vector DB? Aggregates are faster from a structured cache.</div></li>
         </ul>
       </div>
@@ -1676,9 +1710,9 @@
       <div class="tab-pane active" id="ks-index-flow">
         <div class="anim-pipeline" id="anim-pipe">
           <div class="pipe-row" id="pipe-r1">
-            <div class="pipe-source" id="pipe-src1" style="background:#042C53;color:#B5D4F4;border:.5px solid #0C447C;">A-ah! webhook</div>
+            <div class="pipe-source" id="pipe-src1" style="background:#042C53;color:#B5D4F4;border:.5px solid #0C447C;">Snowflake (A-ah!)</div>
             <div class="pipe-arrow" id="pipe-a1"><i class="ti ti-arrow-right"></i></div>
-            <div class="pipe-step" id="pipe-p1" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Status change detected &rarr; fetch updated demand fields <span class="pipe-badge" style="background:#0D3020;color:#1D9E75;border:.5px solid #1D9E75;">event</span></div>
+            <div class="pipe-step" id="pipe-p1" style="background:#0A1020;border:.5px solid #1D4070;color:#A8C8F0;">Changed rows detected (updated_at) &rarr; fetch demand fields <span class="pipe-badge" style="background:#1A1535;color:#7F77DD;border:.5px solid #534AB7;">scheduled</span></div>
           </div>
           <div class="pipe-row" id="pipe-r2">
             <div class="pipe-source" id="pipe-src2" style="background:#04342C;color:#9FE1CB;border:.5px solid #1D9E75;">Teams Copilot</div>
@@ -1707,7 +1741,7 @@
         <table class="data-model">
           <thead><tr><th>Source</th><th>Trigger type</th><th>Latency</th><th>Fallback</th></tr></thead>
           <tbody>
-            <tr><td class="field-name">A-ah!</td><td class="field-type">Webhook (on status change)</td><td class="field-note">&lt;2 min</td><td class="field-note">15-min polling if no webhook</td></tr>
+            <tr><td class="field-name">Snowflake (A-ah!)</td><td class="field-type">Scheduled (incremental on updated_at)</td><td class="field-note">Per Snowflake refresh (TBC)</td><td class="field-note">“Data as of” timestamp shown in answers</td></tr>
             <tr><td class="field-name">Teams Copilot</td><td class="field-type">Event (meeting end)</td><td class="field-note">&lt;5 min after meeting</td><td class="field-note">Hourly Graph API poll</td></tr>
             <tr><td class="field-name">SharePoint</td><td class="field-type">Scheduled (every 30 min)</td><td class="field-note">&lt;30 min</td><td class="field-note">Nightly full re-index</td></tr>
             <tr><td class="field-name">Jira</td><td class="field-type">Scheduled (every 15 min)</td><td class="field-note">&lt;15 min</td><td class="field-note">Daily full sync</td></tr>
@@ -1809,7 +1843,7 @@
             <div class="cx-bubble q" id="ex-q1">How many demands are currently in the Design phase, and which ones are high priority?</div>
             <div class="cx-bubble a" id="ex-a1">There are <strong>4 demands</strong> currently in Design phase. Of these, <strong>2 are high priority</strong>: DM-044 (Data Platform Migration) and DM-038 (Customer Portal Redesign). The remaining two are medium priority.<span class="cx-cite">Source: A-ah! &middot; updated today</span></div>
             <div class="cx-bubble q2" id="ex-q2">What is blocking DM-044?</div>
-            <div class="cx-bubble a2" id="ex-a2">DM-044 has <strong>1 open blocker</strong> in Jira (DM044-02 &mdash; API layer, assigned to L. Bianchi). The design review was completed on 10 May per the Teams meeting minutes. No decision is pending from your side.<span class="cx-cite">Source: Jira &middot; Teams minutes 10 May</span></div>
+            <div class="cx-bubble a2" id="ex-a2">DM-044 has <strong>1 open blocker</strong> in Jira (DM044-02 &mdash; API layer, assigned to L. Bianchi). The design review was completed on 28 Oct per the Teams meeting minutes. No decision is pending from your side.<span class="cx-cite">Source: Jira &middot; Teams minutes 28 Oct</span></div>
           </div>
         </div>
         <button class="replay-btn" id="replay-exec"><i class="ti ti-refresh"></i> Replay</button>
@@ -1853,9 +1887,9 @@
           <div class="cx-role-label" style="color:#1D9E75">&#128101; Demand Manager &mdash; querying the agent</div>
           <div class="chat-exchange">
             <div class="cx-bubble q" id="dm-q1">What action items from last week&rsquo;s DM-044 meeting are still open?</div>
-            <div class="cx-bubble a" id="dm-a1">From the Teams meeting on <strong>10 May</strong>, 2 action items remain open: (1) L. Bianchi to complete API layer design by 17 May &mdash; <em>in progress</em>; (2) M. Rossi to share updated mission brief with sponsor &mdash; <em>not started</em>.<span class="cx-cite">Source: Teams Copilot minutes &middot; 10 May</span></div>
+            <div class="cx-bubble a" id="dm-a1">From the Teams meeting on <strong>28 Oct</strong>, 2 action items remain open: (1) L. Bianchi to complete API layer design by 6 Nov &mdash; <em>in progress</em>; (2) M. Rossi to share updated mission brief with sponsor &mdash; <em>not started</em>.<span class="cx-cite">Source: Teams Copilot minutes &middot; 28 Oct</span></div>
             <div class="cx-bubble q2" id="dm-q2">Show me the latest mission brief for DM-044.</div>
-            <div class="cx-bubble a2" id="dm-a2">The latest approved document is <strong>DM-044 Mission Brief v2.1</strong>, uploaded to SharePoint on 8 May 2025. <u>Open document &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-044/</span></div>
+            <div class="cx-bubble a2" id="dm-a2">The latest approved document is <strong>DM-044 Mission Brief v2.1</strong>, uploaded to SharePoint on 29 Oct 2026. <u>Open document &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-044/</span></div>
           </div>
         </div>
         <button class="replay-btn" id="replay-dm"><i class="ti ti-refresh"></i> Replay</button>
@@ -1901,7 +1935,7 @@
             <div class="cx-bubble q" id="dev-q1">What are the business requirements for DM-044 that I need to implement in the API layer?</div>
             <div class="cx-bubble a" id="dev-a1">DM-044 requires the API to expose <strong>3 core endpoints</strong>: demand status retrieval, owner lookup, and requirements export. Full spec is in the mission brief v2.1 (SharePoint). The key constraint is read-only access &mdash; no write operations in Phase 1.<span class="cx-cite">Source: A-ah! requirements &middot; SharePoint DM-044/</span></div>
             <div class="cx-bubble q2" id="dev-q2">Which of my Jira tickets for DM-044 are still open in this sprint?</div>
-            <div class="cx-bubble a2" id="dev-a2">Sprint 14 has <strong>2 open tickets</strong> assigned to you for DM-044: DM044-02 (API layer &mdash; In Progress) and DM044-05 (Unit tests &mdash; To Do). Sprint ends <strong>23 May</strong>.<span class="cx-cite">Source: Jira &middot; Sprint 14</span></div>
+            <div class="cx-bubble a2" id="dev-a2">Sprint 14 has <strong>2 open tickets</strong> assigned to you for DM-044: DM044-02 (API layer &mdash; In Progress) and DM044-05 (Unit tests &mdash; To Do). Sprint ends <strong>13 Nov</strong>.<span class="cx-cite">Source: Jira &middot; Sprint 14</span></div>
           </div>
         </div>
         <button class="replay-btn" id="replay-dev"><i class="ti ti-refresh"></i> Replay</button>
@@ -1945,9 +1979,9 @@
           <div class="cx-role-label" style="color:#D85A30">&#127970; Business Stakeholder &mdash; querying the agent</div>
           <div class="chat-exchange">
             <div class="cx-bubble q" id="biz-q1">What is the current status of my demand for the Customer Portal redesign?</div>
-            <div class="cx-bubble a" id="biz-a1">Your demand <strong>DM-038</strong> (Customer Portal Redesign) is currently in the <strong>Design phase</strong>. The demand manager is F. Marino. Expected roll-out: Q3 2025. No decisions are pending from your side at this stage.<span class="cx-cite">Source: A-ah! &middot; updated 13 May 2025</span></div>
+            <div class="cx-bubble a" id="biz-a1">Your demand <strong>DM-038</strong> (Customer Portal Redesign) is currently in the <strong>Design phase</strong>. The demand manager is F. Marino. Expected roll-out: Q1 2027. No decisions are pending from your side at this stage.<span class="cx-cite">Source: A-ah! &middot; updated 3 Nov 2026</span></div>
             <div class="cx-bubble q2" id="biz-q2">Is there a presentation I can share with my team about DM-038?</div>
-            <div class="cx-bubble a2" id="biz-a2">Yes &mdash; the <strong>DM-038 Mission Brief v1.3</strong> (PPTX) was last updated on 2 May 2025 and is available in SharePoint. <u>Open file &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-038/</span></div>
+            <div class="cx-bubble a2" id="biz-a2">Yes &mdash; the <strong>DM-038 Mission Brief v1.3</strong> (PPTX) was last updated on 21 Oct 2026 and is available in SharePoint. <u>Open file &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-038/</span></div>
           </div>
         </div>
         <button class="replay-btn" id="replay-biz"><i class="ti ti-refresh"></i> Replay</button>
@@ -2009,7 +2043,7 @@ var simpleDetails = {
   biz:{title:"Business stakeholders",body:"Stakeholders can self-serve the status of their own demands, retrieve the latest mission brief from SharePoint, or check requirements stage — instantly."},
   ctx:{title:"Context builder",body:"Enriches each query with the caller's role (from Azure AD), their team's demand portfolio, and conversation history. An executive's question resolves differently than a developer's."},
   synth:{title:"Response synthesizer",body:"The LLM assembles the final answer from retrieved chunks, adds source citations ('Per A-ah! as of today...'), and formats the response for the channel — chat message or Teams adaptive card."},
-  "c-aah":{title:"A-ah! connector",body:"Reads demand records via the A-ah! API: status, lifecycle stage, business requirements, responsible team. The authoritative source — always reflected faithfully."},
+  "c-aah":{title:"Snowflake connector",body:"Reads A-ah! demand records already replicated in Snowflake (read-only): status, lifecycle stage, business requirements, responsible team. A-ah! remains the system of record; answers show the data-as-of timestamp."},
   "c-teams":{title:"Teams + Copilot connector",body:"Ingests Copilot-generated meeting minutes via the Microsoft Graph API. Meeting decisions and action items become searchable through the agent."},
   "c-sp":{title:"SharePoint connector",body:"Uses Microsoft Graph API to index documents: mission briefs, deliverable PDFs, presentations. Always surfaces the latest approved version."},
   "c-jira":{title:"Jira connector",body:"Reads sprint boards, issue statuses, and dashboard data via Jira REST API. Lets developers and PMs query progress without leaving their workflow."},
@@ -2118,11 +2152,11 @@ var agentScript = [
   {delay:800,  role:'typing', text:'Searching A-ah! and knowledge store\u2026'},
   {delay:1600, role:'trace',  steps:[
     {label:'Intent router',    src:'\u2192 status query detected'},
-    {label:'A-ah! connector',  src:'\u2192 fetching DM-044'},
+    {label:'Snowflake connector',  src:'\u2192 fetching DM-044'},
     {label:'RAG engine',       src:'\u2192 top-3 chunks retrieved'},
     {label:'Context builder',  src:'\u2192 caller: Executive role'}
   ]},
-  {delay:3200, role:'agent',  text:'Demand <strong>DM-044</strong> (Data Platform Migration) is currently in the <strong>Design phase</strong>. Owner: M. Rossi. Last update: 13 May 2025.<br><br><span style="font-size:10px;color:#3A6A54">Source: A-ah! \u00b7 updated 14 May 2025</span>'}
+  {delay:3200, role:'agent',  text:'Demand <strong>DM-044</strong> (Data Platform Migration) is currently in the <strong>Design phase</strong>. Owner: M. Rossi. Last update: 3 Nov 2026.<br><br><span style="font-size:10px;color:#3A6A54">Source: A-ah! \u00b7 updated 4 Nov 2026</span>'}
 ];
 
 function runAgentAnim() {
@@ -2205,7 +2239,7 @@ function runRagAnim() {
       synthText.textContent = answer.slice(0, ++i);
       if (i >= answer.length) {
         clearInterval(iv);
-        synthCite.textContent = 'Source: A-ah! (score 0.94) \u00b7 Teams minutes 08/05 (score 0.91)';
+        synthCite.textContent = 'Source: A-ah! (score 0.94) \u00b7 Teams minutes 28/10 (score 0.91)';
       }
     }, 28);
   }, 3200);
@@ -2415,14 +2449,15 @@ openModal = function(id) {
 
 
 // Roadmap milestone detail
-var milestoneData = {"p1-m1": {"title": "M1 — API assessment & connectivity (Weeks 1–3)", "deliverables": ["A-ah! REST API documentation reviewed and access token obtained", "Microsoft Graph API app registration created with correct permissions", "Jira REST API credentials validated and connectivity confirmed", "Connectivity test scripts passing for all 4 source systems"], "decisions": ["Confirm A-ah! API exists and supports the required fields — most critical decision", "Confirm IT admin can create the Graph API app registration", "Identify who owns Jira API credentials in your organisation", "Define the service account that all connectors will use"], "risk": "If A-ah! has no REST API, the entire indexing approach must be redesigned (CSV export, direct DB read, or vendor engagement). This risk must be resolved in Week 1 — all other milestones depend on it."}, "p1-m2": {"title": "M2 — Knowledge store setup (Weeks 4–7)", "deliverables": ["Vector DB instance deployed and accessible (Azure AI Search / Pinecone / Weaviate)", "Metadata cache (Redis or PostgreSQL) running with demand schema", "Embedding pipeline processing test documents correctly", "Initial bulk load of all A-ah! demands completed", "SharePoint document archive indexed (last 12 months minimum)"], "decisions": ["Vector DB platform: Azure AI Search vs Pinecone vs Weaviate", "Embedding model: text-embedding-3-small (English) or multilingual-e5", "Chunk size: 512 tokens default — validate with real A-ah! requirement texts", "Historical data scope: how far back to index documents and meeting minutes?"], "risk": "Bulk indexing time depends on data volume. Plan for an off-hours run and budget for embedding API costs. Estimate: ~$0.02 per 1M tokens for text-embedding-3-small."}, "p1-m3": {"title": "M3 — Connector development (Weeks 6–10)", "deliverables": ["A-ah! connector: full field read, incremental sync, webhook listener", "Teams connector: Graph API fetch of Copilot minutes, structured parsing of decisions and actions", "SharePoint connector: file discovery, text extraction (PDF/DOCX/PPTX), chunking", "Jira connector: JQL-based issue fetch, sprint board sync", "All connectors tested with real data — not mocks"], "decisions": ["A-ah! webhook support confirmed? If not, define polling interval", "Teams meeting scope: which channels and meeting types to include?", "SharePoint root path convention: how are demand folders named?", "Jira linking convention: custom field, label, or epic hierarchy?"], "risk": "Copilot transcript availability via Graph API depends on Teams tenant configuration. Requires IT admin to enable and test before this milestone can complete."}, "p1-m4": {"title": "M4 — Agent core & RAG engine (Weeks 8–12)", "deliverables": ["LLM API integration (Azure OpenAI GPT-4o or Claude API)", "RAG pipeline: hybrid search, re-ranking, top-k retrieval with source tagging", "Intent router classifying all query types correctly (target: >90% on test set)", "Context builder resolving roles from Azure AD", "System prompt tuned with full demand lifecycle vocabulary and status definitions"], "decisions": ["LLM provider: Azure OpenAI vs Claude API — cost, data residency, compliance", "Confidence threshold for no-answer responses: start at 0.70, calibrate on real data", "Stateful sessions: recommend 3-turn memory for Phase 1", "Escalation path when confidence is low: Teams alert to demand manager?"], "risk": "RAG quality depends on knowledge store data quality. Poor A-ah! requirement text or inconsistent SharePoint naming will degrade answer quality. Plan a data quality review before this milestone."}, "p1-m5": {"title": "M5 — Access control & SSO (Weeks 10–13)", "deliverables": ["Azure AD SSO integrated — all users authenticated via existing credentials", "Role matrix implemented: 4 roles mapped to AD groups", "Per-chunk allowed_roles metadata set correctly at index time", "Audit log running: query, caller, role, chunks retrieved, response", "GDPR review completed for query log retention policy"], "decisions": ["Are 4 roles sufficient or are sub-roles needed (Architect, Business Analyst)?", "Document-level permissions: some files restricted beyond role level?", "Audit log retention period — align with your GDPR and data policy", "Anonymous access: not recommended for Phase 1"], "risk": "If SharePoint documents have individual-level permissions (not role-level), the connector must respect those. This requires additional mapping work that may extend the timeline."}, "p1-m6": {"title": "M6 — Pilot & go-live (Weeks 13–16)", "deliverables": ["Internal pilot with 3-5 demand managers and 2-3 business stakeholders for 2 weeks", "Feedback log reviewed and top issues resolved", "Score threshold tuned based on real query patterns", "Teams bot deployed to pilot group", "Go/no-go decision meeting with stakeholders and full organisation rollout"], "decisions": ["Pilot group composition: who are the best early adopters?", "Feedback collection: Teams survey, direct interview, or usage analytics?", "Go-live criteria: minimum answer accuracy threshold before broader rollout", "Support model: who handles user questions about the agent in Month 1?"], "risk": "User adoption is the biggest risk — not technical. A dedicated internal communication campaign and visible executive sponsorship are critical. Without them the pilot generates insufficient feedback."}, "p2-m1": {"title": "M7 — Proactive alerts (Month 5–6)", "deliverables": ["Monitoring job scanning demand portfolio daily for anomalies", "Teams alerts sent for: stalled demands (>30 days same stage), approaching deadlines, open unowned action items", "Alert templates reviewed and approved by demand managers", "Alert frequency configurable per user preference"], "decisions": ["What constitutes a stalled demand: 30 days? 45 days? Configurable per stage?", "Which roles receive which alert types?", "Alert channel: Teams DM, Teams channel, or email?", "Opt-out mechanism: users must be able to mute specific alert types"], "risk": "Alert fatigue is a real risk. Start with a narrow set of high-value alerts and expand based on feedback. Do not launch with more than 3 alert types simultaneously."}, "p2-m2": {"title": "M8 — Status update automation (Month 6–7)", "deliverables": ["Weekly draft summary generated automatically for each active demand", "Draft delivered to demand manager via Teams for review", "One-click approve, edit, or reject flow implemented", "Approved summary posted to Teams channel (not written to A-ah! yet)", "Audit trail of all drafts, edits, and approvals"], "decisions": ["Draft format: bullet list, narrative paragraph, or structured table?", "Approval flow: individual manager approval or team lead sign-off?", "What triggers generation: fixed day of week or demand manager request?", "Scope: all demands or only active phases (Design and Implementation)?"], "risk": "Managers may resist if they feel automation reduces control. Position drafts as time-savers, not replacements. The human always has the final word before anything is shared externally."}, "p2-m3": {"title": "M9 — Meeting intelligence (Month 7–8)", "deliverables": ["Post-meeting: action items auto-extracted and sent to owners via Teams", "Suggested Jira ticket updates proposed (not auto-created)", "Decisions flagged that require sign-off from a named stakeholder", "Meeting summary automatically linked to the relevant A-ah! demand", "Weekly digest of all open actions across all demands"], "decisions": ["Who receives suggested Jira updates: developer, PM, or demand manager?", "Confidence threshold for action item extraction: when to skip rather than guess?", "Should the agent suggest Jira ticket creation or only flag it for human action?"], "risk": "Action item extraction accuracy depends on Copilot summary quality. If Copilot minutes are inconsistent in format across meeting types, extraction quality will vary significantly."}, "p2-m4": {"title": "M10 — Write-back to A-ah! (Month 8–9)", "deliverables": ["Write-back API integration with A-ah! for status and stage updates only", "Human-in-the-loop approval flow: agent proposes, manager confirms via Teams button", "Full audit trail: who approved, what was changed, when, and based on what source", "DPIA completed and signed off by DPO or compliance team", "Rollback mechanism: every write-back reversible within 24 hours"], "decisions": ["Which fields can the agent update? Recommend: status and stage only in Phase 2", "Approval flow: in-Teams confirmation button or dedicated review UI?", "Maximum write-backs per day before additional review is triggered?", "DPIA scope: does your organisation require DPO sign-off before this goes live?"], "risk": "Highest-risk milestone. An incorrect write-back could corrupt the system of record. Extensive testing in a staging environment is mandatory. Do not skip the DPIA even if it seems like overhead."}, "p2-m5": {"title": "M11 — Analytics dashboard (Month 9–10)", "deliverables": ["Usage dashboard: queries per day, per role, per demand", "Most-queried demands and topics identified", "Unanswered and low-confidence query log reviewed weekly", "Knowledge gap report: questions the agent cannot answer (signals missing content)", "Monthly accuracy report shared with demand management team"], "decisions": ["Dashboard tool: Power BI (likely already available), Grafana, or custom?", "Who reviews the knowledge gap report: demand managers or a dedicated knowledge owner?", "How are knowledge gaps addressed: manual content creation or connector enhancement?"], "risk": "Low usage in early months may look like failure when it is actually a change management challenge. Frame metrics around query quality and user satisfaction, not just volume."}, "p2-m6": {"title": "M12 — Organisation-wide rollout (Month 10–12)", "deliverables": ["All 4 consumer profiles onboarded with role-appropriate access", "Onboarding materials: 1-page quick-start guide and 3-minute video per role", "Governance model defined: who owns the agent and who handles escalations?", "SLA defined: agent availability (uptime) and freshness guarantee per source", "Quarterly review cadence established for continuous improvement"], "decisions": ["Agent name and branding: give it a name that feels natural for your organisation", "Communication campaign: how do you announce it to the full organisation?", "Support model: dedicated Teams channel for agent feedback and issues?", "Long-term ownership: IT team, demand management team, or shared responsibility?"], "risk": "Sustainable adoption requires formal ongoing ownership. If no one is responsible for maintaining the knowledge store and tuning the agent, quality will degrade over time. Define ownership before go-live."}};
+var milestoneData = {"p1-m1": {"title": "M1 — Data access & connectivity assessment (Weeks 1–3)", "deliverables": ["Snowflake coverage assessment: which A-ah! objects, fields and history are available (including business requirements text and Jira links)", "Read-only role or service account on the A-ah! views approved and tested", "Refresh frequency and latency measured; last-refresh timestamp available", "Microsoft Graph API app registration created with correct permissions", "Jira REST API credentials validated; connectivity tests passing for all source systems"], "decisions": ["Confirm Snowflake holds the A-ah! fields the agent needs — most critical decision", "Confirm how the agent reaches Snowflake from the Microsoft ecosystem (supported connector, security constraints)", "Decide separate cache vs Snowflake views as the structured tier, based on measured latency", "Confirm IT admin can create the Graph API app registration", "Define the service accounts all connectors will use"], "risk": "If Snowflake lacks key fields (e.g. business requirements text) or refreshes too slowly, Phase 1 needs a fallback: the A-ah! API or an export for the missing fields, or a narrower scope. This must be resolved in Week 1 — all other milestones depend on it. Snowflake is read-only, so Phase 2 write-back is not covered."}, "p1-m2": {"title": "M2 — Knowledge store setup (Weeks 4–7)", "deliverables": ["Vector DB instance deployed and accessible (Azure AI Search / Pinecone / Weaviate)", "Metadata cache (Redis or PostgreSQL) running with demand schema", "Embedding pipeline processing test documents correctly", "Initial bulk load of all A-ah! demands completed", "SharePoint document archive indexed (last 12 months minimum)"], "decisions": ["Vector DB platform: Azure AI Search vs Pinecone vs Weaviate", "Embedding model: text-embedding-3-small (English) or multilingual-e5", "Chunk size: 512 tokens default — validate with real A-ah! requirement texts", "Historical data scope: how far back to index documents and meeting minutes?"], "risk": "Bulk indexing time depends on data volume. Plan for an off-hours run and budget for embedding API costs. Estimate: ~$0.02 per 1M tokens for text-embedding-3-small."}, "p1-m3": {"title": "M3 — Connector development (Weeks 6–10)", "deliverables": ["Snowflake connector: A-ah! views, incremental sync on updated_at, data-as-of timestamp", "Teams connector: Graph API fetch of Copilot minutes, structured parsing of decisions and actions", "SharePoint connector: file discovery, text extraction (PDF/DOCX/PPTX), chunking", "Jira connector: JQL-based issue fetch, sprint board sync", "All connectors tested with real data — not mocks"], "decisions": ["Snowflake refresh frequency confirmed? Define sync interval and how stale answers are flagged", "Teams meeting scope: which channels and meeting types to include?", "SharePoint root path convention: how are demand folders named?", "Jira linking convention: custom field, label, or epic hierarchy?"], "risk": "Copilot transcript availability via Graph API depends on Teams tenant configuration. Requires IT admin to enable and test before this milestone can complete."}, "p1-m4": {"title": "M4 — Agent core & RAG engine (Weeks 8–12)", "deliverables": ["LLM integration (Azure OpenAI GPT-4o, within the Microsoft perimeter)", "RAG pipeline: hybrid search, re-ranking, top-k retrieval with source tagging", "Intent router classifying all query types correctly (target: >90% on test set)", "Context builder resolving roles from Azure AD", "System prompt tuned with full demand lifecycle vocabulary and status definitions"], "decisions": ["LLM platform: Azure OpenAI vs Copilot-based agent — cost, data residency, compliance", "Confidence threshold for no-answer responses: start at 0.70, calibrate on real data", "Stateful sessions: recommend 3-turn memory for Phase 1", "Escalation path when confidence is low: Teams alert to demand manager?"], "risk": "RAG quality depends on knowledge store data quality. Poor A-ah! requirement text or inconsistent SharePoint naming will degrade answer quality. Plan a data quality review before this milestone."}, "p1-m5": {"title": "M5 — Access control & SSO (Weeks 10–13)", "deliverables": ["Azure AD SSO integrated — all users authenticated via existing credentials", "Role matrix implemented: 4 roles mapped to AD groups", "Per-chunk allowed_roles metadata set correctly at index time", "Audit log running: query, caller, role, chunks retrieved, response", "GDPR review completed for query log retention policy"], "decisions": ["Are 4 roles sufficient or are sub-roles needed (Architect, Business Analyst)?", "Document-level permissions: some files restricted beyond role level?", "Audit log retention period — align with your GDPR and data policy", "Anonymous access: not recommended for Phase 1"], "risk": "If SharePoint documents have individual-level permissions (not role-level), the connector must respect those. This requires additional mapping work that may extend the timeline."}, "p1-m6": {"title": "M6 — Pilot & go-live (Weeks 13–16)", "deliverables": ["Internal pilot with 3-5 demand managers and 2-3 business stakeholders for 2 weeks", "Feedback log reviewed and top issues resolved", "Score threshold tuned based on real query patterns", "Teams bot deployed to pilot group", "Go/no-go decision meeting with stakeholders and full organisation rollout"], "decisions": ["Pilot group composition: who are the best early adopters?", "Feedback collection: Teams survey, direct interview, or usage analytics?", "Go-live criteria: minimum answer accuracy threshold before broader rollout", "Support model: who handles user questions about the agent in Month 1?"], "risk": "User adoption is the biggest risk — not technical. A dedicated internal communication campaign and visible executive sponsorship are critical. Without them the pilot generates insufficient feedback."}, "p2-m1": {"title": "M7 — Proactive alerts (Month 5–6)", "deliverables": ["Monitoring job scanning demand portfolio daily for anomalies", "Teams alerts sent for: stalled demands (>30 days same stage), approaching deadlines, open unowned action items", "Alert templates reviewed and approved by demand managers", "Alert frequency configurable per user preference"], "decisions": ["What constitutes a stalled demand: 30 days? 45 days? Configurable per stage?", "Which roles receive which alert types?", "Alert channel: Teams DM, Teams channel, or email?", "Opt-out mechanism: users must be able to mute specific alert types"], "risk": "Alert fatigue is a real risk. Start with a narrow set of high-value alerts and expand based on feedback. Do not launch with more than 3 alert types simultaneously."}, "p2-m2": {"title": "M8 — Status update automation (Month 6–7)", "deliverables": ["Weekly draft summary generated automatically for each active demand", "Draft delivered to demand manager via Teams for review", "One-click approve, edit, or reject flow implemented", "Approved summary posted to Teams channel (not written to A-ah! yet)", "Audit trail of all drafts, edits, and approvals"], "decisions": ["Draft format: bullet list, narrative paragraph, or structured table?", "Approval flow: individual manager approval or team lead sign-off?", "What triggers generation: fixed day of week or demand manager request?", "Scope: all demands or only active phases (Design and Implementation)?"], "risk": "Managers may resist if they feel automation reduces control. Position drafts as time-savers, not replacements. The human always has the final word before anything is shared externally."}, "p2-m3": {"title": "M9 — Meeting intelligence (Month 7–8)", "deliverables": ["Post-meeting: action items auto-extracted and sent to owners via Teams", "Suggested Jira ticket updates proposed (not auto-created)", "Decisions flagged that require sign-off from a named stakeholder", "Meeting summary automatically linked to the relevant A-ah! demand", "Weekly digest of all open actions across all demands"], "decisions": ["Who receives suggested Jira updates: developer, PM, or demand manager?", "Confidence threshold for action item extraction: when to skip rather than guess?", "Should the agent suggest Jira ticket creation or only flag it for human action?"], "risk": "Action item extraction accuracy depends on Copilot summary quality. If Copilot minutes are inconsistent in format across meeting types, extraction quality will vary significantly."}, "p2-m4": {"title": "M10 — Write-back to A-ah! (Month 8–9)", "deliverables": ["Write-back API integration with A-ah! for status and stage updates only", "Human-in-the-loop approval flow: agent proposes, manager confirms via Teams button", "Full audit trail: who approved, what was changed, when, and based on what source", "DPIA completed and signed off by DPO or compliance team", "Rollback mechanism: every write-back reversible within 24 hours"], "decisions": ["Which fields can the agent update? Recommend: status and stage only in Phase 2", "A-ah! write path: does A-ah! expose a supported write API? Snowflake is read-only and cannot be used for write-back", "Approval flow: in-Teams confirmation button or dedicated review UI?", "Maximum write-backs per day before additional review is triggered?", "DPIA scope: does your organisation require DPO sign-off before this goes live?"], "risk": "Highest-risk milestone. An incorrect write-back could corrupt the system of record. Extensive testing in a staging environment is mandatory. Do not skip the DPIA even if it seems like overhead. Note: Snowflake is read-only, so write-back still requires a supported A-ah! write path — this dependency is not removed by the Snowflake integration."}, "p2-m5": {"title": "M11 — Analytics dashboard (Month 9–10)", "deliverables": ["Usage dashboard: queries per day, per role, per demand", "Most-queried demands and topics identified", "Unanswered and low-confidence query log reviewed weekly", "Knowledge gap report: questions the agent cannot answer (signals missing content)", "Monthly accuracy report shared with demand management team"], "decisions": ["Dashboard tool: Power BI (likely already available), Grafana, or custom?", "Who reviews the knowledge gap report: demand managers or a dedicated knowledge owner?", "How are knowledge gaps addressed: manual content creation or connector enhancement?"], "risk": "Low usage in early months may look like failure when it is actually a change management challenge. Frame metrics around query quality and user satisfaction, not just volume."}, "p2-m6": {"title": "M12 — Organisation-wide rollout (Month 10–12)", "deliverables": ["All 4 consumer profiles onboarded with role-appropriate access", "Onboarding materials: 1-page quick-start guide and 3-minute video per role", "Governance model defined: who owns the agent and who handles escalations?", "SLA defined: agent availability (uptime) and freshness guarantee per source", "Quarterly review cadence established for continuous improvement"], "decisions": ["Agent name and branding: give it a name that feels natural for your organisation", "Communication campaign: how do you announce it to the full organisation?", "Support model: dedicated Teams channel for agent feedback and issues?", "Long-term ownership: IT team, demand management team, or shared responsibility?"], "risk": "Sustainable adoption requires formal ongoing ownership. If no one is responsible for maintaining the knowledge store and tuning the agent, quality will degrade over time. Define ownership before go-live."}};
 
-function showMilestone(id) {
+function showMilestone(id, srcEl) {
   var d = milestoneData[id];
   if(!d) return;
   // Populate title and week tag
   document.getElementById('ms-title').textContent = d.title;
-  document.getElementById('ms-week').textContent = d.week || '';
+  var wkEl = srcEl ? srcEl.querySelector('.m-week') : null;
+  document.getElementById('ms-week').textContent = d.week || (wkEl ? wkEl.textContent : '');
   // Populate deliverables
   var dl = document.getElementById('ms-deliverables-list');
   dl.innerHTML = '';
@@ -2459,21 +2494,21 @@ function showMilestone(id) {
 }
 
 document.querySelectorAll('.milestone[data-milestone]').forEach(function(el){
-  el.addEventListener('click', function(){ showMilestone(el.dataset.milestone); });
+  el.addEventListener('click', function(){ showMilestone(el.dataset.milestone, el); });
 });
 
 
 // Checklist logic
 var ckState = {};
 var ckGroups = {
-  infra: ['i1','i2','i3','i4','i5'],
-  api:   ['a1','a2','a3','a4','a5','a6','a7'],
+  infra: ['i1','i2','i3','i4','i5','i6'],
+  api:   ['a1','a2','a3','a4','a5','a6','a7','a8','a9'],
   agent: ['ag1','ag2','ag3','ag4','ag5'],
   access:['ac1','ac2','ac3','ac4','ac5'],
   data:  ['d1','d2','d3','d4','d5'],
   gov:   ['g1','g2','g3','g4','g5']
 };
-var ckTotal = 32;
+var ckTotal = 35;
 
 function ckUpdateProgress() {
   var resolved = Object.values(ckState).filter(Boolean).length;
@@ -2516,7 +2551,7 @@ document.getElementById('ck-reset').addEventListener('click', function() {
 
 document.getElementById('ck-export').addEventListener('click', function() {
   var lines = ['OPEN DECISIONS — AI Demand Management Assistant', 'Generated: ' + new Date().toLocaleDateString('en-GB'), ''];
-  var groupNames = {infra:'Infrastructure & Platform', api:'Source System APIs', agent:'Agent Design', access:'Access Control & Security', data:'Data & Knowledge Store', gov:'Governance & Rollout'};
+  var groupNames = {infra:'Infrastructure & Platform', api:'Source Systems & APIs', agent:'Agent Design', access:'Access Control & Security', data:'Data & Knowledge Store', gov:'Governance & Rollout'};
   Object.keys(ckGroups).forEach(function(group) {
     var open = ckGroups[group].filter(function(id){ return !ckState[id]; });
     if(!open.length) return;
