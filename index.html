@@ -471,6 +471,7 @@
 
   <div class="layer l-store">
     <div class="layer-label">Knowledge store <span style="color:var(--green)">&#10022;</span></div>
+    <div style="font-size:11.5px;color:var(--text2);margin:-2px 0 10px 1px;line-height:1.55;">With the Copilot Studio build this layer is much smaller: Snowflake views, SharePoint and Teams as knowledge sources, and one list of structured outcomes. The components below are needed only for the custom build. <a href="architecture-detail.html" style="color:var(--green-dk);">See solution detail</a></div>
     <div class="node-row">
       <button class="node has-dive" data-modal="ks-vec"><i class="ti ti-database n-icon"></i><div class="n-title">Vector database</div><div class="n-sub">Semantic search over demands</div></button>
       <button class="node has-dive" data-modal="ks-meta"><i class="ti ti-table n-icon"></i><div class="n-title">Metadata cache</div><div class="n-sub">Demand IDs, status, owners</div></button>
@@ -489,7 +490,7 @@
 <section class="roadmap-section">
   <div class="roadmap-header">
     <h2>Implementation Roadmap</h2>
-    <p>A phased approach from foundation to full intelligence. Each phase delivers standalone value while preparing the ground for the next. Click any milestone for detail.</p>
+    <p>A phased approach for the Copilot Studio build, from a read-only pilot to wider use. Each phase delivers standalone value. Durations are not estimated yet: they depend on the outcome of M1. Click any milestone for detail.</p>
   </div>
   <div class="roadmap-grid">
 
@@ -497,41 +498,37 @@
     <div class="phase-card">
       <div class="phase-card-header" style="background:linear-gradient(135deg,#085041 0%,#0F6E56 100%);">
         <span class="phase-pill-tag" style="background:rgba(255,255,255,0.15);color:#fff;border:.5px solid rgba(255,255,255,0.3);"><i class="ti ti-rocket"></i> Phase 1</span>
-        <h3 style="color:#fff;">Foundation &amp; Read-only Agent</h3>
-        <p style="color:rgba(255,255,255,0.75);">Connect existing systems, build the knowledge store, and deploy a read-only conversational agent. Zero disruption to current tools.</p>
-        <div class="phase-timeline" style="color:rgba(255,255,255,0.6);"><i class="ti ti-calendar"></i> Estimated duration: <strong style="color:#fff;margin-left:3px;">3&ndash;4 months</strong></div>
+        <h3 style="color:#fff;">Read-only pilot</h3>
+        <p style="color:rgba(255,255,255,0.75);">Verify access, prepare the data, build the agent and test it. Read-only, with zero disruption to current tools.</p>
+        <div class="phase-timeline" style="color:rgba(255,255,255,0.6);"><i class="ti ti-calendar"></i> Duration: to be estimated after M1</div>
       </div>
       <div class="phase-body">
         <div class="phase-divider"></div>
         <div class="milestone-list">
           <div class="milestone" data-milestone="p1-m1">
             <div class="m-dot-col"><div class="m-dot" style="background:#378ADD;"></div><div class="m-line" style="background:#E6F1FB;"></div></div>
-            <div class="m-content"><div class="m-title">M1 &mdash; Data access &amp; connectivity assessment</div><div class="m-sub">Validate Snowflake coverage, freshness and read-only access for A-ah! data; Graph API permissions; Jira API access and service accounts</div><div class="m-week" style="color:#378ADD;">Weeks 1&ndash;3</div></div>
+            <div class="m-content"><div class="m-title">M1 &mdash; Access & feasibility assessment</div><div class="m-sub">Check Copilot Studio policies and licences, the Snowflake connection and its coverage of A-ah! data, and the environment to build in</div><div class="m-week" style="color:#378ADD;">First</div></div>
           </div>
           <div class="milestone" data-milestone="p1-m2">
             <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
-            <div class="m-content"><div class="m-title">M2 &mdash; Knowledge store setup</div><div class="m-sub">Deploy vector DB and metadata cache. Initial bulk indexing of all historical demands, documents, and meeting minutes</div><div class="m-week" style="color:#7F77DD;">Weeks 4&ndash;7</div></div>
+            <div class="m-content"><div class="m-title">M2 &mdash; Data foundation</div><div class="m-sub">Curated read-only Snowflake views, a list for structured assessment outcomes, and a SharePoint folder convention</div><div class="m-week" style="color:#7F77DD;">After M1</div></div>
           </div>
           <div class="milestone" data-milestone="p1-m3">
-            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
-            <div class="m-content"><div class="m-title">M3 &mdash; Connector development</div><div class="m-sub">Build and test all 4 connectors: Snowflake (A-ah! data), Teams/Copilot, SharePoint, Jira. Implement incremental sync and event triggers</div><div class="m-week" style="color:#EF9F27;">Weeks 6&ndash;10</div></div>
+            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
+            <div class="m-content"><div class="m-title">M3 &mdash; Agent build</div><div class="m-sub">Build the Copilot Studio agent: instructions, guardrails, flows and knowledge sources</div><div class="m-week" style="color:#1D9E75;">After M2</div></div>
           </div>
           <div class="milestone" data-milestone="p1-m4">
-            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
-            <div class="m-content"><div class="m-title">M4 &mdash; Agent core &amp; RAG engine</div><div class="m-sub">Deploy LLM integration, RAG pipeline, intent router, context builder. System prompt tuned for demand vocabulary</div><div class="m-week" style="color:#1D9E75;">Weeks 8&ndash;12</div></div>
+            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
+            <div class="m-content"><div class="m-title">M4 &mdash; Accuracy test</div><div class="m-sub">Check answers against known cases before anyone relies on them</div><div class="m-week" style="color:#EF9F27;">After M3</div></div>
           </div>
           <div class="milestone" data-milestone="p1-m5">
-            <div class="m-dot-col"><div class="m-dot" style="background:#D85A30;"></div><div class="m-line" style="background:#FAECE7;"></div></div>
-            <div class="m-content"><div class="m-title">M5 &mdash; Access control &amp; SSO</div><div class="m-sub">Integrate Azure AD, implement role matrix, per-chunk access metadata, audit logging, GDPR review</div><div class="m-week" style="color:#D85A30;">Weeks 10&ndash;13</div></div>
-          </div>
-          <div class="milestone" data-milestone="p1-m6">
             <div class="m-dot-col"><div class="m-dot" style="background:#888780;"></div><div class="m-line" style="display:none;"></div></div>
-            <div class="m-content"><div class="m-title">M6 &mdash; Pilot &amp; go-live</div><div class="m-sub">Internal pilot with demand managers and selected stakeholders. Feedback, threshold tuning, Teams bot deployment and rollout</div><div class="m-week" style="color:#888780;">Weeks 13&ndash;16</div></div>
+            <div class="m-content"><div class="m-title">M5 &mdash; Pilot & go/no-go</div><div class="m-sub">Limited use with demand managers, feedback and decision</div><div class="m-week" style="color:#888780;">After M4</div></div>
           </div>
         </div>
         <div class="dep-bar" style="background:#E6F1FB;border:.5px solid #B5D4F4;">
           <strong style="color:#185FA5;">&#128204; Critical dependency</strong>
-          <span style="color:#0C447C;">Snowflake coverage and read-only access to A-ah! data must be confirmed in Week 1. All subsequent milestones depend on it.</span>
+          <span style="color:#0C447C;">Snowflake coverage, the connection method, and IT approval for policies and licences must be confirmed first. All other milestones depend on them.</span>
         </div>
       </div>
     </div>
@@ -540,41 +537,33 @@
     <div class="phase-card">
       <div class="phase-card-header" style="background:linear-gradient(135deg,#26215C 0%,#3C3489 100%);">
         <span class="phase-pill-tag" style="background:rgba(255,255,255,0.15);color:#fff;border:.5px solid rgba(255,255,255,0.3);"><i class="ti ti-stars"></i> Phase 2</span>
-        <h3 style="color:#fff;">Intelligence &amp; Write Capabilities</h3>
-        <p style="color:rgba(255,255,255,0.75);">Expand from read-only to proactive intelligence. The agent suggests, alerts, and where authorized acts on behalf of the demand manager.</p>
-        <div class="phase-timeline" style="color:rgba(255,255,255,0.6);"><i class="ti ti-calendar"></i> Estimated start: <strong style="color:#fff;margin-left:3px;">Month 5 onwards</strong></div>
+        <h3 style="color:#fff;">Executive Pack & extensions</h3>
+        <p style="color:rgba(255,255,255,0.75);">Draft the executive review pack, add Jira and alerts, and widen use. Write-back only if a supported path exists.</p>
+        <div class="phase-timeline" style="color:rgba(255,255,255,0.6);"><i class="ti ti-calendar"></i> Starts after the pilot go/no-go</div>
       </div>
       <div class="phase-body">
         <div class="phase-divider"></div>
         <div class="milestone-list">
           <div class="milestone" data-milestone="p2-m1">
             <div class="m-dot-col"><div class="m-dot" style="background:#534AB7;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
-            <div class="m-content"><div class="m-title">M7 &mdash; Proactive alerts</div><div class="m-sub">Agent monitors demand portfolio and sends Teams alerts: stalled demands, approaching deadlines, open action items</div><div class="m-week" style="color:#534AB7;">Month 5&ndash;6</div></div>
+            <div class="m-content"><div class="m-title">M6 &mdash; Executive Pack</div><div class="m-sub">Draft a card for each of the top 3 or 4 demands by A-ah! rank, on request</div><div class="m-week" style="color:#534AB7;">After the pilot</div></div>
           </div>
           <div class="milestone" data-milestone="p2-m2">
             <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
-            <div class="m-content"><div class="m-title">M8 &mdash; Status update automation</div><div class="m-sub">Agent drafts weekly status summaries per demand. Manager reviews and approves before any update is shared</div><div class="m-week" style="color:#7F77DD;">Month 6&ndash;7</div></div>
+            <div class="m-content"><div class="m-title">M7 &mdash; Jira and alerts</div><div class="m-sub">Add Jira as a source and send alerts on stalled demands</div><div class="m-week" style="color:#7F77DD;">After M6</div></div>
           </div>
           <div class="milestone" data-milestone="p2-m3">
-            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
-            <div class="m-content"><div class="m-title">M9 &mdash; Meeting intelligence</div><div class="m-sub">Post-meeting: agent extracts action items from Copilot minutes, suggests Jira updates, flags decisions needing sign-off</div><div class="m-week" style="color:#1D9E75;">Month 7&ndash;8</div></div>
+            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
+            <div class="m-content"><div class="m-title">M8 &mdash; Write-back to A-ah!</div><div class="m-sub">With explicit manager approval, update demand status in A-ah!</div><div class="m-week" style="color:#EF9F27;">Only if needed</div></div>
           </div>
           <div class="milestone" data-milestone="p2-m4">
-            <div class="m-dot-col"><div class="m-dot" style="background:#EF9F27;"></div><div class="m-line" style="background:#FAEEDA;"></div></div>
-            <div class="m-content"><div class="m-title">M10 &mdash; Write-back to A-ah!</div><div class="m-sub">With explicit manager approval, agent updates demand status in A-ah!. Full audit trail. Human-in-the-loop always required. Needs an A-ah! write path (Snowflake is read-only)</div><div class="m-week" style="color:#EF9F27;">Month 8&ndash;9</div></div>
-          </div>
-          <div class="milestone" data-milestone="p2-m5">
-            <div class="m-dot-col"><div class="m-dot" style="background:#D85A30;"></div><div class="m-line" style="background:#FAECE7;"></div></div>
-            <div class="m-content"><div class="m-title">M11 &mdash; Analytics dashboard</div><div class="m-sub">Usage analytics: most queried demands, unanswered questions, knowledge gaps. Drives continuous improvement</div><div class="m-week" style="color:#D85A30;">Month 9&ndash;10</div></div>
-          </div>
-          <div class="milestone" data-milestone="p2-m6">
             <div class="m-dot-col"><div class="m-dot" style="background:#888780;"></div><div class="m-line" style="display:none;"></div></div>
-            <div class="m-content"><div class="m-title">M12 &mdash; Organisation-wide rollout</div><div class="m-sub">Full deployment to all profiles. Onboarding materials, governance model, SLA definition, long-term ownership assigned</div><div class="m-week" style="color:#888780;">Month 10&ndash;12</div></div>
+            <div class="m-content"><div class="m-title">M9 &mdash; Rollout & scale-up decision</div><div class="m-sub">Wider use, ownership, and a decision on whether a custom build is needed</div><div class="m-week" style="color:#888780;">After M5</div></div>
           </div>
         </div>
         <div class="dep-bar" style="background:#EEEDFE;border:.5px solid #CECBF6;">
           <strong style="color:#3C3489;">&#128204; Phase 2 prerequisite</strong>
-          <span style="color:#534AB7;">Phase 1 must be stable for at least 4 weeks. Write-back capabilities (M10) require formal governance approval and a DPIA.</span>
+          <span style="color:#534AB7;">The pilot must be stable first. Write-back (M8) requires formal governance approval and a data protection impact assessment.</span>
         </div>
       </div>
     </div>
@@ -592,10 +581,10 @@
   <div class="roadmap-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
     <div>
       <h2>Open Decisions Checklist</h2>
-      <p>All unresolved decisions aggregated from every architecture layer and roadmap milestone. Bring this to your next steering meeting.</p>
+      <p>Open decisions for the Copilot Studio build, grouped by theme and linked to roadmap milestones. Bring this to your next steering meeting.</p>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 35 resolved</span>
+      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 20 resolved</span>
       <button id="ck-reset" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text3);cursor:pointer;font-family:var(--font);">Reset all</button>
       <button id="ck-export" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green);border:none;color:#fff;cursor:pointer;font-family:var(--font);">&#8681; Export open</button>
     </div>
@@ -603,364 +592,238 @@
 
   <div id="checklist-wrap" style="display:flex;flex-direction:column;gap:16px;">
 
-    <!-- GROUP: INFRASTRUCTURE & PLATFORM -->
     <div class="ck-group">
       <div class="ck-group-header">
         <span class="ck-group-icon" style="background:#E6F1FB;color:#185FA5;"><i class="ti ti-server"></i></span>
         <div>
-          <div class="ck-group-title">Infrastructure &amp; Platform</div>
-          <div class="ck-group-sub">Cloud environment, vector DB, LLM provider</div>
+          <div class="ck-group-title">Platform &amp; Environment</div>
+          <div class="ck-group-sub">Copilot Studio environment, policies, licences</div>
         </div>
-        <span class="ck-group-badge" id="badge-infra">0/6</span>
+        <span class="ck-group-badge" id="badge-infra">0/3</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="infra" data-id="i1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">What is our cloud environment — Azure, AWS, or on-premise?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Knowledge store · Vector DB</span></div>
+            <div class="ck-item-q">Which environment will host the agent: the Default environment, or a dedicated one?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Environment · M1</span></div>
           </div>
-          <span class="ck-priority p-critical">Critical</span>
+          <span class="ck-priority p-high">High</span>
         </div>
         <div class="ck-item" data-group="infra" data-id="i2">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Which vector DB platform: Azure AI Search, Pinecone, or Weaviate?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Vector DB · M2</span></div>
+            <div class="ck-item-q">Do tenant policies and data loss prevention rules allow the Snowflake connector and the agent to use real demand data?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Policies · M1</span></div>
           </div>
-          <span class="ck-priority p-high">High</span>
+          <span class="ck-priority p-critical">Critical</span>
         </div>
         <div class="ck-item" data-group="infra" data-id="i3">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Which LLM platform, within the Microsoft perimeter: Azure OpenAI (GPT-4o) or a Copilot-based agent?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent core · M4</span></div>
-          </div>
-          <span class="ck-priority p-high">High</span>
-        </div>
-        <div class="ck-item" data-group="infra" data-id="i4">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">What is the structured tier: a separate cache (Redis, PostgreSQL, Azure Table Storage) or Snowflake views?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Metadata cache</span></div>
-          </div>
-          <span class="ck-priority p-medium">Medium</span>
-        </div>
-        <div class="ck-item" data-group="infra" data-id="i5">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Is multilingual content present in demands or documents? If yes, a multilingual embedding model must be chosen before first indexing.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Vector DB · RAG engine</span></div>
-          </div>
-          <span class="ck-priority p-critical">Critical</span>
-        </div>
-        <div class="ck-item" data-group="infra" data-id="i6">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Is the use of Snowflake Cortex (Analyst / Search) on internal demand data approved by IT and Legal, given the Microsoft-only policy for AI tools?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Metadata cache · Vector DB</span></div>
+            <div class="ck-item-q">Which licences and consumption model cover the Snowflake connector, the flows and the agent (Copilot credits)?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Licences · M1</span></div>
           </div>
           <span class="ck-priority p-high">High</span>
         </div>
       </div>
     </div>
 
-    <!-- GROUP: SOURCE SYSTEM APIs -->
     <div class="ck-group">
       <div class="ck-group-header">
         <span class="ck-group-icon" style="background:#FAEEDA;color:#854F0B;"><i class="ti ti-plug"></i></span>
         <div>
           <div class="ck-group-title">Source Systems &amp; APIs</div>
-          <div class="ck-group-sub">Snowflake (A-ah! data), Teams/Copilot, SharePoint, Jira connectivity</div>
+          <div class="ck-group-sub">Snowflake (A-ah! data), Teams, SharePoint, Jira</div>
         </div>
-        <span class="ck-group-badge" id="badge-api">0/9</span>
+        <span class="ck-group-badge" id="badge-api">0/6</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="api" data-id="a1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Does Snowflake hold the A-ah! data the agent needs — demands and statuses, business requirements text, custom fields, Jira links and status-change history? This is the single most critical dependency — all other milestones depend on it.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Snowflake connector · M1</span></div>
+            <div class="ck-item-q">Does Snowflake hold the A-ah! fields the agent needs: rank, stage, status, owner, team, requirements text and change history?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Snowflake · M1</span></div>
           </div>
           <span class="ck-priority p-critical">Critical</span>
         </div>
         <div class="ck-item" data-group="api" data-id="a2">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">What is the refresh frequency and latency between a change in A-ah! and its availability in Snowflake, and how are deleted or duplicate records handled?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Snowflake connector · Indexing pipeline</span></div>
+            <div class="ck-item-q">How does the agent authenticate to Snowflake: Entra ID OAuth with delegated users, or a service principal?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Snowflake · M1</span></div>
           </div>
-          <span class="ck-priority p-high">High</span>
+          <span class="ck-priority p-critical">Critical</span>
         </div>
         <div class="ck-item" data-group="api" data-id="a3">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Can IT admin create a Microsoft Graph API app registration with OnlineMeetings.Read.All and Sites.Read.All permissions?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Teams connector · SharePoint connector · M1</span></div>
+            <div class="ck-item-q">How often is Snowflake refreshed from A-ah!, and how is staleness shown in answers?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Snowflake · M1</span></div>
           </div>
-          <span class="ck-priority p-critical">Critical</span>
+          <span class="ck-priority p-high">High</span>
         </div>
         <div class="ck-item" data-group="api" data-id="a4">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Are Copilot meeting transcripts accessible via Graph API in our tenant, or only visible inside the Teams UI?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Teams connector · M3</span></div>
+            <div class="ck-item-q">Can the agent read Teams meeting minutes as a knowledge source in our tenant, or are they visible only in the Teams interface?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Teams · M3</span></div>
           </div>
-          <span class="ck-priority p-critical">Critical</span>
+          <span class="ck-priority p-high">High</span>
         </div>
         <div class="ck-item" data-group="api" data-id="a5">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">What is our Jira version — Cloud or Data Center? The REST API differs between the two.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Jira connector · M1</span></div>
+            <div class="ck-item-q">What SharePoint root path and folder naming convention keeps demand documents within the 25-URL limit?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint · M2</span></div>
           </div>
-          <span class="ck-priority p-high">High</span>
+          <span class="ck-priority p-medium">Medium</span>
         </div>
         <div class="ck-item" data-group="api" data-id="a6">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">How are Jira issues linked to A-ah! demands today — custom field, label convention, or epic hierarchy?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Jira connector</span></div>
-          </div>
-          <span class="ck-priority p-high">High</span>
-        </div>
-        <div class="ck-item" data-group="api" data-id="a7">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">What is the SharePoint folder naming convention for demand documents — is there a consistent root path per demand ID?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint connector</span></div>
+            <div class="ck-item-q">Is the Jira connector available and approved in the tenant, and what linking convention ties Jira issues to A-ah! demands?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Jira · M7</span></div>
           </div>
           <span class="ck-priority p-medium">Medium</span>
-        </div>
-        <div class="ck-item" data-group="api" data-id="a8">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Who owns the A-ah! data in Snowflake, and what is the process to obtain read-only access (dedicated role or service account, row-level restrictions by role)?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Snowflake connector · Access control · M1</span></div>
-          </div>
-          <span class="ck-priority p-critical">Critical</span>
-        </div>
-        <div class="ck-item" data-group="api" data-id="a9">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Which integration paths from the Microsoft ecosystem to Snowflake are supported and approved (e.g. Power Platform / Azure connectors), and are there security constraints on exposing Snowflake to an agent?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Snowflake connector · Agent core · M1</span></div>
-          </div>
-          <span class="ck-priority p-high">High</span>
         </div>
       </div>
     </div>
 
-    <!-- GROUP: AGENT DESIGN -->
     <div class="ck-group">
       <div class="ck-group-header">
         <span class="ck-group-icon" style="background:#E0F5EE;color:#085041;"><i class="ti ti-robot"></i></span>
         <div>
           <div class="ck-group-title">Agent Design</div>
-          <div class="ck-group-sub">Deployment channel, memory, escalation, response format</div>
+          <div class="ck-group-sub">Credential mode, channel, fallback behaviour</div>
         </div>
-        <span class="ck-group-badge" id="badge-agent">0/5</span>
+        <span class="ck-group-badge" id="badge-agent">0/3</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="agent" data-id="ag1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Primary deployment channel: Microsoft Teams bot or dedicated web portal? This drives the entire front-end development scope.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent interface</span></div>
+            <div class="ck-item-q">Which credential mode applies for the pilot: end-user credentials, or maker credentials if IT allows them?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Identity · M1</span></div>
           </div>
           <span class="ck-priority p-critical">Critical</span>
         </div>
         <div class="ck-item" data-group="agent" data-id="ag2">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Should external stakeholders (vendors, clients) be able to query the agent? If yes, a guest access model is needed.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">Agent interface · Access control</span></div>
+            <div class="ck-item-q">Delivery channel: Teams only, or also Microsoft Copilot? And what does the agent say when it cannot answer?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Channel · M3</span></div>
           </div>
           <span class="ck-priority p-medium">Medium</span>
         </div>
         <div class="ck-item" data-group="agent" data-id="ag3">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Stateful or stateless sessions? Stateful enables follow-up questions but requires session storage infrastructure.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Agent interface · Context builder</span></div>
-          </div>
-          <span class="ck-priority p-medium">Medium</span>
-        </div>
-        <div class="ck-item" data-group="agent" data-id="ag4">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">When confidence is low, should the agent escalate to a demand manager via Teams message, or simply reply "I don't have reliable information on this"?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Agent interface · Response synthesizer</span></div>
-          </div>
-          <span class="ck-priority p-medium">Medium</span>
-        </div>
-        <div class="ck-item" data-group="agent" data-id="ag5">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Should the agent proactively suggest 2–3 follow-up questions after each answer? Increases engagement but adds cost per query.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Response synthesizer</span></div>
+            <div class="ck-item-q">Can the tenant produce slide files for the executive pack, or are text cards the output?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Executive Pack · M6</span></div>
           </div>
           <span class="ck-priority p-low">Low</span>
         </div>
       </div>
     </div>
 
-    <!-- GROUP: ACCESS & SECURITY -->
     <div class="ck-group">
       <div class="ck-group-header">
         <span class="ck-group-icon" style="background:#FAECE7;color:#993C1D;"><i class="ti ti-shield-lock"></i></span>
         <div>
           <div class="ck-group-title">Access Control &amp; Security</div>
-          <div class="ck-group-sub">Roles, permissions, GDPR, audit log</div>
+          <div class="ck-group-sub">Who can use it, data protection</div>
         </div>
-        <span class="ck-group-badge" id="badge-access">0/5</span>
+        <span class="ck-group-badge" id="badge-access">0/2</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="access" data-id="ac1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Are the 4 defined roles (Executive, Demand Manager, Developer/PM, Business Stakeholder) sufficient, or are sub-roles needed?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Access control · M5</span></div>
+            <div class="ck-item-q">Which roles and groups may use the agent, and do their Snowflake permissions match what they should see?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Access · M3</span></div>
           </div>
           <span class="ck-priority p-high">High</span>
         </div>
         <div class="ck-item" data-group="access" data-id="ac2">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Do any SharePoint documents require access restrictions beyond the role level — e.g. visible only to specific individuals?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Access control · SharePoint connector</span></div>
-          </div>
-          <span class="ck-priority p-medium">Medium</span>
-        </div>
-        <div class="ck-item" data-group="access" data-id="ac3">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">What is the audit log retention period? GDPR may impose constraints on logs containing personal data (query text may reference names).</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Access control · M5</span></div>
+            <div class="ck-item-q">What data protection review and retention rule apply to the agent's conversation logs?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Data protection · M5</span></div>
           </div>
           <span class="ck-priority p-high">High</span>
-        </div>
-        <div class="ck-item" data-group="access" data-id="ac4">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Does our organisation require a Data Protection Impact Assessment (DPIA) before deploying an AI system that indexes internal documents?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Access control · M5 · M10</span></div>
-          </div>
-          <span class="ck-priority p-critical">Critical</span>
-        </div>
-        <div class="ck-item" data-group="access" data-id="ac5">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Should meeting minutes from all Teams channels be indexed, or only specific channels (e.g. Demand Follow-up)?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Teams connector · M3</span></div>
-          </div>
-          <span class="ck-priority p-medium">Medium</span>
         </div>
       </div>
     </div>
 
-    <!-- GROUP: DATA & KNOWLEDGE -->
     <div class="ck-group">
       <div class="ck-group-header">
         <span class="ck-group-icon" style="background:#EEEDFE;color:#3C3489;"><i class="ti ti-database"></i></span>
         <div>
-          <div class="ck-group-title">Data &amp; Knowledge Store</div>
-          <div class="ck-group-sub">Indexing scope, chunk size, freshness, historical data</div>
+          <div class="ck-group-title">Data Ownership &amp; Quality</div>
+          <div class="ck-group-sub">Rank, outcomes list, accuracy</div>
         </div>
-        <span class="ck-group-badge" id="badge-data">0/5</span>
+        <span class="ck-group-badge" id="badge-data">0/3</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="data" data-id="d1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">How many total demands exist today and what is the average length of business requirement texts? Required to estimate storage and embedding cost.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Vector DB · M2</span></div>
+            <div class="ck-item-q">Who sets rank in A-ah!, how often is it reviewed, and how are ties handled?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-tag tag-exec">Executive</span><span class="ck-source">Rank · M2</span></div>
           </div>
           <span class="ck-priority p-high">High</span>
         </div>
         <div class="ck-item" data-group="data" data-id="d2">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">How far back should historical meeting minutes and documents be indexed at launch — last 6 months, 12 months, or all available history?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Indexing pipeline · M2</span></div>
+            <div class="ck-item-q">Who fills and maintains the list of structured assessment outcomes?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Outcomes list · M2</span></div>
           </div>
-          <span class="ck-priority p-medium">Medium</span>
+          <span class="ck-priority p-high">High</span>
         </div>
         <div class="ck-item" data-group="data" data-id="d3">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">What maximum staleness is acceptable per source — how quickly must a status change in A-ah! be reflected in agent answers?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Indexing pipeline</span></div>
+            <div class="ck-item-q">What accuracy on the test set is enough to start the pilot, and do document questions need a custom knowledge store?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-tag tag-it">IT</span><span class="ck-source">Accuracy · M4</span></div>
           </div>
-          <span class="ck-priority p-medium">Medium</span>
-        </div>
-        <div class="ck-item" data-group="data" data-id="d4">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">What happens if an indexing job fails — should the agent serve stale data with a freshness warning, or block queries until the index is healthy?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">Indexing pipeline · M2</span></div>
-          </div>
-          <span class="ck-priority p-medium">Medium</span>
-        </div>
-        <div class="ck-item" data-group="data" data-id="d5">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Should the agent be able to answer "what changed between version 1 and version 2 of this document", or is latest-version-only sufficient for Phase 1?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">SharePoint connector</span></div>
-          </div>
-          <span class="ck-priority p-low">Low</span>
+          <span class="ck-priority p-critical">Critical</span>
         </div>
       </div>
     </div>
 
-    <!-- GROUP: GOVERNANCE & ROLLOUT -->
     <div class="ck-group">
       <div class="ck-group-header">
         <span class="ck-group-icon" style="background:#F1EFE8;color:#5F5E5A;"><i class="ti ti-flag"></i></span>
         <div>
           <div class="ck-group-title">Governance &amp; Rollout</div>
-          <div class="ck-group-sub">Ownership, SLA, Phase 2 write-back approvals, analytics</div>
+          <div class="ck-group-sub">Ownership, baseline, write-back</div>
         </div>
-        <span class="ck-group-badge" id="badge-gov">0/5</span>
+        <span class="ck-group-badge" id="badge-gov">0/3</span>
       </div>
       <div class="ck-items">
         <div class="ck-item" data-group="gov" data-id="g1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Who is the long-term owner of the agent — IT team, demand management team, or a shared responsibility model?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">M12</span></div>
+            <div class="ck-item-q">Who owns the agent after the pilot: IT, the demand management team, or shared?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Ownership · M9</span></div>
           </div>
-          <span class="ck-priority p-high">High</span>
+          <span class="ck-priority p-medium">Medium</span>
         </div>
         <div class="ck-item" data-group="gov" data-id="g2">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">What pilot group do we start with — which demand managers and business stakeholders are the best early adopters for M6?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">M6</span></div>
+            <div class="ck-item-q">How much time does one executive pack take today? Measure it before the pilot to show the benefit.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Baseline · M5</span></div>
           </div>
-          <span class="ck-priority p-high">High</span>
+          <span class="ck-priority p-medium">Medium</span>
         </div>
         <div class="ck-item" data-group="gov" data-id="g3">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
-            <div class="ck-item-q">Which analytics tool will power the usage dashboard in Phase 2 — Power BI, Grafana, or a custom solution?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-source">M11</span></div>
-          </div>
-          <span class="ck-priority p-low">Low</span>
-        </div>
-        <div class="ck-item" data-group="gov" data-id="g4">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">Phase 2 write-back (M10): which fields can the agent propose updating in A-ah!, and who is the approving authority for each update?</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">M10</span></div>
-          </div>
-          <span class="ck-priority p-high">High</span>
-        </div>
-        <div class="ck-item" data-group="gov" data-id="g5">
-          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
-          <div class="ck-item-body">
-            <div class="ck-item-q">What name and branding should the agent have internally? A recognisable name drives adoption.</div>
-            <div class="ck-item-meta"><span class="ck-tag tag-exec">Executive</span><span class="ck-source">M12</span></div>
+            <div class="ck-item-q">Is there a supported A-ah! write path, and does write-back need formal sign-off? Needed only if Phase 2 write-back goes ahead.</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-it">IT</span><span class="ck-tag tag-legal">Legal</span><span class="ck-source">Write-back · M8</span></div>
           </div>
           <span class="ck-priority p-low">Low</span>
         </div>
@@ -1081,7 +944,7 @@
       </div>
       <div class="tab-pane" id="rag-decisions">
         <ul class="decisions-list">
-          <li><div class="d-num">?</div><div class="d-text"><strong>Vector DB choice:</strong> Azure AI Search (zero infra if already on Azure) vs Pinecone vs Weaviate. Depends on your cloud environment.</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Vector DB choice:</strong> Azure AI Search (zero infra if already on Azure) or another Azure-hosted option. Services outside the Microsoft perimeter are excluded by policy.</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Chunk size:</strong> 512 tokens default. Demand records with long requirement fields may need larger windows. Needs empirical testing with real A-ah! data.</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Multi-lingual support:</strong> Are demands and documents in multiple languages? If yes, a multilingual embedding model is needed from day one.</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Re-ranking latency:</strong> A cross-encoder adds ~100–200ms. Acceptable trade-off for your use case?</div></li>
@@ -1639,7 +1502,7 @@
       </div>
       <div class="tab-pane" id="ks-vec-decisions">
         <ul class="decisions-list">
-          <li><div class="d-num">?</div><div class="d-text"><strong>Vector DB platform:</strong> Azure AI Search (best if already on Azure — integrated auth, no extra infra), Pinecone (managed, fastest queries), or Weaviate (open source, full control). What is your cloud environment?</div></li>
+          <li><div class="d-num">?</div><div class="d-text"><strong>Vector DB platform:</strong> Azure AI Search (best if already on Azure — integrated auth, no extra infra) or another Azure-hosted option. Services outside the Microsoft perimeter are excluded by policy. What is your cloud environment?</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Index size estimate:</strong> How many demands exist today, and what is the average length of business requirements? This determines initial storage and embedding cost.</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Multilingual content:</strong> Are demands or documents written in multiple languages? The embedding model choice must be made before any data is indexed.</div></li>
           <li><div class="d-num">?</div><div class="d-text"><strong>Score threshold tuning:</strong> The 0.70 threshold is a starting point. It must be calibrated on real demand data — too high and the agent says &quot;I don&apos;t know&quot; too often; too low and answers become noisy.</div></li>
@@ -2054,7 +1917,7 @@ var simpleDetails = {
   "s-teams":{title:"Teams + Copilot",body:"Collaboration hub. Copilot records follow-up meetings and produces structured minutes with decision logs, action items, and risk flags — all made searchable."},
   "s-sp":{title:"SharePoint",body:"Document archive. Stores mission briefs, deliverables, presentations, and compliance artefacts. The connector always surfaces the latest approved version."},
   "s-jira":{title:"Jira",body:"Developer and PM tracking. A-ah! holds the demand-level view; Jira holds the technical task breakdown. The agent bridges them in its answers."},
-  "ks-vec":{title:"Vector database",body:"Stores embeddings of demand records, document chunks, and meeting summaries. Enables semantic search — finds conceptually related results, not just keyword matches. Options: Azure AI Search, Pinecone, Weaviate."},
+  "ks-vec":{title:"Vector database",body:"Stores embeddings of demand records, document chunks, and meeting summaries. Enables semantic search — finds conceptually related results, not just keyword matches. Option: Azure AI Search, hosted in the Microsoft perimeter."},
   "ks-meta":{title:"Metadata cache",body:"Fast-lookup store for structured demand attributes: IDs, statuses, owners, dates, and any structured assessment outcomes that need a home outside A-ah!. Answers factual queries without hitting the vector DB every time."},
   "ks-index":{title:"Indexing pipeline",body:"Scheduled jobs sync source systems regularly. Event-triggered sync fires on A-ah! status changes or new SharePoint uploads. Copilot minutes ingested after each meeting."},
   "ks-access":{title:"Access control",body:"Enforces role-based visibility. Executives see all demands. Business stakeholders see only their own. Developers see technical detail. Filters retrieval before it reaches the LLM."}
@@ -2452,7 +2315,7 @@ openModal = function(id) {
 
 
 // Roadmap milestone detail
-var milestoneData = {"p1-m1": {"title": "M1 — Data access & connectivity assessment (Weeks 1–3)", "deliverables": ["Snowflake coverage assessment: which A-ah! objects, fields and history are available (including business requirements text and Jira links)", "Read-only role or service account on the A-ah! views approved and tested", "Refresh frequency and latency measured; last-refresh timestamp available", "Microsoft Graph API app registration created with correct permissions", "Jira REST API credentials validated; connectivity tests passing for all source systems"], "decisions": ["Confirm Snowflake holds the A-ah! fields the agent needs — most critical decision", "Confirm how the agent reaches Snowflake from the Microsoft ecosystem (supported connector, security constraints)", "Decide separate cache vs Snowflake views as the structured tier, based on measured latency", "Confirm IT admin can create the Graph API app registration", "Define the service accounts all connectors will use"], "risk": "If Snowflake lacks key fields (e.g. business requirements text) or refreshes too slowly, Phase 1 needs a fallback: the A-ah! API or an export for the missing fields, or a narrower scope. This must be resolved in Week 1 — all other milestones depend on it. Snowflake is read-only, so Phase 2 write-back is not covered."}, "p1-m2": {"title": "M2 — Knowledge store setup (Weeks 4–7)", "deliverables": ["Vector DB instance deployed and accessible (Azure AI Search / Pinecone / Weaviate)", "Metadata cache (Redis or PostgreSQL) running with demand schema", "Embedding pipeline processing test documents correctly", "Initial bulk load of all A-ah! demands completed", "SharePoint document archive indexed (last 12 months minimum)"], "decisions": ["Vector DB platform: Azure AI Search vs Pinecone vs Weaviate", "Embedding model: text-embedding-3-small (English) or multilingual-e5", "Chunk size: 512 tokens default — validate with real A-ah! requirement texts", "Historical data scope: how far back to index documents and meeting minutes?"], "risk": "Bulk indexing time depends on data volume. Plan for an off-hours run and budget for embedding API costs. Estimate: ~$0.02 per 1M tokens for text-embedding-3-small."}, "p1-m3": {"title": "M3 — Connector development (Weeks 6–10)", "deliverables": ["Snowflake connector: A-ah! views, incremental sync on updated_at, data-as-of timestamp", "Teams connector: Graph API fetch of Copilot minutes, structured parsing of decisions and actions", "SharePoint connector: file discovery, text extraction (PDF/DOCX/PPTX), chunking", "Jira connector: JQL-based issue fetch, sprint board sync", "All connectors tested with real data — not mocks"], "decisions": ["Snowflake refresh frequency confirmed? Define sync interval and how stale answers are flagged", "Teams meeting scope: which channels and meeting types to include?", "SharePoint root path convention: how are demand folders named?", "Jira linking convention: custom field, label, or epic hierarchy?"], "risk": "Copilot transcript availability via Graph API depends on Teams tenant configuration. Requires IT admin to enable and test before this milestone can complete."}, "p1-m4": {"title": "M4 — Agent core & RAG engine (Weeks 8–12)", "deliverables": ["LLM integration (Azure OpenAI GPT-4o, within the Microsoft perimeter)", "RAG pipeline: hybrid search, re-ranking, top-k retrieval with source tagging", "Intent router classifying all query types correctly (target: >90% on test set)", "Context builder resolving roles from Azure AD", "System prompt tuned with full demand lifecycle vocabulary and status definitions"], "decisions": ["LLM platform: Azure OpenAI vs Copilot-based agent — cost, data residency, compliance", "Confidence threshold for no-answer responses: start at 0.70, calibrate on real data", "Stateful sessions: recommend 3-turn memory for Phase 1", "Escalation path when confidence is low: Teams alert to demand manager?"], "risk": "RAG quality depends on knowledge store data quality. Poor A-ah! requirement text or inconsistent SharePoint naming will degrade answer quality. Plan a data quality review before this milestone."}, "p1-m5": {"title": "M5 — Access control & SSO (Weeks 10–13)", "deliverables": ["Azure AD SSO integrated — all users authenticated via existing credentials", "Role matrix implemented: 4 roles mapped to AD groups", "Per-chunk allowed_roles metadata set correctly at index time", "Audit log running: query, caller, role, chunks retrieved, response", "GDPR review completed for query log retention policy"], "decisions": ["Are 4 roles sufficient or are sub-roles needed (Architect, Business Analyst)?", "Document-level permissions: some files restricted beyond role level?", "Audit log retention period — align with your GDPR and data policy", "Anonymous access: not recommended for Phase 1"], "risk": "If SharePoint documents have individual-level permissions (not role-level), the connector must respect those. This requires additional mapping work that may extend the timeline."}, "p1-m6": {"title": "M6 — Pilot & go-live (Weeks 13–16)", "deliverables": ["Internal pilot with 3-5 demand managers and 2-3 business stakeholders for 2 weeks", "Feedback log reviewed and top issues resolved", "Score threshold tuned based on real query patterns", "Teams bot deployed to pilot group", "Go/no-go decision meeting with stakeholders and full organisation rollout"], "decisions": ["Pilot group composition: who are the best early adopters?", "Feedback collection: Teams survey, direct interview, or usage analytics?", "Go-live criteria: minimum answer accuracy threshold before broader rollout", "Support model: who handles user questions about the agent in Month 1?"], "risk": "User adoption is the biggest risk — not technical. A dedicated internal communication campaign and visible executive sponsorship are critical. Without them the pilot generates insufficient feedback."}, "p2-m1": {"title": "M7 — Proactive alerts (Month 5–6)", "deliverables": ["Monitoring job scanning demand portfolio daily for anomalies", "Teams alerts sent for: stalled demands (>30 days same stage), approaching deadlines, open unowned action items", "Alert templates reviewed and approved by demand managers", "Alert frequency configurable per user preference"], "decisions": ["What constitutes a stalled demand: 30 days? 45 days? Configurable per stage?", "Which roles receive which alert types?", "Alert channel: Teams DM, Teams channel, or email?", "Opt-out mechanism: users must be able to mute specific alert types"], "risk": "Alert fatigue is a real risk. Start with a narrow set of high-value alerts and expand based on feedback. Do not launch with more than 3 alert types simultaneously."}, "p2-m2": {"title": "M8 — Status update automation (Month 6–7)", "deliverables": ["Weekly draft summary generated automatically for each active demand", "Draft delivered to demand manager via Teams for review", "One-click approve, edit, or reject flow implemented", "Approved summary posted to Teams channel (not written to A-ah! yet)", "Audit trail of all drafts, edits, and approvals"], "decisions": ["Draft format: bullet list, narrative paragraph, or structured table?", "Approval flow: individual manager approval or team lead sign-off?", "What triggers generation: fixed day of week or demand manager request?", "Scope: all demands or only active phases (Design and Implementation)?"], "risk": "Managers may resist if they feel automation reduces control. Position drafts as time-savers, not replacements. The human always has the final word before anything is shared externally."}, "p2-m3": {"title": "M9 — Meeting intelligence (Month 7–8)", "deliverables": ["Post-meeting: action items auto-extracted and sent to owners via Teams", "Suggested Jira ticket updates proposed (not auto-created)", "Decisions flagged that require sign-off from a named stakeholder", "Meeting summary automatically linked to the relevant A-ah! demand", "Weekly digest of all open actions across all demands"], "decisions": ["Who receives suggested Jira updates: developer, PM, or demand manager?", "Confidence threshold for action item extraction: when to skip rather than guess?", "Should the agent suggest Jira ticket creation or only flag it for human action?"], "risk": "Action item extraction accuracy depends on Copilot summary quality. If Copilot minutes are inconsistent in format across meeting types, extraction quality will vary significantly."}, "p2-m4": {"title": "M10 — Write-back to A-ah! (Month 8–9)", "deliverables": ["Write-back API integration with A-ah! for status and stage updates only", "Human-in-the-loop approval flow: agent proposes, manager confirms via Teams button", "Full audit trail: who approved, what was changed, when, and based on what source", "DPIA completed and signed off by DPO or compliance team", "Rollback mechanism: every write-back reversible within 24 hours"], "decisions": ["Which fields can the agent update? Recommend: status and stage only in Phase 2", "A-ah! write path: does A-ah! expose a supported write API? Snowflake is read-only and cannot be used for write-back", "Approval flow: in-Teams confirmation button or dedicated review UI?", "Maximum write-backs per day before additional review is triggered?", "DPIA scope: does your organisation require DPO sign-off before this goes live?"], "risk": "Highest-risk milestone. An incorrect write-back could corrupt the system of record. Extensive testing in a staging environment is mandatory. Do not skip the DPIA even if it seems like overhead. Note: Snowflake is read-only, so write-back still requires a supported A-ah! write path — this dependency is not removed by the Snowflake integration."}, "p2-m5": {"title": "M11 — Analytics dashboard (Month 9–10)", "deliverables": ["Usage dashboard: queries per day, per role, per demand", "Most-queried demands and topics identified", "Unanswered and low-confidence query log reviewed weekly", "Knowledge gap report: questions the agent cannot answer (signals missing content)", "Monthly accuracy report shared with demand management team"], "decisions": ["Dashboard tool: Power BI (likely already available), Grafana, or custom?", "Who reviews the knowledge gap report: demand managers or a dedicated knowledge owner?", "How are knowledge gaps addressed: manual content creation or connector enhancement?"], "risk": "Low usage in early months may look like failure when it is actually a change management challenge. Frame metrics around query quality and user satisfaction, not just volume."}, "p2-m6": {"title": "M12 — Organisation-wide rollout (Month 10–12)", "deliverables": ["All 4 consumer profiles onboarded with role-appropriate access", "Onboarding materials: 1-page quick-start guide and 3-minute video per role", "Governance model defined: who owns the agent and who handles escalations?", "SLA defined: agent availability (uptime) and freshness guarantee per source", "Quarterly review cadence established for continuous improvement"], "decisions": ["Agent name and branding: give it a name that feels natural for your organisation", "Communication campaign: how do you announce it to the full organisation?", "Support model: dedicated Teams channel for agent feedback and issues?", "Long-term ownership: IT team, demand management team, or shared responsibility?"], "risk": "Sustainable adoption requires formal ongoing ownership. If no one is responsible for maintaining the knowledge store and tuning the agent, quality will degrade over time. Define ownership before go-live."}};
+var milestoneData = {"p1-m1": {"title": "M1 — Access & feasibility assessment", "deliverables": ["Snowflake coverage assessment: which A-ah! objects, fields and history are available (rank, stage, status, owner, team, requirements text, change history)", "Connection method agreed with IT: Entra ID OAuth, delegated users or service principal, and the credential mode for the agent", "Policies, data loss prevention rules and licences confirmed for the Snowflake connector and the agent", "Environment confirmed: the Default environment or a dedicated one", "Refresh frequency of the Snowflake data measured, so answers can show a data-as-of line"], "decisions": ["Does Snowflake hold the fields the agent needs? This is the most critical decision", "Which credential mode applies: end-user or maker?", "Is the Default environment acceptable, or does IT require another?", "Which licence and consumption model covers the connector and the flows?"], "risk": "If Snowflake lacks key fields (for example requirements text or change history), the pilot needs a fallback: a narrower scope, an export for the missing fields, or the A-ah! API. Everything else depends on this, so it comes first."}, "p1-m2": {"title": "M2 — Data foundation", "deliverables": ["Curated Snowflake views for the questions in scope, read-only", "A SharePoint list for structured assessment outcomes, one row per demand", "SharePoint root path and folder naming convention agreed, within the 25-URL limit of generative mode", "Rank in A-ah!: owner, update frequency and tie handling agreed"], "decisions": ["Which fields go in the views, and who approves them?", "Who fills and maintains the outcomes list?", "SharePoint root path: how are demand folders named?", "Who sets rank and how often is it reviewed?"], "risk": "The outcomes list depends on manual entry. If nobody owns it, the agent will report empty outcomes. Agree the owner before building on it."}, "p1-m3": {"title": "M3 — Agent build", "deliverables": ["Agent with instructions in English, web search off and ungrounded answers off", "Fixed, parameterised flows on the Snowflake views, with no free-form SQL", "SharePoint and Teams as knowledge sources, with citations in every answer", "Data-as-of line on every figure that comes from Snowflake", "Agent published only to the builder, until IT is involved"], "decisions": ["Which questions are in scope for the first release?", "What does the agent say when it cannot answer?", "Delivery channel: Teams only, or also Microsoft Copilot?"], "risk": "Generative answers can sound right and be wrong when the right document is not found. Citations and the test in M4 are the main protection."}, "p1-m4": {"title": "M4 — Accuracy test", "deliverables": ["Test set of 20-30 real questions with known answers", "Results recorded per type: data questions, document questions, meeting questions", "Go/no-go threshold agreed with the demand management team", "Evidence on whether a custom knowledge store is needed for documents"], "decisions": ["What accuracy is enough to start the pilot?", "Do document questions fail more often than data questions? If so, consider the custom build for that part"], "risk": "The built-in evaluation feature is not yet read in detail, so its limits are unknown. The test set can be run by hand if needed."}, "p1-m5": {"title": "M5 — Pilot & go/no-go", "deliverables": ["Pilot with a small group of demand managers", "Feedback collected and top issues resolved", "Baseline effort measured: time spent on one executive pack today versus with the agent", "Go/no-go decision with IT and the demand management team"], "decisions": ["Who are the early adopters?", "How is feedback collected: survey, interviews or usage data?", "What are the go-live criteria?"], "risk": "Adoption is the main risk, not technology. Without a clear baseline, the benefit is hard to show."}, "p2-m1": {"title": "M6 — Executive Pack", "deliverables": ["Flow that reads active demands by rank and keeps the first 3 or 4", "Cards with rank, name and stage, short status, assessment result and decision to submit", "Missing outcomes flagged on each card", "Text cards first; slide file output tested later"], "decisions": ["Do dependencies between demands need to be recorded in a structured way?", "Can the tenant produce a slide file, or are text cards the output?", "On request only, or scheduled once the credential mode allows it?"], "risk": "Scheduled runs fail when maker credentials are blocked by an administrator, so the pack starts on request. Schedule decisions stay with people."}, "p2-m2": {"title": "M7 — Jira and alerts", "deliverables": ["Jira connector approved and connected, read-only", "Questions on sprint and issue status answered with citations", "Alerts for stalled demands and open actions, with a narrow first set", "Alert opt-out for each person"], "decisions": ["Is the Jira connector available and allowed in the tenant?", "What counts as a stalled demand?", "Which alert types are sent to which roles?"], "risk": "Alert fatigue is a real risk. Start with at most three alert types."}, "p2-m3": {"title": "M8 — Write-back to A-ah!", "deliverables": ["A supported A-ah! write path confirmed", "Human approval for every change, with a full audit trail", "Data protection impact assessment signed off", "Rollback within 24 hours"], "decisions": ["Does A-ah! expose a supported write API? Snowflake is read-only", "Which fields may the agent update: status and stage only?", "Does the organisation require formal sign-off before this goes live?"], "risk": "Highest-risk milestone: a wrong write could corrupt the system of record. It requires formal governance approval."}, "p2-m4": {"title": "M9 — Rollout & scale-up decision", "deliverables": ["Onboarding material for each profile", "Owner of the agent and escalation route defined", "Usage and unanswered-question review, monthly", "Decision recorded: stay on Copilot Studio, or build the custom components for the parts that need them"], "decisions": ["Who owns the agent after the pilot?", "Which evidence triggers the custom build for documents or search?"], "risk": "Without a named owner, quality drops over time. Define ownership before go-live."}};
 
 function showMilestone(id, srcEl) {
   var d = milestoneData[id];
@@ -2504,14 +2367,14 @@ document.querySelectorAll('.milestone[data-milestone]').forEach(function(el){
 // Checklist logic
 var ckState = {};
 var ckGroups = {
-  infra: ['i1','i2','i3','i4','i5','i6'],
-  api:   ['a1','a2','a3','a4','a5','a6','a7','a8','a9'],
-  agent: ['ag1','ag2','ag3','ag4','ag5'],
-  access:['ac1','ac2','ac3','ac4','ac5'],
-  data:  ['d1','d2','d3','d4','d5'],
-  gov:   ['g1','g2','g3','g4','g5']
+  infra: ['i1','i2','i3'],
+  api: ['a1','a2','a3','a4','a5','a6'],
+  agent: ['ag1','ag2','ag3'],
+  access: ['ac1','ac2'],
+  data: ['d1','d2','d3'],
+  gov: ['g1','g2','g3']
 };
-var ckTotal = 35;
+var ckTotal = 20;
 
 function ckUpdateProgress() {
   var resolved = Object.values(ckState).filter(Boolean).length;
@@ -2554,7 +2417,7 @@ document.getElementById('ck-reset').addEventListener('click', function() {
 
 document.getElementById('ck-export').addEventListener('click', function() {
   var lines = ['OPEN DECISIONS — AI Demand Management Assistant', 'Generated: ' + new Date().toLocaleDateString('en-GB'), ''];
-  var groupNames = {infra:'Infrastructure & Platform', api:'Source Systems & APIs', agent:'Agent Design', access:'Access Control & Security', data:'Data & Knowledge Store', gov:'Governance & Rollout'};
+  var groupNames = {infra:'Platform & Environment', api:'Source Systems & APIs', agent:'Agent Design', access:'Access Control & Security', data:'Data Ownership & Quality', gov:'Governance & Rollout'};
   Object.keys(ckGroups).forEach(function(group) {
     var open = ckGroups[group].filter(function(id){ return !ckState[id]; });
     if(!open.length) return;
