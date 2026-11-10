@@ -376,13 +376,14 @@
     <a href="https://demand-intelligence.fastwilll.workers.dev/preview" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-arrow-left" style="font-size:12px;"></i> Overview</a>
     <a href="https://requirements-assistant.fastwilll.workers.dev/preview" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:#1A2E52;color:#7AAAE8;border:.5px solid #2A4F8A;text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-file-description" style="font-size:12px;"></i> Requirements Assistant</a>
     <a href="https://demand-agent-ui.fastwilll.workers.dev" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green-bg);color:var(--green-dk);border:.5px solid var(--green);text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><i class="ti ti-robot" style="font-size:12px;"></i> Demand Agent &#9675;</a>
+    <a href="architecture-detail.html" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--bg3);color:var(--text);border:.5px solid var(--border);text-decoration:none;"><i class="ti ti-layout-list" style="font-size:12px;"></i> Solution detail</a>
     <div style="width:.5px;height:16px;background:var(--border);margin:0 2px;"></div>
     <a href="/login" id="logout-btn" onclick="sessionStorage.removeItem('di_auth')" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;color:var(--text3);border:.5px solid var(--border);text-decoration:none;transition:opacity .15s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'"><i class="ti ti-logout" style="font-size:12px;"></i> Sign out</a>
   </div>
 </nav>
 <header>
   <div>
-    <div class="h-eyebrow">Solution Architecture — Draft v1.1</div>
+    <div class="h-eyebrow">Solution Architecture — Draft v1.2</div>
     <h1>AI-Driven Demand Management Assistant</h1>
     <p>From fragmented knowledge to real-time decision intelligence. A unified AI layer connecting A-ah! (via Snowflake), Microsoft Teams, SharePoint, and Jira into a single conversational interface.</p>
     <span class="h-badge"><i class="ti ti-sparkles"></i> Any demand · Any time · Instant answers</span>
@@ -390,6 +391,7 @@
   <div class="h-meta">
     <span class="phase-pill">Phase 1 — Read-only</span>
     <span>Click any node to explore</span>
+    <a href="architecture-detail.html" style="font-size:11px;font-weight:500;color:var(--green-dk);text-decoration:underline;">Solution detail: Copilot Studio build &rarr;</a>
     <span style="font-size:10px;margin-top:4px;color:var(--green)">&#10022; animated deep dives available</span>
   </div>
 </header>
@@ -432,6 +434,7 @@
 
   <div class="layer l-core">
     <div class="layer-label">Intelligence core <span style="color:var(--green)">&#10022;</span></div>
+    <div style="font-size:11.5px;color:var(--text2);margin:-2px 0 10px 1px;line-height:1.55;">Preferred build: a Microsoft Copilot Studio agent, with a custom build as the scale-up option. <a href="architecture-detail.html" style="color:var(--green-dk);">See solution detail</a></div>
     <div class="node-row">
       <button class="node has-dive" data-modal="rag"><i class="ti ti-search n-icon"></i><div class="n-title">RAG engine</div><div class="n-sub">Retrieval-augmented generation</div></button>
       <button class="node has-dive" data-modal="router"><i class="ti ti-route n-icon"></i><div class="n-title">Intent router</div><div class="n-sub">Routes to right connector</div></button>
@@ -2052,7 +2055,7 @@ var simpleDetails = {
   "s-sp":{title:"SharePoint",body:"Document archive. Stores mission briefs, deliverables, presentations, and compliance artefacts. The connector always surfaces the latest approved version."},
   "s-jira":{title:"Jira",body:"Developer and PM tracking. A-ah! holds the demand-level view; Jira holds the technical task breakdown. The agent bridges them in its answers."},
   "ks-vec":{title:"Vector database",body:"Stores embeddings of demand records, document chunks, and meeting summaries. Enables semantic search — finds conceptually related results, not just keyword matches. Options: Azure AI Search, Pinecone, Weaviate."},
-  "ks-meta":{title:"Metadata cache",body:"Fast-lookup store for structured demand attributes: IDs, statuses, owners, dates. Answers factual queries without hitting the vector DB every time."},
+  "ks-meta":{title:"Metadata cache",body:"Fast-lookup store for structured demand attributes: IDs, statuses, owners, dates, and any structured assessment outcomes that need a home outside A-ah!. Answers factual queries without hitting the vector DB every time."},
   "ks-index":{title:"Indexing pipeline",body:"Scheduled jobs sync source systems regularly. Event-triggered sync fires on A-ah! status changes or new SharePoint uploads. Copilot minutes ingested after each meeting."},
   "ks-access":{title:"Access control",body:"Enforces role-based visibility. Executives see all demands. Business stakeholders see only their own. Developers see technical detail. Filters retrieval before it reaches the LLM."}
 };
