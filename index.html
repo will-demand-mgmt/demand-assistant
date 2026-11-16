@@ -383,7 +383,7 @@
 </nav>
 <header>
   <div>
-    <div class="h-eyebrow">Solution Architecture — Draft v1.2</div>
+    <div class="h-eyebrow">Solution Architecture — Draft v1.3</div>
     <h1>AI-Driven Demand Management Assistant</h1>
     <p>From fragmented knowledge to real-time decision intelligence. A unified AI layer connecting A-ah! (via Snowflake), Microsoft Teams, SharePoint, and Jira into a single conversational interface.</p>
     <span class="h-badge"><i class="ti ti-sparkles"></i> Any demand · Any time · Instant answers</span>
@@ -408,7 +408,8 @@
   </div>
 
   <div class="layer l-consumer">
-    <div class="layer-label">Consumers — any stakeholder, any time <span style="color:var(--green)">&#10022;</span></div>
+    <div class="layer-label">Consumers — demand managers first, then each role <span style="color:var(--green)">&#10022;</span></div>
+    <div style="font-size:11.5px;color:var(--text2);margin:-2px 0 10px 1px;line-height:1.55;">First phase: demand managers are the only direct users. They check the answers, build the story and share the output with developers and PMs, business stakeholders and executives. Direct access for the other roles is a later decision.</div>
     <div class="node-row">
       <button class="node has-dive" data-modal="cons-exec"><i class="ti ti-building-skyscraper n-icon"></i><div class="n-title">Executives</div><div class="n-sub">Portfolio overview, status</div></button>
       <button class="node has-dive" data-modal="cons-dm"><i class="ti ti-layout-dashboard n-icon"></i><div class="n-title">Demand managers</div><div class="n-sub">Your team — demand details</div></button>
@@ -505,9 +506,13 @@
       <div class="phase-body">
         <div class="phase-divider"></div>
         <div class="milestone-list">
+          <div class="milestone" data-milestone="p1-m0">
+            <div class="m-dot-col"><div class="m-dot" style="background:#1D9E75;"></div><div class="m-line" style="background:#E0F5EE;"></div></div>
+            <div class="m-content"><div class="m-title">M0 &mdash; Align on needs and use cases</div><div class="m-sub">Collect requirements from the demand managers; share and update the list of needs</div><div class="m-week" style="color:#1D9E75;">First step</div></div>
+          </div>
           <div class="milestone" data-milestone="p1-m1">
             <div class="m-dot-col"><div class="m-dot" style="background:#378ADD;"></div><div class="m-line" style="background:#E6F1FB;"></div></div>
-            <div class="m-content"><div class="m-title">M1 &mdash; Access & feasibility assessment</div><div class="m-sub">Check Copilot Studio policies and licences, the Snowflake connection and its coverage of A-ah! data, and the environment to build in</div><div class="m-week" style="color:#378ADD;">First</div></div>
+            <div class="m-content"><div class="m-title">M1 &mdash; Access & feasibility assessment</div><div class="m-sub">Check Copilot Studio policies and licences, the Snowflake connection and its coverage of A-ah! data, and the environment to build in</div><div class="m-week" style="color:#378ADD;">After M0</div></div>
           </div>
           <div class="milestone" data-milestone="p1-m2">
             <div class="m-dot-col"><div class="m-dot" style="background:#7F77DD;"></div><div class="m-line" style="background:#EEEDFE;"></div></div>
@@ -584,7 +589,7 @@
       <p>Open decisions for the Copilot Studio build, grouped by theme and linked to roadmap milestones. Bring this to your next steering meeting.</p>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 20 resolved</span>
+      <span id="ck-progress" style="font-size:12px;color:var(--text2);padding:5px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:20px;">0 / 21 resolved</span>
       <button id="ck-reset" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:transparent;border:.5px solid var(--border2);color:var(--text3);cursor:pointer;font-family:var(--font);">Reset all</button>
       <button id="ck-export" style="font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;background:var(--green);border:none;color:#fff;cursor:pointer;font-family:var(--font);">&#8681; Export open</button>
     </div>
@@ -697,9 +702,17 @@
           <div class="ck-group-title">Agent Design</div>
           <div class="ck-group-sub">Credential mode, channel, fallback behaviour</div>
         </div>
-        <span class="ck-group-badge" id="badge-agent">0/3</span>
+        <span class="ck-group-badge" id="badge-agent">0/4</span>
       </div>
       <div class="ck-items">
+        <div class="ck-item" data-group="agent" data-id="ag0">
+          <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
+          <div class="ck-item-body">
+            <div class="ck-item-q">Which needs and use cases go into the first release, as agreed with the demand managers?</div>
+            <div class="ck-item-meta"><span class="ck-tag tag-dm">DM Team</span><span class="ck-source">Needs · M0</span></div>
+          </div>
+          <span class="ck-priority p-high">High</span>
+        </div>
         <div class="ck-item" data-group="agent" data-id="ag1">
           <button class="ck-check" aria-label="Mark resolved"><i class="ti ti-circle"></i></button>
           <div class="ck-item-body">
@@ -844,7 +857,7 @@
   </div>
   <div style="font-size:11px;color:var(--text3);text-align:right;">
     <strong style="color:var(--text2);">AI-Driven Demand Management Assistant</strong>
-    <div style="margin-top:2px;">Solution Architecture &nbsp;&middot;&nbsp; Phase 1: Read-only &nbsp;&middot;&nbsp; <span style="font-size:10px;font-weight:500;color:var(--text3,#9A9A9E);letter-spacing:.04em;opacity:.7;">v1.1</span></div>
+    <div style="margin-top:2px;">Solution Architecture &nbsp;&middot;&nbsp; Phase 1: Read-only &nbsp;&middot;&nbsp; <span style="font-size:10px;font-weight:500;color:var(--text3,#9A9A9E);letter-spacing:.04em;opacity:.7;">v1.3</span></div>
   </div>
 </footer>
 
@@ -1693,7 +1706,7 @@
 <div class="modal-overlay" id="modal-cons-exec">
   <div class="modal-box" id="modal-cons-exec-box">
     <div class="modal-header">
-      <div><h2>Executives</h2><p>Portfolio-level visibility without coordination overhead. Real-time answers on demand status, risks, and priorities.</p></div>
+      <div><h2>Executives</h2><p>Portfolio-level visibility without coordination overhead. Real-time answers on demand status, risks, and priorities. <em>First phase: executives receive the output through the demand manager.</em></p></div>
       <button class="modal-close" data-close="cons-exec"><i class="ti ti-x"></i></button>
     </div>
     <div class="modal-body">
@@ -1739,7 +1752,7 @@
 <div class="modal-overlay" id="modal-cons-dm">
   <div class="modal-box" id="modal-cons-dm-box">
     <div class="modal-header">
-      <div><h2>Demand Managers</h2><p>The agent handles repetitive information requests so your team can focus on decisions, governance, and stakeholder relationships.</p></div>
+      <div><h2>Demand Managers</h2><p>The agent handles repetitive information requests so your team can focus on decisions, governance, and stakeholder relationships. <em>First phase: the only direct user of the agent, who checks the answers and shares the output.</em></p></div>
       <button class="modal-close" data-close="cons-dm"><i class="ti ti-x"></i></button>
     </div>
     <div class="modal-body">
@@ -1785,7 +1798,7 @@
 <div class="modal-overlay" id="modal-cons-dev">
   <div class="modal-box" id="modal-cons-dev-box">
     <div class="modal-header">
-      <div><h2>Developers &amp; Project Managers</h2><p>Technical context and sprint clarity without waiting for a sync meeting or navigating between Jira and A-ah!.</p></div>
+      <div><h2>Developers &amp; Project Managers</h2><p>Technical context and sprint clarity without waiting for a sync meeting or navigating between Jira and A-ah!. <em>First phase: developers and PMs receive the output through the demand manager.</em></p></div>
       <button class="modal-close" data-close="cons-dev"><i class="ti ti-x"></i></button>
     </div>
     <div class="modal-body">
@@ -1831,7 +1844,7 @@
 <div class="modal-overlay" id="modal-cons-biz">
   <div class="modal-box" id="modal-cons-biz-box">
     <div class="modal-header">
-      <div><h2>Business Stakeholders</h2><p>Self-service visibility on their own demands &mdash; status, documents, and next steps &mdash; without needing to contact the demand team.</p></div>
+      <div><h2>Business Stakeholders</h2><p>Self-service visibility on their own demands &mdash; status, documents, and next steps &mdash; without needing to contact the demand team. <em>First phase: business stakeholders receive the output through the demand manager.</em></p></div>
       <button class="modal-close" data-close="cons-biz"><i class="ti ti-x"></i></button>
     </div>
     <div class="modal-body">
@@ -2315,7 +2328,7 @@ openModal = function(id) {
 
 
 // Roadmap milestone detail
-var milestoneData = {"p1-m1": {"title": "M1 — Access & feasibility assessment", "deliverables": ["Snowflake coverage assessment: which A-ah! objects, fields and history are available (rank, stage, status, owner, team, requirements text, change history)", "Connection method agreed with IT: Entra ID OAuth, delegated users or service principal, and the credential mode for the agent", "Policies, data loss prevention rules and licences confirmed for the Snowflake connector and the agent", "Environment confirmed: the Default environment or a dedicated one", "Refresh frequency of the Snowflake data measured, so answers can show a data-as-of line"], "decisions": ["Does Snowflake hold the fields the agent needs? This is the most critical decision", "Which credential mode applies: end-user or maker?", "Is the Default environment acceptable, or does IT require another?", "Which licence and consumption model covers the connector and the flows?"], "risk": "If Snowflake lacks key fields (for example requirements text or change history), the pilot needs a fallback: a narrower scope, an export for the missing fields, or the A-ah! API. Everything else depends on this, so it comes first."}, "p1-m2": {"title": "M2 — Data foundation", "deliverables": ["Curated Snowflake views for the questions in scope, read-only", "A SharePoint list for structured assessment outcomes, one row per demand", "SharePoint root path and folder naming convention agreed, within the 25-URL limit of generative mode", "Rank in A-ah!: owner, update frequency and tie handling agreed"], "decisions": ["Which fields go in the views, and who approves them?", "Who fills and maintains the outcomes list?", "SharePoint root path: how are demand folders named?", "Who sets rank and how often is it reviewed?"], "risk": "The outcomes list depends on manual entry. If nobody owns it, the agent will report empty outcomes. Agree the owner before building on it."}, "p1-m3": {"title": "M3 — Agent build", "deliverables": ["Agent with instructions in English, web search off and ungrounded answers off", "Fixed, parameterised flows on the Snowflake views, with no free-form SQL", "SharePoint and Teams as knowledge sources, with citations in every answer", "Data-as-of line on every figure that comes from Snowflake", "Agent published only to the builder, until IT is involved"], "decisions": ["Which questions are in scope for the first release?", "What does the agent say when it cannot answer?", "Delivery channel: Teams only, or also Microsoft Copilot?"], "risk": "Generative answers can sound right and be wrong when the right document is not found. Citations and the test in M4 are the main protection."}, "p1-m4": {"title": "M4 — Accuracy test", "deliverables": ["Test set of 20-30 real questions with known answers", "Results recorded per type: data questions, document questions, meeting questions", "Go/no-go threshold agreed with the demand management team", "Evidence on whether a custom knowledge store is needed for documents"], "decisions": ["What accuracy is enough to start the pilot?", "Do document questions fail more often than data questions? If so, consider the custom build for that part"], "risk": "The built-in evaluation feature is not yet read in detail, so its limits are unknown. The test set can be run by hand if needed."}, "p1-m5": {"title": "M5 — Pilot & go/no-go", "deliverables": ["Pilot with a small group of demand managers", "Feedback collected and top issues resolved", "Baseline effort measured: time spent on one executive pack today versus with the agent", "Go/no-go decision with IT and the demand management team"], "decisions": ["Who are the early adopters?", "How is feedback collected: survey, interviews or usage data?", "What are the go-live criteria?"], "risk": "Adoption is the main risk, not technology. Without a clear baseline, the benefit is hard to show."}, "p2-m1": {"title": "M6 — Executive Pack", "deliverables": ["Flow that reads active demands by rank and keeps the first 3 or 4", "Cards with rank, name and stage, short status, assessment result and decision to submit", "Missing outcomes flagged on each card", "Text cards first; slide file output tested later"], "decisions": ["Do dependencies between demands need to be recorded in a structured way?", "Can the tenant produce a slide file, or are text cards the output?", "On request only, or scheduled once the credential mode allows it?"], "risk": "Scheduled runs fail when maker credentials are blocked by an administrator, so the pack starts on request. Schedule decisions stay with people."}, "p2-m2": {"title": "M7 — Jira and alerts", "deliverables": ["Jira connector approved and connected, read-only", "Questions on sprint and issue status answered with citations", "Alerts for stalled demands and open actions, with a narrow first set", "Alert opt-out for each person"], "decisions": ["Is the Jira connector available and allowed in the tenant?", "What counts as a stalled demand?", "Which alert types are sent to which roles?"], "risk": "Alert fatigue is a real risk. Start with at most three alert types."}, "p2-m3": {"title": "M8 — Write-back to A-ah!", "deliverables": ["A supported A-ah! write path confirmed", "Human approval for every change, with a full audit trail", "Data protection impact assessment signed off", "Rollback within 24 hours"], "decisions": ["Does A-ah! expose a supported write API? Snowflake is read-only", "Which fields may the agent update: status and stage only?", "Does the organisation require formal sign-off before this goes live?"], "risk": "Highest-risk milestone: a wrong write could corrupt the system of record. It requires formal governance approval."}, "p2-m4": {"title": "M9 — Rollout & scale-up decision", "deliverables": ["Onboarding material for each profile", "Owner of the agent and escalation route defined", "Usage and unanswered-question review, monthly", "Decision recorded: stay on Copilot Studio, or build the custom components for the parts that need them"], "decisions": ["Who owns the agent after the pilot?", "Which evidence triggers the custom build for documents or search?"], "risk": "Without a named owner, quality drops over time. Define ownership before go-live."}};
+var milestoneData = {"p1-m0": {"title": "M0 — Align on needs and use cases", "deliverables": ["Shared list of needs and use cases, starting from the high-level design", "Feedback from the demand managers: what they are asked today and which questions they want the agent to answer", "Needs ranked by how often they come up", "First-release scope agreed with the demand management team lead"], "decisions": ["Which needs go into the first release?", "How are needs ranked: by frequency, by effort saved, or both?"], "risk": "If needs differ a lot between demand managers, the first release has to stay narrow. Collect them before building, not after."}, "p1-m1": {"title": "M1 — Access & feasibility assessment", "deliverables": ["Snowflake coverage assessment: which A-ah! objects, fields and history are available (rank, stage, status, owner, team, requirements text, change history)", "Connection method agreed with IT: Entra ID OAuth, delegated users or service principal, and the credential mode for the agent", "Policies, data loss prevention rules and licences confirmed for the Snowflake connector and the agent", "Environment confirmed: the Default environment or a dedicated one", "Refresh frequency of the Snowflake data measured, so answers can show a data-as-of line"], "decisions": ["Does Snowflake hold the fields the agent needs? This is the most critical decision", "Which credential mode applies: end-user or maker?", "Is the Default environment acceptable, or does IT require another?", "Which licence and consumption model covers the connector and the flows?"], "risk": "If Snowflake lacks key fields (for example requirements text or change history), the pilot needs a fallback: a narrower scope, an export for the missing fields, or the A-ah! API. Everything else depends on this, so it comes first."}, "p1-m2": {"title": "M2 — Data foundation", "deliverables": ["Curated Snowflake views for the questions in scope, read-only", "A SharePoint list for structured assessment outcomes, one row per demand", "SharePoint root path and folder naming convention agreed, within the 25-URL limit of generative mode", "Rank in A-ah!: owner, update frequency and tie handling agreed"], "decisions": ["Which fields go in the views, and who approves them?", "Who fills and maintains the outcomes list?", "SharePoint root path: how are demand folders named?", "Who sets rank and how often is it reviewed?"], "risk": "The outcomes list depends on manual entry. If nobody owns it, the agent will report empty outcomes. Agree the owner before building on it."}, "p1-m3": {"title": "M3 — Agent build", "deliverables": ["Agent with instructions in English, web search off and ungrounded answers off", "Fixed, parameterised flows on the Snowflake views, with no free-form SQL", "SharePoint and Teams as knowledge sources, with citations in every answer", "Data-as-of line on every figure that comes from Snowflake", "Agent published only to the builder, until IT is involved"], "decisions": ["Which questions are in scope for the first release?", "What does the agent say when it cannot answer?", "Delivery channel: Teams only, or also Microsoft Copilot?"], "risk": "Generative answers can sound right and be wrong when the right document is not found. Citations and the test in M4 are the main protection."}, "p1-m4": {"title": "M4 — Accuracy test", "deliverables": ["Test set of 20-30 real questions with known answers", "Results recorded per type: data questions, document questions, meeting questions", "Go/no-go threshold agreed with the demand management team", "Evidence on whether a custom knowledge store is needed for documents"], "decisions": ["What accuracy is enough to start the pilot?", "Do document questions fail more often than data questions? If so, consider the custom build for that part"], "risk": "The built-in evaluation feature is not yet read in detail, so its limits are unknown. The test set can be run by hand if needed."}, "p1-m5": {"title": "M5 — Pilot & go/no-go", "deliverables": ["Pilot with a small group of demand managers", "Feedback collected and top issues resolved", "Baseline effort measured: time spent on one executive pack today versus with the agent", "Go/no-go decision with IT and the demand management team"], "decisions": ["Who are the early adopters?", "How is feedback collected: survey, interviews or usage data?", "What are the go-live criteria?"], "risk": "Adoption is the main risk, not technology. Without a clear baseline, the benefit is hard to show."}, "p2-m1": {"title": "M6 — Executive Pack", "deliverables": ["Flow that reads active demands by rank and keeps the first 3 or 4", "Cards with rank, name and stage, short status, assessment result and decision to submit", "Missing outcomes flagged on each card", "Text cards first; slide file output tested later"], "decisions": ["Do dependencies between demands need to be recorded in a structured way?", "Can the tenant produce a slide file, or are text cards the output?", "On request only, or scheduled once the credential mode allows it?"], "risk": "Scheduled runs fail when maker credentials are blocked by an administrator, so the pack starts on request. Schedule decisions stay with people."}, "p2-m2": {"title": "M7 — Jira and alerts", "deliverables": ["Jira connector approved and connected, read-only", "Questions on sprint and issue status answered with citations", "Alerts for stalled demands and open actions, with a narrow first set", "Alert opt-out for each person"], "decisions": ["Is the Jira connector available and allowed in the tenant?", "What counts as a stalled demand?", "Which alert types are sent to which roles?"], "risk": "Alert fatigue is a real risk. Start with at most three alert types."}, "p2-m3": {"title": "M8 — Write-back to A-ah!", "deliverables": ["A supported A-ah! write path confirmed", "Human approval for every change, with a full audit trail", "Data protection impact assessment signed off", "Rollback within 24 hours"], "decisions": ["Does A-ah! expose a supported write API? Snowflake is read-only", "Which fields may the agent update: status and stage only?", "Does the organisation require formal sign-off before this goes live?"], "risk": "Highest-risk milestone: a wrong write could corrupt the system of record. It requires formal governance approval."}, "p2-m4": {"title": "M9 — Rollout & scale-up decision", "deliverables": ["Onboarding material for each profile", "Owner of the agent and escalation route defined", "Usage and unanswered-question review, monthly", "Decision recorded: stay on Copilot Studio, or build the custom components for the parts that need them"], "decisions": ["Who owns the agent after the pilot?", "Which evidence triggers the custom build for documents or search?"], "risk": "Without a named owner, quality drops over time. Define ownership before go-live."}};
 
 function showMilestone(id, srcEl) {
   var d = milestoneData[id];
@@ -2369,12 +2382,12 @@ var ckState = {};
 var ckGroups = {
   infra: ['i1','i2','i3'],
   api: ['a1','a2','a3','a4','a5','a6'],
-  agent: ['ag1','ag2','ag3'],
+  agent: ['ag0','ag1','ag2','ag3'],
   access: ['ac1','ac2'],
   data: ['d1','d2','d3'],
   gov: ['g1','g2','g3']
 };
-var ckTotal = 20;
+var ckTotal = 21;
 
 function ckUpdateProgress() {
   var resolved = Object.values(ckState).filter(Boolean).length;

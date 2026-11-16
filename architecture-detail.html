@@ -423,9 +423,9 @@
 </nav>
 
 <section class="v12-section" id="recommended">
-  <div class="v12-eyebrow">Solution detail &mdash; v1.2</div>
+  <div class="v12-eyebrow">Solution detail &mdash; v1.3</div>
   <h2>Preferred build: a Copilot Studio agent</h2>
-  <p class="v12-lead">This page details the preferred way to realise the intelligence core and agent layers of the architecture. One read-only agent, built in Microsoft Copilot Studio, answers questions about demands and drafts the executive review pack. It stays inside the Microsoft perimeter and reads three sources: A-ah! data through Snowflake, an HLA outcomes record, and SharePoint and Teams content.</p>
+  <p class="v12-lead">This page details the preferred way to realise the intelligence core and agent layers of the architecture. One read-only agent, built in Microsoft Copilot Studio, answers questions about demands and drafts the executive review pack. It stays inside the Microsoft perimeter and reads three sources: A-ah! data through Snowflake, an HLA outcomes record, and SharePoint and Teams content. In the first months only demand managers use the agent: they check the answers and share the output with each role.</p>
 
   <div class="v12-callout"><i class="ti ti-circle-check" style="font-size:16px;color:var(--green);flex-shrink:0;margin-top:1px;"></i><div><strong>Verified so far:</strong> Copilot Studio opens with the corporate account, an agent can be created, and the Snowflake connector is in the tool catalogue with three actions. <strong>Not yet verified:</strong> connection and authentication, policies, licences, the Snowflake schema and its refresh frequency.</div></div>
 
@@ -523,6 +523,7 @@
       <h3>Identity and guardrails</h3>
       <p>Target: end-user credentials, so each person acts with their own permissions. Maker credentials only if IT allows them for the pilot.</p>
       <ul>
+        <li>Used by demand managers only in the first months; they check the answers and share the output</li>
         <li>Web search off; ungrounded answers off</li>
         <li>Citation in every answer, and a data-as-of line for Snowflake figures</li>
         <li>Read-only; fixed flows on curated views, no free-form SQL</li>
@@ -532,7 +533,7 @@
   </div>
 
   <div class="v12-h3">Attention points</div>
-  <p class="v12-sub">Fifteen points are tracked: two are verified, two are assumptions, and the rest need a check or a decision from IT, Snowflake or the demand manager.</p>
+  <p class="v12-sub">Sixteen points are tracked: two are verified and one is decided, two are assumptions, and the rest need a check or a decision from IT, Snowflake or the demand manager.</p>
   <div class="v12-table-wrap">
     <table class="v12-table">
       <thead><tr><th>#</th><th>Topic</th><th>Why it matters</th><th>How to resolve</th><th>Status</th></tr></thead>
@@ -552,6 +553,7 @@
         <tr><td>13</td><td class="t">Baseline effort</td><td>The proposal needs the time spent today on one pack</td><td>Measure it on the next review</td><td><span class="v12-pill v12-p-verify">To verify</span></td></tr>
         <tr><td>14</td><td class="t">Accuracy testing</td><td>Answers must be checked against known cases before people rely on them</td><td>Build a test set with the evaluation feature, whose details are still unread</td><td><span class="v12-pill v12-p-open">Open design point</span></td></tr>
         <tr><td>15</td><td class="t">On-demand trigger</td><td>Scheduled runs fail when maker credentials are blocked, so the pack starts on request</td><td>Keep on-demand for the pilot</td><td><span class="v12-pill v12-p-ok">Verified</span></td></tr>
+      <tr><td>16</td><td class="t">Access for other roles</td><td>Accuracy, interpretation and the central role of the demand manager must be protected</td><td>First phase: demand managers only; wider access decided later with the team</td><td><span class="v12-pill v12-p-ok">Decided</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -559,6 +561,7 @@
   <div class="v12-h3">Pilot path</div>
   <div class="v12-card" style="margin-bottom:22px;">
     <ol style="margin-top:0;">
+      <li>Share the list of needs with the demand managers and update it with their feedback (the agreed first step)</li>
       <li>Measure the time spent preparing the last executive pack</li>
       <li>Rank the twelve questions by how often they are asked, and add the real ones</li>
       <li>Prototype the Executive Pack in Copilot Studio with three fictitious demands and a fictitious HLA record in SharePoint</li>
