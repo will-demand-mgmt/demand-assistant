@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solution Detail v1.2</title>
+  <title>Solution Detail v1.3</title>
   <script>
 (function(){
   var AUTH_KEY = 'di_auth';
@@ -455,7 +455,7 @@
 
       <rect class="bx" x="470" y="48" width="266" height="84" rx="8"/>
       <text class="tx" x="482" y="72" font-weight="600">Snowflake views (A-ah! data)</text>
-      <text class="tx" x="482" y="90" font-size="11.5">Rank, stage, status, dates, owner</text>
+      <text class="tx" x="482" y="90" font-size="11.5">Rank, stage, owner, dates, requirements</text>
       <text class="tx" x="482" y="106" font-size="11.5">Read through connector and flows</text>
       <circle class="dot" cx="488" cy="120" r="4"/>
       <text class="tx" x="498" y="124" font-size="11.5">Attention: 1, 2, 3, 4, 6, 7</text>
@@ -469,7 +469,7 @@
 
       <rect class="bx" x="470" y="248" width="266" height="84" rx="8"/>
       <text class="tx" x="482" y="272" font-weight="600">SharePoint and Teams</text>
-      <text class="tx" x="482" y="290" font-size="11.5">BRD, HLA and HLD documents</text>
+      <text class="tx" x="482" y="290" font-size="11.5">HLA and HLD documents</text>
       <text class="tx" x="482" y="306" font-size="11.5">Meeting minutes and open actions</text>
       <circle class="dot" cx="488" cy="320" r="4"/>
       <text class="tx" x="498" y="324" font-size="11.5">Attention: 9</text>
@@ -485,16 +485,17 @@
   <div class="v12-grid">
     <div class="v12-card">
       <h3>Use case 1 &mdash; Q&amp;A on any demand</h3>
-      <p>Twelve questions cover the day-to-day needs of a demand manager.</p>
+      <p>Sixteen questions cover the day-to-day needs of a demand manager: eleven from the initial list and five proposed, to be validated with the demand managers.</p>
       <ul>
         <li>Status, stage and owner of a demand, and which demands I own</li>
         <li>Which demands sit too long in a stage, and which wait for IT, Engineering or Operations</li>
         <li>Priority, rank and target dates; counts per stage and priority</li>
         <li>Decisions and open action items from the latest meetings</li>
-        <li>The latest BRD, HLA or HLD, and a summary of the requirements</li>
+        <li>The business requirements on the Aha! card and their summary, and the latest HLA or HLD</li>
         <li>What changed on a demand in the last 7 days</li>
+        <li>Proposed: demands with missing HLA outcomes, effort and delivery timeframe per team, overdue or upcoming target dates, demands blocked on a decision, and dependencies between demands</li>
       </ul>
-      <p>Questions on change history, team assignment and requirements text depend on what Snowflake holds (attention point 1).</p>
+      <p>Questions on change history, team assignment and requirements text depend on what Snowflake holds (attention point 1). The business requirements are the Aha! card itself, filled by the business requirements owners of each business unit; they are not a separate document.</p>
     </div>
     <div class="v12-card">
       <h3>Use case 2 &mdash; Executive Pack</h3>
@@ -563,13 +564,13 @@
     <ol style="margin-top:0;">
       <li>Share the list of needs with the demand managers and update it with their feedback (the agreed first step)</li>
       <li>Measure the time spent preparing the last executive pack</li>
-      <li>Rank the twelve questions by how often they are asked, and add the real ones</li>
+      <li>Rank the agreed questions by how often they are asked, and add the real ones</li>
       <li>Prototype the Executive Pack in Copilot Studio with three fictitious demands and a fictitious HLA record in SharePoint</li>
       <li>Prepare the questions for IT and the Snowflake owner (attention points 1 to 4 and 6)</li>
     </ol>
     <p>Gate: no real data is connected until IT has confirmed connection, policies and licences.</p>
   </div>
 </section>
-<footer style="max-width:860px;margin:0 auto;padding:12px 20px 48px;font-size:11px;color:var(--text3);">Solution detail, draft v1.2. The architecture itself is on the <a href="/" style="color:var(--green-dk);">main page</a>.</footer>
+<footer style="max-width:860px;margin:0 auto;padding:12px 20px 48px;font-size:11px;color:var(--text3);">Solution detail, draft v1.3. The architecture itself is on the <a href="/" style="color:var(--green-dk);">main page</a>.</footer>
 </body>
 </html>
