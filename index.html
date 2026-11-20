@@ -1139,7 +1139,7 @@
         <table class="data-model">
           <thead><tr><th>Document type</th><th>Format</th><th>Indexed content</th></tr></thead>
           <tbody>
-            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX / PDF</td><td class="field-note">Scope, objectives, stakeholders — key for exec queries</td></tr>
+            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX</td><td class="field-note">Slides the demand manager uses in the weekly alignment meetings with the technical teams</td></tr>
             <tr><td class="field-name">Deliverables</td><td class="field-type">DOCX / PDF</td><td class="field-note">Full text — surfaced on "show me the latest deliverable" queries</td></tr>
             <tr><td class="field-name">Requirement specs</td><td class="field-type">DOCX / XLSX</td><td class="field-note">Chunked by section — linked to A-ah! demand ID in metadata</td></tr>
             <tr><td class="field-name">Status reports</td><td class="field-type">PDF / DOCX</td><td class="field-note">Latest version always preferred — version metadata tracked</td></tr>
@@ -1322,16 +1322,16 @@
       <div class="tab-pane active" id="s-sp-overview">
         <ul class="decisions-list">
           <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Zero change to SharePoint:</strong> Documents are uploaded and organized exactly as today. The connector reads via Microsoft Graph — no SharePoint customization required.</div></li>
-          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Version awareness:</strong> The connector tracks document versions and always indexes the latest approved file. Older versions are retained but deprioritized in retrieval ranking.</div></li>
+          <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Version awareness:</strong> The connector tracks document versions and always indexes the latest file. Older versions are retained but deprioritized in retrieval ranking.</div></li>
           <li><div class="d-num" style="background:#378ADD">i</div><div class="d-text"><strong>Format support:</strong> PDF, DOCX, PPTX, and XLSX are all supported. Text is extracted, chunked at ~512 tokens, and embedded. PPTX slide notes and XLSX cell content are included.</div></li>
-          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Folder structure matters:</strong> A consistent naming convention (e.g. /Demands/DM-044/Mission Brief v2.pdf) makes it possible to link documents to A-ah! demand IDs automatically.</div></li>
+          <li><div class="d-num" style="background:#EF9F27">!</div><div class="d-text"><strong>Folder structure matters:</strong> A consistent naming convention (e.g. /Demands/DM-044/Mission Brief v2.pptx) makes it possible to link documents to A-ah! demand IDs automatically.</div></li>
         </ul>
       </div>
       <div class="tab-pane" id="s-sp-data">
         <table class="data-model">
           <thead><tr><th>Document type</th><th>Format</th><th>Agent use</th></tr></thead>
           <tbody>
-            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX / PDF</td><td class="field-note">"Show me the mission brief for DM-044" — agent links the file</td></tr>
+            <tr><td class="field-name">Mission brief</td><td class="field-type">PPTX</td><td class="field-note">"Show me the mission brief for DM-044" — agent links the file</td></tr>
             <tr><td class="field-name">Deliverables</td><td class="field-type">DOCX / PDF</td><td class="field-note">"What deliverables exist for DM-044?" — latest version returned</td></tr>
             <tr><td class="field-name">Requirement specs</td><td class="field-type">DOCX / XLSX</td><td class="field-note">Chunked by section — semantic search over requirements text</td></tr>
             <tr><td class="field-name">Status reports</td><td class="field-type">PDF</td><td class="field-note">Periodic reports — useful for exec portfolio queries</td></tr>
@@ -1768,7 +1768,7 @@
             <div class="cx-bubble q" id="dm-q1">What action items from last week&rsquo;s DM-044 meeting are still open?</div>
             <div class="cx-bubble a" id="dm-a1">From the Teams meeting on <strong>28 Oct</strong>, 2 action items remain open: (1) L. Bianchi to complete API layer design by 6 Nov &mdash; <em>in progress</em>; (2) M. Rossi to share updated mission brief with sponsor &mdash; <em>not started</em>.<span class="cx-cite">Source: Teams Copilot minutes &middot; 28 Oct</span></div>
             <div class="cx-bubble q2" id="dm-q2">Show me the latest mission brief for DM-044.</div>
-            <div class="cx-bubble a2" id="dm-a2">The latest approved document is <strong>DM-044 Mission Brief v2.1</strong>, uploaded to SharePoint on 29 Oct 2026. <u>Open document &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-044/</span></div>
+            <div class="cx-bubble a2" id="dm-a2">The latest version is <strong>DM-044 Mission Brief v2.1</strong>, uploaded to SharePoint on 29 Oct 2026. <u>Open document &rarr;</u><span class="cx-cite">Source: SharePoint &middot; Demands/DM-044/</span></div>
           </div>
         </div>
         <button class="replay-btn" id="replay-dm"><i class="ti ti-refresh"></i> Replay</button>
@@ -1924,11 +1924,11 @@ var simpleDetails = {
   synth:{title:"Response synthesizer",body:"The LLM assembles the final answer from retrieved chunks, adds source citations ('Per A-ah! as of today...'), and formats the response for the channel — chat message or Teams adaptive card."},
   "c-aah":{title:"Snowflake connector",body:"Reads A-ah! demand records already replicated in Snowflake (read-only): status, lifecycle stage, business requirements, responsible team. A-ah! remains the system of record; answers show the data-as-of timestamp."},
   "c-teams":{title:"Teams + Copilot connector",body:"Ingests Copilot-generated meeting minutes via the Microsoft Graph API. Meeting decisions and action items become searchable through the agent."},
-  "c-sp":{title:"SharePoint connector",body:"Uses Microsoft Graph API to index documents: mission briefs, deliverable PDFs, presentations. Always surfaces the latest approved version."},
+  "c-sp":{title:"SharePoint connector",body:"Uses Microsoft Graph API to index documents: mission briefs, deliverable PDFs, presentations. Always surfaces the latest version."},
   "c-jira":{title:"Jira connector",body:"Reads sprint boards, issue statuses, and dashboard data via Jira REST API. Lets developers and PMs query progress without leaving their workflow."},
   "s-aah":{title:"A-ah! (source system)",body:"System of record. Statuses: Shaping > High Level Assessment > Design > Implementation & Testing > Roll-out > Closure. Nothing changes in how your team uses A-ah!."},
   "s-teams":{title:"Teams + Copilot",body:"Collaboration hub. Copilot records follow-up meetings and produces structured minutes with decision logs, action items, and risk flags — all made searchable."},
-  "s-sp":{title:"SharePoint",body:"Document archive. Stores mission briefs, deliverables, presentations, and compliance artefacts. The connector always surfaces the latest approved version."},
+  "s-sp":{title:"SharePoint",body:"Document archive. Stores mission briefs, deliverables, presentations, and compliance artefacts. The connector always surfaces the latest version."},
   "s-jira":{title:"Jira",body:"Developer and PM tracking. A-ah! holds the demand-level view; Jira holds the technical task breakdown. The agent bridges them in its answers."},
   "ks-vec":{title:"Vector database",body:"Stores embeddings of demand records, document chunks, and meeting summaries. Enables semantic search — finds conceptually related results, not just keyword matches. Option: Azure AI Search, hosted in the Microsoft perimeter."},
   "ks-meta":{title:"Metadata cache",body:"Fast-lookup store for structured demand attributes: IDs, statuses, owners, dates, and any structured assessment outcomes that need a home outside A-ah!. Answers factual queries without hitting the vector DB every time."},
